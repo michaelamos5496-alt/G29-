@@ -1,0 +1,598 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <!-- A refresh/reload should land on the top of the page, not wherever the
+       browser last scrolled to — must run before the browser applies its
+       own scroll restoration. -->
+  <script>if ('scrollRestoration' in history) { history.scrollRestoration = 'manual'; window.scrollTo(0, 0); }</script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>G29 Property Consult | Trusted Property Solutions in Accra, Ghana</title>
+  <link rel="icon" type="image/png" href="assets/images/g29-icon-32.png">
+  <link rel="apple-touch-icon" href="assets/images/g29-icon-180.png">
+  <meta name="description"
+    content="G29 Property Consult offers property management, real estate brokerage, valuation, and advisory services backed by local market knowledge in Accra, Ghana.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="preconnect" href="https://images.unsplash.com">
+  <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&display=swap"
+    rel="stylesheet">
+  <link rel="stylesheet" href="assets/css/style.css">
+</head>
+
+<body>
+
+  <!-- Scroll progress rail -->
+  <div class="progress-line" aria-hidden="true"><span class="progress-line__fill" id="progressFill"></span></div>
+
+  <!-- GSAP ScrollSmoother requires all scrollable content wrapped in this
+       #smooth-wrapper/#smooth-content pair. Fixed-position elements (this
+       progress rail, the contact modal, the dynamic island nav, the
+       floating contact button) stay outside it — see
+       assets/js/motion/scroll-smoother-init.js for why. -->
+  <div id="smooth-wrapper">
+  <div id="smooth-content">
+
+  <main>
+
+    <!-- Section 00: Scroll-driven cinematic property walkthrough. Scroll position
+       drives video.currentTime (see assets/js/motion/scroll-video.js). Falls
+       back to a static hero (poster + headline + CTA) if the video errors
+       or prefers-reduced-motion is set. -->
+    <section class="walkthrough" id="walkthrough" aria-label="Cinematic property walkthrough">
+      <div class="walkthrough__pin" id="walkthroughPin">
+
+        <video id="walkthroughVideo" class="walkthrough__video" muted playsinline preload="metadata"
+          poster="assets/videos/herovideo-poster.jpg" aria-hidden="true">
+          <source src="assets/videos/herovideo-mobile.mp4" type="video/mp4" media="(max-width: 768px)">
+          <source src="assets/videos/herovideo.mp4" type="video/mp4">
+        </video>
+        <div class="walkthrough__gradient"></div>
+
+        <div class="walkthrough__hint" id="walkthroughHint">
+          <span>Scroll to Explore</span>
+          <span class="walkthrough__hint-line"></span>
+        </div>
+
+        <div class="walkthrough__progress" id="walkthroughProgress"></div>
+
+        <svg class="walkthrough__wordmark" id="walkthroughWordmark" viewBox="0 0 600 260" aria-hidden="true">
+          <text id="walkthroughWordmarkText" x="50%" y="46%" text-anchor="middle" dominant-baseline="middle">G29</text>
+          <text id="walkthroughWordmarkSub" x="50%" y="76%" text-anchor="middle" dominant-baseline="middle">PROPERTY CONSULT</text>
+        </svg>
+
+        <div class="walkthrough__ctas" id="walkthroughCtaGroup">
+          <a href="properties-category.html" class="btn btn-primary walkthrough__cta" id="walkthroughCta">Explore Properties <span
+              aria-hidden="true">&#8594;</span></a>
+          <button type="button" class="btn btn-ghost walkthrough__cta walkthrough__cta--secondary" data-contact-trigger
+            data-contact-message="I'd like to book a private viewing.">Book Private Viewing</button>
+        </div>
+
+        <!-- Fades to white at the very end of the scroll so the pin releases
+             into the Services section smoothly instead of cutting abruptly. -->
+        <div class="walkthrough__fade-out" id="walkthroughFadeOut" aria-hidden="true"></div>
+
+        <!-- Shown only when reduced-motion is set or the video fails to load -->
+        <div class="walkthrough__fallback-content">
+          <h1>Exceptional Residences, Designed for Modern Living</h1>
+          <p><strong>Trusted advisors. Real results.</strong> A clear path from search to signature, right here in
+            Accra.</p>
+          <div class="walkthrough__ctas">
+            <a href="properties-category.html" class="btn btn-primary">Explore Properties <span aria-hidden="true">&#8594;</span></a>
+            <button type="button" class="btn btn-ghost" data-contact-trigger
+              data-contact-message="I'd like to book a private viewing.">Book Private Viewing</button>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- Section 00b: Featured Properties — editorial showcase of hand-picked
+         listings (see assets/js/properties-featured.js). Distinct from the
+         category browse grid further down: fewer items, larger imagery,
+         full specs on the card. -->
+    <section class="featured-properties" id="featured" aria-labelledby="featured-heading">
+      <div class="container featured-properties__head">
+        <div data-reveal="fade-up">
+          <span class="eyebrow">Featured</span>
+          <h2 id="featured-heading">Hand-Picked Residences</h2>
+        </div>
+        <a href="properties-category.html" class="featured-properties__all" data-reveal="fade-up">
+          View all properties <span aria-hidden="true">&#8594;</span>
+        </a>
+      </div>
+
+      <div class="container featured-grid" id="featuredGrid" data-reveal-container></div>
+    </section>
+
+    <!-- Section 01: Services Showcase (replicates reference layout) -->
+    <section class="services-hero" id="services" aria-labelledby="services-heading">
+      <div class="container services-hero__intro">
+        <h2 id="services-heading" data-reveal="mask">Discover Our Full Range<br>of Property Services</h2>
+        <p class="services-hero__desc" data-reveal="fade-up">
+          From day-to-day management to strategic investment advice, G29 Property Consult
+          delivers trusted, end-to-end property solutions across Accra &mdash; built on
+          clarity, professionalism, and real results.
+        </p>
+      </div>
+
+      <div class="services-grid" data-reveal-container>
+
+        <a href="#" class="service-tile" data-reveal="glance" data-reveal-group="services-grid"
+          style="background-image: url('https://images.unsplash.com/photo-1600585154340-be6161a56a0c?q=80&w=1200&auto=format&fit=crop');">
+          <span class="service-tile__overlay"></span>
+          <span class="service-tile__content">
+            <span class="service-tile__label">Property Management</span>
+            <span class="service-tile__sub">Hands-on care for your investment</span>
+          </span>
+          <span class="service-tile__arrow" aria-hidden="true">&#8599;</span>
+        </a>
+
+        <a href="#" class="service-tile" data-reveal="glance" data-reveal-group="services-grid"
+          style="background-image: url('https://images.unsplash.com/photo-1600047509807-ba8f99d2cdde?q=80&w=1200&auto=format&fit=crop');">
+          <span class="service-tile__overlay"></span>
+          <span class="service-tile__content">
+            <span class="service-tile__label">Real Estate Brokerage</span>
+            <span class="service-tile__sub">Buy, sell, and lease with confidence</span>
+          </span>
+          <span class="service-tile__arrow" aria-hidden="true">&#8599;</span>
+        </a>
+
+        <a href="#" class="service-tile" data-reveal="glance" data-reveal-group="services-grid"
+          style="background-image: url('https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?q=80&w=1200&auto=format&fit=crop');">
+          <span class="service-tile__overlay"></span>
+          <span class="service-tile__content">
+            <span class="service-tile__label">Property Valuation</span>
+            <span class="service-tile__sub">Accurate insight for informed decisions</span>
+          </span>
+          <span class="service-tile__arrow" aria-hidden="true">&#8599;</span>
+        </a>
+
+        <a href="#" class="service-tile" data-reveal="glance" data-reveal-group="services-grid"
+          style="background-image: url('https://images.unsplash.com/photo-1613977257363-707ba9348227?q=80&w=1200&auto=format&fit=crop');">
+          <span class="service-tile__overlay"></span>
+          <span class="service-tile__content">
+            <span class="service-tile__label">Advisory Services</span>
+            <span class="service-tile__sub">Strategic guidance for property investors</span>
+          </span>
+          <span class="service-tile__arrow" aria-hidden="true">&#8599;</span>
+        </a>
+
+      </div>
+    </section>
+
+    <!-- Section 01b: Lifestyle Storytelling — pinned-stack scroll sequence.
+         Each panel pins while the next slides up to cover it (see
+         assets/js/motion/lifestyle-stack.js). Sells the lifestyle around
+         the properties, not just the units themselves. -->
+    <section class="lifestyle-stack" id="lifestyle" aria-labelledby="lifestyle-heading">
+
+      <div class="lifestyle-panel">
+        <div class="lifestyle-panel__bg"
+          style="background-image: url('https://images.unsplash.com/photo-1600607687920-4e2a09cf159d?q=80&w=1800&auto=format&fit=crop');"></div>
+        <div class="lifestyle-panel__gradient"></div>
+        <div class="container lifestyle-panel__content lifestyle-panel__content--intro">
+          <span class="eyebrow eyebrow--on-dark">Beyond the Walls</span>
+          <h2 id="lifestyle-heading">A Life Designed Around You</h2>
+          <p>
+            Every G29 listing is chosen for more than its floor plan. We look at the light through the windows
+            in the afternoon, the walk to the nearest café, the quiet of the street at night &mdash; the details
+            that turn a property into a home.
+          </p>
+        </div>
+      </div>
+
+      <div class="lifestyle-panel">
+        <div class="lifestyle-panel__bg"
+          style="background-image: url('https://images.unsplash.com/photo-1600566753086-00f18fb6b3ea?q=80&w=1800&auto=format&fit=crop');"></div>
+        <div class="lifestyle-panel__gradient"></div>
+        <div class="container lifestyle-panel__content">
+          <span class="lifestyle-panel__index">01</span>
+          <h3>Architecture &amp; Space</h3>
+          <p>Considered layouts, natural light, and finishes built to last &mdash; not just to photograph well.</p>
+        </div>
+      </div>
+
+      <div class="lifestyle-panel">
+        <div class="lifestyle-panel__bg"
+          style="background-image: url('https://images.unsplash.com/photo-1516156008625-3a9d6067fab5?q=80&w=1800&auto=format&fit=crop');"></div>
+        <div class="lifestyle-panel__gradient"></div>
+        <div class="container lifestyle-panel__content">
+          <span class="lifestyle-panel__index">02</span>
+          <h3>Neighborhood</h3>
+          <p>Accra's most established addresses &mdash; East Legon, Cantonments, Airport Residential, Labone, Osu.</p>
+        </div>
+      </div>
+
+      <div class="lifestyle-panel">
+        <div class="lifestyle-panel__bg"
+          style="background-image: url('https://images.unsplash.com/photo-1600566752355-35792bedcfea?q=80&w=1800&auto=format&fit=crop');"></div>
+        <div class="lifestyle-panel__gradient"></div>
+        <div class="container lifestyle-panel__content">
+          <span class="lifestyle-panel__index">03</span>
+          <h3>Amenities &amp; Security</h3>
+          <p>24-hour security, backup power and water, and secure parking come standard across our portfolio.</p>
+        </div>
+      </div>
+
+    </section>
+
+    <!-- Section 02: Properties Grid (replicates reference layout) -->
+    <section class="property-grid-section" id="properties" aria-label="Our Properties">
+      <div class="container featured-properties__head">
+        <div data-reveal="fade-up">
+          <span class="eyebrow">Discover</span>
+          <h2>Browse by Category</h2>
+        </div>
+      </div>
+
+      <div class="container property-grid__scrubber">
+        <span id="propGridStart">01.</span>
+        <span class="property-grid__track"><span class="property-grid__dot"></span></span>
+        <span id="propGridEnd">03.</span>
+      </div>
+
+      <div class="container gallery" id="categoryTileGallery">
+        <ul class="cards" id="propertyGrid"></ul>
+        <div class="actions">
+          <button type="button" class="prev" id="categoryTilePrev" aria-label="Previous category">
+            <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg>
+          </button>
+          <button type="button" class="next" id="categoryTileNext" aria-label="Next category">
+            <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg>
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- Section 03: About (replicates reference layout) -->
+    <section class="about" id="about" aria-labelledby="about-heading">
+      <div class="container">
+        <h2 id="about-heading" class="about__heading" data-reveal="mask">About Us.</h2>
+
+        <div class="about__intro">
+          <nav class="about__nav" data-reveal="fade-up">
+            <a href="#about">About us.</a>
+            <a href="#team">Our team.</a>
+            <span class="about__nav-disabled">Press.</span>
+          </nav>
+
+          <div class="about__body">
+            <p>
+              Your life’s changing. Don’t just find a
+              place — find what’s next. We help you
+              move forward with clarity, confidence,
+              and the right agent by your side. <span class="about__highlight">Property Management</span>,
+              <span class="about__highlight">Real Estate Brokerage</span>,
+              <span class="about__highlight">Property Valuation</span>, and
+              <span class="about__highlight">Advisory Services</span> &mdash; helping owners,
+              investors, and buyers navigate Accra's market with confidence.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <div class="about__video" data-reveal="fade-in">
+        <video id="aboutVideo" poster="assets/videos/herovideo-poster.jpg" autoplay muted loop playsinline preload="metadata">
+          <!-- Reusing the real interior walkthrough footage here since it's
+               the only real video asset available. NEEDS INPUT: swap for a
+               dedicated BTS clip of staff/management at work once one exists. -->
+          <source src="assets/videos/herovideo-mobile.mp4" type="video/mp4" media="(max-width: 768px)">
+          <source src="assets/videos/herovideo.mp4" type="video/mp4">
+          Your browser does not support embedded video.
+        </video>
+      </div>
+    </section>
+
+    <!-- Section 04: Team Carousel (replicates reference layout) -->
+    <section class="team-carousel" id="team" aria-labelledby="team-heading">
+      <div class="container team-carousel__head">
+        <div data-reveal="fade-up">
+          <h2 id="team-heading">Meet Our Team</h2>
+          <p>
+            Our team brings together property management, brokerage, valuation, and
+            advisory specialists who know Accra's market inside and out &mdash; committed
+            to clarity, professionalism, and results for every client.
+          </p>
+        </div>
+        <div class="team-carousel__nav">
+          <button type="button" id="teamPrev" aria-label="Previous team member">&#8249;</button>
+          <button type="button" id="teamNext" aria-label="Next team member">&#8250;</button>
+        </div>
+      </div>
+
+      <div class="container">
+        <div class="team-strip" id="teamStrip"></div>
+      </div>
+    </section>
+
+    <!-- Section 05: Testimonials (replicates reference layout) -->
+    <section class="testimonials" id="testimonials" aria-labelledby="testimonials-heading">
+      <div class="container">
+        <div class="testimonials__label" data-reveal="fade-in">Testimonials</div>
+        <hr class="testimonials__rule">
+        <h2 id="testimonials-heading" class="testimonials__heading" data-reveal="mask">&mdash; Our Happy Clients Say
+        </h2>
+      </div>
+
+      <div class="container testimonials__viewport">
+        <div class="testimonials__track" id="testimonialsTrack">
+
+          <figure class="testimonial-card" data-reveal="glance" data-reveal-group="testimonials-grid">
+            <div class="testimonial-card__photo-wrap">
+              <div class="testimonial-card__photo"
+                style="background-image: url('https://images.unsplash.com/photo-1500648767791-00dcc994a43e?q=80&w=600&auto=format&fit=crop');">
+              </div>
+              <div class="testimonial-card__hover">
+                <div class="testimonial-card__stars" aria-label="5 out of 5 stars">&#9733;&#9733;&#9733;&#9733;&#9733;
+                </div>
+                <p class="testimonial-card__quote">&ldquo;I've managed rentals before, but G29 handled everything
+                  &mdash; tenant vetting, rent collection, maintenance &mdash; without me lifting a finger.&rdquo;</p>
+                <div class="testimonial-card__author">
+                  <div class="testimonial-card__avatar"
+                    style="background-image: url('https://images.unsplash.com/photo-1500648767791-00dcc994a43e?q=80&w=200&auto=format&fit=crop');">
+                  </div>
+                  <div>
+                    <span class="testimonial-card__name">Kojo Antwi</span>
+                    <span class="testimonial-card__role">Landlord, Osu</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </figure>
+
+          <figure class="testimonial-card" data-reveal="glance" data-reveal-group="testimonials-grid">
+            <div class="testimonial-card__photo-wrap">
+              <div class="testimonial-card__photo"
+                style="background-image: url('https://images.unsplash.com/photo-1519244703995-f4e0f30006d5?q=80&w=600&auto=format&fit=crop');">
+              </div>
+              <div class="testimonial-card__hover">
+                <div class="testimonial-card__stars" aria-label="5 out of 5 stars">&#9733;&#9733;&#9733;&#9733;&#9733;
+                </div>
+                <p class="testimonial-card__quote">&ldquo;Their valuation team gave me a clear, honest number before I
+                  bought &mdash; no inflated projections, just solid market data.&rdquo;</p>
+                <div class="testimonial-card__author">
+                  <div class="testimonial-card__avatar"
+                    style="background-image: url('https://images.unsplash.com/photo-1519244703995-f4e0f30006d5?q=80&w=200&auto=format&fit=crop');">
+                  </div>
+                  <div>
+                    <span class="testimonial-card__name">Nana Yaw</span>
+                    <span class="testimonial-card__role">Property Investor</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </figure>
+
+          <figure class="testimonial-card" data-reveal="glance" data-reveal-group="testimonials-grid">
+            <div class="testimonial-card__photo-wrap">
+              <div class="testimonial-card__photo"
+                style="background-image: url('https://images.unsplash.com/photo-1492562080023-ab3db95bfbce?q=80&w=600&auto=format&fit=crop');">
+              </div>
+              <div class="testimonial-card__hover">
+                <div class="testimonial-card__stars" aria-label="5 out of 5 stars">&#9733;&#9733;&#9733;&#9733;&#9733;
+                </div>
+                <p class="testimonial-card__quote">&ldquo;G29 made letting out my property completely stress-free. Their
+                  team is responsive, transparent about fees, and they found a reliable tenant within two weeks.&rdquo;
+                </p>
+                <div class="testimonial-card__author">
+                  <div class="testimonial-card__avatar"
+                    style="background-image: url('https://images.unsplash.com/photo-1492562080023-ab3db95bfbce?q=80&w=200&auto=format&fit=crop');">
+                  </div>
+                  <div>
+                    <span class="testimonial-card__name">Adjoa Frimpong</span>
+                    <span class="testimonial-card__role">Managing Partner, Frimpong Holdings</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </figure>
+
+          <figure class="testimonial-card" data-reveal="glance" data-reveal-group="testimonials-grid">
+            <div class="testimonial-card__photo-wrap">
+              <div class="testimonial-card__photo"
+                style="background-image: url('https://images.unsplash.com/photo-1607990281513-2c110a25bd8c?q=80&w=600&auto=format&fit=crop');">
+              </div>
+              <div class="testimonial-card__hover">
+                <div class="testimonial-card__stars" aria-label="5 out of 5 stars">&#9733;&#9733;&#9733;&#9733;&#9733;
+                </div>
+                <p class="testimonial-card__quote">&ldquo;G29 walked me through every step of my first purchase &mdash;
+                  I never felt like I was on my own or being rushed into a decision.&rdquo;</p>
+                <div class="testimonial-card__author">
+                  <div class="testimonial-card__avatar"
+                    style="background-image: url('https://images.unsplash.com/photo-1607990281513-2c110a25bd8c?q=80&w=200&auto=format&fit=crop');">
+                  </div>
+                  <div>
+                    <span class="testimonial-card__name">Yaw Darko</span>
+                    <span class="testimonial-card__role">First-Time Buyer</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </figure>
+
+        </div>
+      </div>
+
+      <div class="testimonials__controls">
+        <button type="button" id="testPrev" aria-label="Previous testimonial">&#8592;</button>
+        <span class="testimonials__progress"><span class="testimonials__progress-bar"
+            id="testimonialsProgress"></span></span>
+        <button type="button" id="testNext" aria-label="Next testimonial">&#8594;</button>
+      </div>
+    </section>
+
+    <!-- Section 06: Contact — split editorial layout, direct inline form
+         (no modal hop for the primary contact page). The floating contact
+         button and other data-contact-trigger CTAs elsewhere on the page
+         still use the quick modal (see contact-modal.js). -->
+    <section class="contact-split" id="contact" aria-labelledby="contact-heading">
+      <div class="contact-split__media">
+        <div class="contact-split__image" id="expand-img"
+          style="background-image: url('https://images.unsplash.com/photo-1600607687920-4e2a09cf159d?q=80&w=1400&auto=format&fit=crop');">
+        </div>
+      </div>
+
+      <div class="contact-split__panel">
+        <nav class="contact-split__nav" data-reveal="fade-in">
+          <a href="index.html#about">About Us</a>
+          <a href="properties-category.html">Properties</a>
+          <a href="index.html#services">Services</a>
+          <span class="contact-split__nav-current">Contact Us</span>
+        </nav>
+
+        <div class="contact-split__body">
+          <h1 id="contact-heading" data-reveal="mask">Contact</h1>
+          <p class="contact-split__intro" data-reveal="fade-up">
+            Speak with a G29 advisor about a property, a valuation, or a management enquiry.
+            We typically respond within one business day.
+          </p>
+
+          <div class="contact-split__info" data-reveal="fade-up">
+            <div>
+              <h3>Visit Our Office</h3>
+              <p>Monday &mdash; Friday<br>9:00 am &mdash; 5:00 pm GMT</p>
+              <p>Laterbiokorshie, 1st Soko Link,<br>Accra, Ghana</p>
+            </div>
+            <div>
+              <h3>General Enquiries</h3>
+              <p>
+                <a href="mailto:info@g29propertyconsult.com">info@g29propertyconsult.com</a><br>
+                <a href="tel:+233246381172">+233 24 638 1172</a><br>
+                <a href="tel:+233541479680">+233 54 147 9680</a>
+              </p>
+            </div>
+          </div>
+
+          <form class="contact-split__form" data-reveal="fade-up" onsubmit="return false;">
+            <input type="text" name="name" placeholder="Full Name" required>
+            <input type="email" name="email" placeholder="Email" required>
+            <textarea name="message" rows="2" placeholder="Message" required></textarea>
+            <button type="submit" class="contact-split__submit" aria-label="Submit request">
+              <span>Submit Request</span>
+              <span class="contact-split__submit-icon" aria-hidden="true">&#8594;</span>
+            </button>
+          </form>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <footer class="site-footer">
+
+    <div class="footer-banner"
+      data-bg="https://images.unsplash.com/photo-1600585154340-be6161a56a0c?q=80&w=1600&auto=format&fit=crop"
+      role="img" aria-label="Modern property managed by G29 Property Consult"></div>
+
+    <div class="footer-main">
+      <div class="container footer-grid">
+
+        <div class="footer-col footer-col--brand reveal-up">
+          <a href="index.html" class="footer-logo">
+            <img src="assets/images/g29-icon.png" alt="" width="28" height="28">
+            <span>G29 Property Consult</span>
+          </a>
+          <p class="footer-tagline">Trusted property solutions for buyers, owners, and investors across Accra.</p>
+          <a href="#contact" class="footer-cta">
+            Request a Consultation
+            <span class="footer-cta__icon" aria-hidden="true">&#8594;</span>
+          </a>
+        </div>
+
+        <nav class="footer-col footer-nav reveal-up" aria-label="Explore">
+          <span class="footer-col__heading">Explore</span>
+          <a href="index.html" class="active">Home</a>
+          <a href="#about">About</a>
+          <a href="properties-category.html">Properties</a>
+          <a href="#">Insights</a>
+          <a href="#contact">Contact</a>
+        </nav>
+
+        <nav class="footer-col footer-nav reveal-up" aria-label="Services">
+          <span class="footer-col__heading">Services</span>
+          <a href="#services">Property Management</a>
+          <a href="#services">Real Estate Brokerage</a>
+          <a href="#services">Property Valuation</a>
+          <a href="#services">Advisory Services</a>
+        </nav>
+
+        <div class="footer-col footer-contact reveal-up">
+          <span class="footer-col__heading">Contact</span>
+          <a href="tel:+233246381172" class="footer-phone">+233 24 638 1172</a>
+          <a href="mailto:info@g29propertyconsult.com" class="footer-email">info@g29propertyconsult.com</a>
+          <p class="footer-address">Laterbiokorshie, 1st Soko Link,<br>Accra, Ghana</p>
+        </div>
+
+      </div>
+
+      <div class="container">
+        <div class="footer-brand-wrap">
+          <div class="footer-brand" id="wordmark">G29<br>PROPERTY<br>CONSULT</div>
+        </div>
+        <div class="footer-bottom__row">
+          <p class="footer-copyright">&copy; 2026 G29 Property Consult. All rights reserved.</p>
+          <div class="footer-legal">
+            <a href="privacy-policy.html">Privacy Policy</a>
+            <a href="terms-of-use.html">Terms of Use</a>
+            <span class="footer-credit">Developed by <a href="https://theimagedept.vercel.app" target="_blank" rel="noopener">TheImageDept</a></span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </footer>
+
+  </div><!-- /#smooth-content -->
+  </div><!-- /#smooth-wrapper -->
+
+  <!-- Contact form modal — position:fixed, must stay outside #smooth-content
+       (see assets/js/motion/scroll-smoother-init.js). -->
+  <div class="contact-modal-overlay" id="contactModalOverlay">
+    <div class="contact-modal" id="contactModal" role="dialog" aria-modal="true" aria-labelledby="contact-modal-heading">
+      <button type="button" class="contact-modal__close" id="contactCloseBtn" aria-label="Close">
+        <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      </button>
+
+      <h2 id="contact-modal-heading">Request a Consultation</h2>
+      <p>Fill out the form below and a member of our team will get back to you shortly.</p>
+
+      <form class="contact-modal__form" onsubmit="return false;">
+        <input type="text" name="name" placeholder="Full Name" required>
+        <input type="email" name="email" placeholder="you@example.com" required>
+        <input type="tel" name="phone" placeholder="+233 (___) ___-____">
+        <textarea name="message" id="contactModalMessage" rows="3" placeholder="Tell us what you're looking for (optional)"></textarea>
+        <button type="submit" class="btn btn-primary contact-modal__submit">Send Request</button>
+        <p class="contact-modal__consent">By submitting, you agree to our Privacy Policy.</p>
+      </form>
+    </div>
+  </div>
+
+  <script src="assets/js/properties-data.js" defer></script>
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.15.0/dist/gsap.min.js" defer></script>
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.15.0/dist/Draggable.min.js" defer></script>
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.15.0/dist/InertiaPlugin.min.js" defer></script>
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.15.0/dist/ScrollTrigger.min.js" defer></script>
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.15.0/dist/ScrollSmoother.min.js" defer></script>
+  <script src="assets/js/motion/tokens.js" defer></script>
+  <script src="assets/js/motion/scroll-smoother-init.js" defer></script>
+  <script src="assets/js/motion/lazy-bg.js" defer></script>
+  <script src="assets/js/motion/draggable-gallery.js" defer></script>
+  <script src="assets/js/properties-featured.js" defer></script>
+  <script src="assets/js/properties-showcase.js" defer></script>
+  <script src="assets/js/team-carousel.js" defer></script>
+  <script src="assets/js/testimonials.js" defer></script>
+  <script src="assets/js/motion/reveal.js" defer></script>
+  <script src="assets/js/motion/cinematic.js" defer></script>
+  <script src="assets/js/motion/lifestyle-stack.js" defer></script>
+  <script src="assets/js/motion/walkthrough-sections.js" defer></script>
+  <script src="assets/js/motion/scroll-video.js" defer></script>
+  <script src="assets/js/motion/contact-modal.js" defer></script>
+  <script src="assets/js/dynamic-island.js" defer></script>
+  <script src="assets/js/floating-contact.js" defer></script>
+</body>
+
+</html>
