@@ -1638,7 +1638,7 @@ a { text-decoration: none; color: inherit; }
   left: 50%;
   transform: translateX(-50%);
   z-index: var(--z-nav);
-  padding: 8px 8px 8px 18px;
+  padding: 4px 4px 4px 18px;
   height: 44px;
   background: var(--glass-bg-dark);
   -webkit-backdrop-filter: var(--glass-blur);
@@ -1671,8 +1671,10 @@ a { text-decoration: none; color: inherit; }
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 28px;
-  height: 28px;
+  /* 36px, not the icon's own smaller footprint — keeps the tap target
+     closer to the ~44px guideline on the site's one primary nav control. */
+  width: 36px;
+  height: 36px;
   border-radius: 50%;
   border: none;
   background: rgba(255, 255, 255, 0.08);
@@ -2261,7 +2263,7 @@ a { text-decoration: none; color: inherit; }
   background: none;
   border: 1px solid var(--color-border);
   border-radius: var(--radius);
-  padding: 10px 18px;
+  padding: 13px 18px;
   font-size: 14px;
   font-weight: 600;
   color: var(--color-text-muted);
