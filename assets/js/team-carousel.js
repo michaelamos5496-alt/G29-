@@ -53,6 +53,13 @@
         });
       }
     });
+
+    // On mobile the strip scrolls horizontally (see the max-width:768px
+    // rule in style.css) — activating a slice near either edge would
+    // otherwise expand it partly out of view since re-rendering doesn't
+    // move the scroll position on its own.
+    var activeEl = strip.querySelector('.team-slice.is-active');
+    if (activeEl) activeEl.scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' });
   }
 
   prevBtn.addEventListener('click', () => {

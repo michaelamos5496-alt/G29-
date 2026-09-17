@@ -52,6 +52,7 @@
     const hash = window.location.hash;
 
     if (path.includes('property-detail') || path.includes('properties-category')) return 'properties';
+    if (path.includes('service-detail')) return 'services';
     if (hash === '#about') return 'about';
     if (hash === '#services') return 'services';
     if (hash === '#properties') return 'properties';

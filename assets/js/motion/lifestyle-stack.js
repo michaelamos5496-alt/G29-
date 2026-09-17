@@ -33,7 +33,16 @@
           trigger: panel,
           start: 'top top',
           pin: true,
-          pinSpacing: false
+          pinSpacing: false,
+          // Without a ScrollSmoother running (touch devices — see
+          // scroll-smoother-init.js), ScrollTrigger's default pin
+          // technique on the plain document scroller is position:fixed.
+          // Multiple stacked fixed-position pins engaging/releasing in
+          // quick succession during a fast touch swipe is a known iOS
+          // Safari jank/stutter source (repaint-driven, not GPU-composited).
+          // Forcing transform-based pinning composites on the GPU instead
+          // and sidesteps it, on every device.
+          pinType: 'transform'
         });
       }
 

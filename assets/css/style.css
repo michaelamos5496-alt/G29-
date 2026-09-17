@@ -612,6 +612,12 @@ a { text-decoration: none; color: inherit; }
   border-color: var(--color-accent);
 }
 
+.property-inquiry__card > .btn {
+  display: block;
+  width: 100%;
+  text-align: center;
+}
+
 .property-inquiry__direct {
   display: flex;
   flex-direction: column;
@@ -649,6 +655,105 @@ a { text-decoration: none; color: inherit; }
   gap: 6px;
 }
 .property-related__link:hover { color: var(--color-secondary); }
+
+/* ==========================================================================
+   Service Detail Page (service-detail.html, see assets/js/service-detail.js)
+   ========================================================================== */
+.service-hero-banner {
+  position: relative;
+  height: 56vh;
+  min-height: 340px;
+  margin-top: var(--space-2);
+  background-size: cover;
+  background-position: center;
+  display: flex;
+  align-items: flex-end;
+}
+.service-hero-banner::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, rgba(31, 36, 34, 0) 35%, rgba(31, 36, 34, 0.8) 100%);
+}
+.service-hero-banner__content {
+  position: relative;
+  z-index: 1;
+  padding-bottom: var(--space-10);
+  color: #fff;
+}
+.service-hero-banner__content h1 {
+  font-family: var(--font-heading);
+  font-size: 48px;
+  margin: var(--space-2) 0;
+}
+.service-hero-banner__content p {
+  font-size: 17px;
+  color: rgba(255, 255, 255, 0.85);
+  margin: 0;
+}
+
+.service-process {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-6);
+}
+.service-process__step {
+  display: flex;
+  gap: var(--space-5);
+  align-items: flex-start;
+}
+.service-process__num {
+  flex-shrink: 0;
+  font-family: var(--font-heading);
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--color-accent);
+  width: 48px;
+}
+.service-process__step h3 {
+  font-family: var(--font-heading);
+  font-size: 17px;
+  color: var(--color-primary);
+  margin: 0 0 var(--space-1);
+}
+.service-process__step p {
+  color: var(--color-text-muted);
+  font-size: 15px;
+  line-height: 1.6;
+  margin: 0;
+}
+
+.service-related {
+  padding: var(--space-8) var(--space-6) var(--space-24);
+  border-top: 1px solid var(--color-border);
+}
+.service-related h2 {
+  font-family: var(--font-heading);
+  font-size: 22px;
+  color: var(--color-primary);
+  margin: 0 0 var(--space-4);
+}
+.service-related-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-6);
+}
+.service-related-links a {
+  font-weight: 600;
+  color: var(--color-primary);
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+.service-related-links a:hover { color: var(--color-secondary); }
+
+@media (max-width: 768px) {
+  .service-hero-banner { height: 42vh; min-height: 280px; }
+  .service-hero-banner__content h1 { font-size: 34px; }
+}
 
 /* ==========================================================================
    Services Hero (replicates reference: headline + desc, then split image grid)
@@ -1892,20 +1997,28 @@ a { text-decoration: none; color: inherit; }
   .footer-grid { grid-template-columns: 1fr; gap: var(--space-8); }
   .footer-brand { font-size: 56px; }
   .team-carousel__head { flex-direction: column; align-items: flex-start; gap: var(--space-4); }
+  /* Same grayscale-filmstrip-with-one-expanding-slice treatment as
+     desktop (see base .team-strip/.team-slice rules above) — a fixed
+     flex row can't fit all 7 slices at once at this width, so the strip
+     scrolls horizontally instead. Collapsed slices get a fixed width
+     (flex:1 1 0's even-split math needs a container wide enough to
+     divide, which mobile isn't) and the active one expands to a large
+     but not full-bleed width so the next slice still peeks in as a
+     scroll affordance. */
   .team-strip {
-    height: 340px;
+    height: 380px;
     overflow-x: auto;
-    scroll-snap-type: x mandatory;
+    scroll-snap-type: x proximity;
+    -webkit-overflow-scrolling: touch;
   }
   .team-slice {
-    flex: 0 0 78%;
-    scroll-snap-align: center;
-    filter: grayscale(0);
+    flex: 0 0 56px;
+    min-width: 56px;
+    scroll-snap-align: start;
   }
-  .team-slice .team-slice__overlay,
-  .team-slice .team-slice__info {
-    opacity: 1;
-    transform: none;
+  .team-slice.is-active {
+    flex: 0 0 82%;
+    scroll-snap-align: center;
   }
   .property-grid__item { flex: 0 0 70%; }
   .property-gallery { grid-template-columns: 1fr; }
@@ -2106,7 +2219,8 @@ a { text-decoration: none; color: inherit; }
   display: flex;
   align-items: baseline;
   justify-content: space-between;
-  gap: var(--space-3);
+  flex-wrap: wrap;
+  gap: var(--space-1) var(--space-3);
 }
 .featured-card__title {
   font-family: var(--font-heading);

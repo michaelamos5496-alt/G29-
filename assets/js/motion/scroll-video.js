@@ -151,6 +151,12 @@
       start: 'top top',
       end: '+=' + scrollLengthVh + '%',
       pin: pinTarget,
+      // See the matching comment in motion/lifestyle-stack.js — without a
+      // ScrollSmoother running (touch devices), this would otherwise pin
+      // via position:fixed, a known iOS Safari jank/stutter source during
+      // fast touch swipes. Transform-based pinning composites on the GPU
+      // instead.
+      pinType: 'transform',
       scrub: 0.4, // slight smoothing only — stays responsive, avoids seek stutter
       onUpdate: function (self) {
         if (self.progress > 0.001) dismissHint();
