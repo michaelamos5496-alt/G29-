@@ -146,17 +146,21 @@
     var FADE_START = 0.90;
     var scrollLengthVh = contentVh / CONTENT_FRACTION;
 
-    ScrollTrigger.create({
+    // Matches the media query gating .walkthrough__pin's `position: sticky`
+    // in style.css. Desktop (mouse/trackpad, ScrollSmoother running) keeps
+    // GSAP's JS-driven pin, which has always worked fine there. Touch
+    // devices instead rely on native CSS sticky to stay in place — no
+    // pin-spacer, no JS-computed transform, nothing that can desync from
+    // real scroll/resize timing. That JS pin (even forced to
+    // pinType:'transform', even with ignoreMobileResize on) kept producing
+    // a visible wobble on real phones that headless testing here never
+    // reproduced; sticky is handled entirely by the browser's own
+    // compositor and sidesteps that whole category of bug.
+    var isDesktopPointer = window.matchMedia('(hover: hover) and (pointer: fine)').matches;
+
+    var triggerConfig = {
       trigger: root,
       start: 'top top',
-      end: '+=' + scrollLengthVh + '%',
-      pin: pinTarget,
-      // See the matching comment in motion/lifestyle-stack.js — without a
-      // ScrollSmoother running (touch devices), this would otherwise pin
-      // via position:fixed, a known iOS Safari jank/stutter source during
-      // fast touch swipes. Transform-based pinning composites on the GPU
-      // instead.
-      pinType: 'transform',
       // scrub is an eased "catch up to the scroll position" tween, not a
       // 1:1 mapping — on mobile, real touch-scroll input arrives in bursts
       // (momentum, rubber-banding) rather than the mouse wheel's steadier
@@ -182,16 +186,34 @@
         var fadeProgress = Math.max(0, Math.min((self.progress - FADE_START) / (1 - FADE_START), 1));
         setFadeOutProgress(fadeProgress);
       }
-    });
+    };
 
-    // This pin-spacer is created asynchronously (only once the video's
-    // metadata arrives), and it adds a large chunk of height at the very
-    // top of the page. Every ScrollTrigger below it on the page (lifestyle-
-    // stack.js's panels in particular — see its own ScrollTrigger.refresh())
-    // was already created and measured against the shorter layout that
-    // existed before this pin existed, so without this, their cached
-    // start/end positions desync from the real, final layout — visible as
-    // a gap or an early/late pin release while scrolling through them.
+    if (isDesktopPointer) {
+      triggerConfig.end = '+=' + scrollLengthVh + '%';
+      triggerConfig.pin = pinTarget;
+      triggerConfig.pinType = 'transform';
+    } else {
+      // No GSAP pin at all — .walkthrough__pin's own `position: sticky`
+      // (see style.css) keeps it in place while .walkthrough scrolls past
+      // underneath it. Since there's no pin-spacer reserving that scroll
+      // distance for us here, .walkthrough needs an explicit height doing
+      // the same job.
+      root.style.height = scrollLengthVh + 'svh';
+      triggerConfig.end = 'bottom bottom';
+    }
+
+    ScrollTrigger.create(triggerConfig);
+
+    // Either branch above adds a large chunk of height at the very top of
+    // the page (a pin-spacer, or .walkthrough's own explicit height), but
+    // only once the video's metadata arrives — asynchronously, well after
+    // other triggers further down the page. Every ScrollTrigger below this
+    // one (lifestyle-stack.js's panels in particular — see its own
+    // ScrollTrigger.refresh()) was already created and measured against
+    // the shorter layout that existed before this height existed, so
+    // without this, their cached start/end positions desync from the real,
+    // final layout — visible as a gap or an early/late pin release while
+    // scrolling through them.
     ScrollTrigger.refresh();
 
     updateSection(sections[0]);

@@ -57,7 +57,17 @@ body {
   color: var(--color-text);
   background: var(--color-bg);
   line-height: 1.6;
-  overflow-x: hidden;
+  /* No overflow-x:hidden here (html above already has it, and html is the
+     actual scrolling element — see document.scrollingElement). Per spec,
+     declaring overflow-x without overflow-y makes the *computed* overflow-y
+     'auto' too (even if you also explicitly write overflow-y: visible —
+     the auto-promotion is keyed off the computed pair being asymmetric,
+     not authorship), which turns body into a `position: sticky` containing
+     block. Since body itself never actually scrolls (html does), any
+     sticky descendant (.walkthrough__pin) resolves against a container
+     that never receives scroll input and goes inert — renders exactly
+     like `position: static`. Keeping body's overflow untouched (both axes
+     genuinely 'visible') avoids that entirely. */
 }
 
 img { max-width: 100%; display: block; }
@@ -144,6 +154,20 @@ a { text-decoration: none; color: inherit; }
   height: calc(100svh + 100px);
   overflow: hidden;
   background: #060e1a;
+}
+
+/* Touch devices (no ScrollSmoother — see scroll-smoother-init.js) get the
+   hero's "stay in place while the video scrubs" behavior from native CSS
+   sticky instead of GSAP's JS-computed transform pin (see the matching
+   branch in scroll-video.js). Sticky is handled entirely by the browser's
+   own compositor: it can't desync from real scroll/resize timing the way
+   a JS-driven transform can, which is what kept causing visible wobble on
+   real devices even after pinType:'transform' + ignoreMobileResize. */
+@media not all and (hover: hover) and (pointer: fine) {
+  .walkthrough__pin {
+    position: sticky;
+    top: 0;
+  }
 }
 
 .walkthrough__video {
