@@ -14,6 +14,7 @@
     { label: 'About', href: 'index.html#about' },
     { label: 'Services', href: 'index.html#services' },
     { label: 'Properties', href: 'index.html#properties' },
+    { label: 'Insights', href: 'insights.html' },
     { label: 'Contact', href: 'index.html#contact' }
   ];
 
@@ -53,6 +54,7 @@
 
     if (path.includes('property-detail') || path.includes('properties-category')) return 'properties';
     if (path.includes('service-detail')) return 'services';
+    if (path.includes('insights') || path.includes('insight-detail')) return 'insights';
     if (hash === '#about') return 'about';
     if (hash === '#services') return 'services';
     if (hash === '#properties') return 'properties';

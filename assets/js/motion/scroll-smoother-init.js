@@ -47,6 +47,16 @@
   var isDesktopPointer = window.matchMedia('(hover: hover) and (pointer: fine)').matches;
   var hasScrollSmoother = false;
 
+  // Mobile browsers fire a 'resize' event when the address bar hides/shows
+  // during scroll — ScrollTrigger's default behavior is to treat that as a
+  // real viewport change and recalculate every pin's start/end (and the
+  // pinned element's on-screen position) mid-scroll, which is exactly what
+  // reads as the pinned hero "shaking". This is GSAP's own documented flag
+  // for that; without it, the height fix in style.css (svh over dvh) isn't
+  // enough on its own because this recalculation churn is a second, separate
+  // cause of the same symptom.
+  ScrollTrigger.config({ ignoreMobileResize: true });
+
   if (isDesktopPointer && typeof ScrollSmoother !== 'undefined') {
     gsap.registerPlugin(ScrollTrigger, ScrollSmoother);
 

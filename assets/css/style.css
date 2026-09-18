@@ -1862,7 +1862,11 @@ a { text-decoration: none; color: inherit; }
   align-items: center;
   gap: var(--space-4);
   position: fixed;
-  top: var(--space-4);
+  /* env(safe-area-inset-top) is 0 on devices without a notch/dynamic
+     island, so this is a no-op there — but on ones that have it, without
+     this the island (and the dropdown below it, which mirrors this same
+     offset) renders partly under the hardware cutout/status bar. */
+  top: calc(var(--space-4) + env(safe-area-inset-top, 0px));
   left: 50%;
   transform: translateX(-50%);
   z-index: var(--z-nav);
@@ -1918,7 +1922,10 @@ a { text-decoration: none; color: inherit; }
 .menu-panel {
   display: none; /* GSAP sets this to 'block' on open, 'none' on close */
   position: fixed;
-  top: calc(var(--space-4) + 44px);
+  /* Must track the same safe-area offset as .island above, or the two
+     desync on notched devices — the panel would open flush with where
+     the island *used* to sit, not where it actually renders. */
+  top: calc(var(--space-4) + 44px + env(safe-area-inset-top, 0px));
   left: 50%;
   transform: translateX(-50%);
   z-index: 410;
@@ -1974,8 +1981,8 @@ a { text-decoration: none; color: inherit; }
 }
 
 @media (max-width: 768px) {
-  .island { left: var(--space-4); transform: none; }
-  .menu-panel { left: var(--space-4); transform: none; width: min(300px, calc(100vw - 32px)); }
+  .island { left: calc(var(--space-4) + env(safe-area-inset-left, 0px)); transform: none; }
+  .menu-panel { left: calc(var(--space-4) + env(safe-area-inset-left, 0px)); transform: none; width: min(300px, calc(100vw - 32px - env(safe-area-inset-left, 0px))); }
 }
 
 /* ==========================================================================

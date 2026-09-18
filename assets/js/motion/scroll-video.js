@@ -176,6 +176,16 @@
       }
     });
 
+    // This pin-spacer is created asynchronously (only once the video's
+    // metadata arrives), and it adds a large chunk of height at the very
+    // top of the page. Every ScrollTrigger below it on the page (lifestyle-
+    // stack.js's panels in particular — see its own ScrollTrigger.refresh())
+    // was already created and measured against the shorter layout that
+    // existed before this pin existed, so without this, their cached
+    // start/end positions desync from the real, final layout — visible as
+    // a gap or an early/late pin release while scrolling through them.
+    ScrollTrigger.refresh();
+
     updateSection(sections[0]);
   });
 
