@@ -157,7 +157,15 @@
       // fast touch swipes. Transform-based pinning composites on the GPU
       // instead.
       pinType: 'transform',
-      scrub: 0.4, // slight smoothing only — stays responsive, avoids seek stutter
+      // scrub is an eased "catch up to the scroll position" tween, not a
+      // 1:1 mapping — on mobile, real touch-scroll input arrives in bursts
+      // (momentum, rubber-banding) rather than the mouse wheel's steadier
+      // deltas, so a 0.4s catch-up window has enough lag to visibly
+      // overshoot/settle on every burst, which reads as the video wobbling.
+      // A much shorter window on touch keeps just enough smoothing to
+      // filter raw touchmove jitter without that lag being long enough to
+      // perceive.
+      scrub: M.isMobile ? 0.15 : 0.4,
       onUpdate: function (self) {
         if (self.progress > 0.001) dismissHint();
 

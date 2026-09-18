@@ -109,23 +109,39 @@ a { text-decoration: none; color: inherit; }
    Section pins for `scrollLengthVh` (see scroll-video.js) while scroll
    progress drives video.currentTime.
    ========================================================================== */
+.walkthrough {
+  /* Same color as .walkthrough__pin below, deliberately. The pin is sized
+     to svh (the smallest possible viewport), so on a device where the
+     address bar hides mid-scroll, the real viewport briefly becomes
+     taller than the pin — without this, that sliver shows the white
+     <body> background peeking out under the dark pinned video, which
+     reads as a white border flickering in and out as the address bar
+     shows/hides while scrolling. Matching this section's own background
+     to the pin's means that sliver is invisible either way. */
+  background: #060e1a;
+}
+
 .walkthrough__pin {
   position: relative;
   width: 100%;
-  /* svh (the *smallest* possible viewport — address bar fully shown) is
-     deliberate here, not dvh. This section sits at the very top of the
-     page and is scroll-pinned, so its own height feeds back into total
-     document height, which is exactly what the browser uses to decide
-     whether it *can* hide the address bar. dvh live-updates with that
-     decision, so the two can oscillate — the pinned hero visibly shakes
-     as the address bar repeatedly shows/hides in response to its own
-     height changing. svh is a fixed worst-case value, so it can't feed
-     that loop; the tradeoff is the pin sits a browser-chrome's-height
-     short of full screen once the address bar actually hides, which is
-     unnoticeable and far better than shaking. vh stays first as a
+  /* svh (the *smallest* possible viewport — address bar fully shown), not
+     dvh: dvh live-updates as the address bar shows/hides, and since this
+     section is pinned and its own height feeds the scroll-distance math
+     in scroll-video.js, a live-changing height there visibly shakes the
+     pinned hero mid-scroll. svh is a fixed value, so it can't do that.
+     But svh alone is a *worst-case* height — once the address bar
+     actually hides, the real viewport is taller than svh, so a plain
+     100svh box falls short of full screen and a border of whatever sits
+     behind it shows through underneath. The + 100px on top is a fixed
+     overscan buffer covering that gap: comfortably more than any mobile
+     browser's address-bar height, but still a static number, so it
+     carries none of dvh's live-recalculation risk. .walkthrough__hint
+     and .walkthrough__ctas below add that same 100px to their `bottom`
+     offset so they stay anchored to the *visible* (svh) viewport edge
+     instead of drifting down with this overscan. vh stays first as a
      fallback for browsers without svh support. */
   height: 100vh;
-  height: 100svh;
+  height: calc(100svh + 100px);
   overflow: hidden;
   background: #060e1a;
 }
@@ -151,7 +167,10 @@ a { text-decoration: none; color: inherit; }
 
 .walkthrough__hint {
   position: absolute;
-  bottom: var(--space-8);
+  /* +100px offsets .walkthrough__pin's overscan buffer above — see its
+     comment — so this stays var(--space-8) from the visible bottom edge
+     instead of drifting down with the extra (usually off-screen) height. */
+  bottom: calc(100px + var(--space-8));
   left: 50%;
   transform: translateX(-50%);
   z-index: 2;
@@ -265,7 +284,8 @@ a { text-decoration: none; color: inherit; }
 .walkthrough__ctas {
   position: absolute;
   left: 50%;
-  bottom: var(--space-16);
+  /* Same +100px compensation as .walkthrough__hint above. */
+  bottom: calc(100px + var(--space-16));
   z-index: 2;
   display: flex;
   gap: var(--space-4);
@@ -2388,6 +2408,12 @@ a { text-decoration: none; color: inherit; }
    ========================================================================== */
 .lifestyle-stack {
   position: relative;
+  /* Same reasoning as .walkthrough above: panels are sized to svh, so a
+     sliver of this wrapper can peek out at the bottom of whichever panel
+     is currently pinned when the address bar hides mid-scroll. Matching
+     it to the panels' own background (--color-primary) means that sliver
+     is invisible instead of reading as a white border. */
+  background: var(--color-primary);
 }
 
 .lifestyle-panel {
