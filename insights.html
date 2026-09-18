@@ -4,10 +4,10 @@
 <script>if ('scrollRestoration' in history) { history.scrollRestoration = 'manual'; window.scrollTo(0, 0); }</script>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title id="pageTitle">Service Details | G29 Property Consult</title>
+<title>Insights | G29 Property Consult</title>
 <link rel="icon" type="image/png" href="assets/images/g29-icon-32.png">
 <link rel="apple-touch-icon" href="assets/images/g29-icon-180.png">
-<meta id="pageDescription" name="description" content="Property services from G29 Property Consult in Accra, Ghana.">
+<meta name="description" content="Guides and market insights on buying, selling, renting, and investing in property across Accra, Ghana.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="preconnect" href="https://images.unsplash.com">
@@ -23,8 +23,24 @@
 <div id="smooth-wrapper">
 <div id="smooth-content">
 
-<main id="serviceDetailRoot">
-  <!-- Populated by assets/js/service-detail.js based on ?slug= -->
+<main>
+
+  <div class="container property-breadcrumb">
+    <a href="index.html">Home</a> <span aria-hidden="true">/</span>
+    <span>Insights</span>
+  </div>
+
+  <section class="property-grid-section property-grid-section--category" aria-labelledby="insights-heading">
+    <div class="container category-head" data-reveal="fade-up">
+      <h1 id="insights-heading">Insights</h1>
+      <p id="insightsCount"></p>
+    </div>
+
+    <div class="container insight-filters" id="insightsFilters" data-reveal="fade-up"></div>
+
+    <div class="container insight-grid" id="insightsGrid"></div>
+  </section>
+
 </main>
 
 <footer class="site-footer">
@@ -51,7 +67,7 @@
         <a href="index.html">Home</a>
         <a href="index.html#about">About</a>
         <a href="properties-category.html">Properties</a>
-        <a href="insights.html">Insights</a>
+        <a href="insights.html" class="active">Insights</a>
         <a href="index.html#contact">Contact</a>
       </nav>
 
@@ -92,14 +108,14 @@
 </div><!-- /#smooth-content -->
 </div><!-- /#smooth-wrapper -->
 
-<script src="assets/js/services-data.js" defer></script>
-<script src="assets/js/service-detail.js" defer></script>
+<script src="assets/js/insights-data.js" defer></script>
 <script src="https://cdn.jsdelivr.net/npm/gsap@3.15.0/dist/gsap.min.js" defer></script>
 <script src="https://cdn.jsdelivr.net/npm/gsap@3.15.0/dist/ScrollTrigger.min.js" defer></script>
 <script src="https://cdn.jsdelivr.net/npm/gsap@3.15.0/dist/ScrollSmoother.min.js" defer></script>
 <script src="assets/js/motion/tokens.js" defer></script>
 <script src="assets/js/motion/scroll-smoother-init.js" defer></script>
 <script src="assets/js/motion/lazy-bg.js" defer></script>
+<script src="assets/js/insights.js" defer></script>
 <script src="assets/js/motion/reveal.js" defer></script>
 <script src="assets/js/motion/cinematic.js" defer></script>
 <script src="assets/js/dynamic-island.js" defer></script>
