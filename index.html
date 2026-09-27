@@ -21,6 +21,10 @@
     href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&display=swap"
     rel="stylesheet">
   <link rel="stylesheet" href="assets/css/style.css">
+  <!-- Hero poster is the page's LCP image (see .walkthrough__poster) —
+       starts this fetch immediately rather than waiting for the parser
+       to reach the <img> in <body>. -->
+  <link rel="preload" as="image" href="assets/videos/herovideo-poster.jpg" fetchpriority="high">
 </head>
 
 <body>
@@ -44,6 +48,18 @@
        or prefers-reduced-motion is set. -->
     <section class="walkthrough" id="walkthrough" aria-label="Cinematic property walkthrough">
       <div class="walkthrough__pin" id="walkthroughPin">
+
+        <!-- A real <img>, not just the video's `poster` attribute: once
+             scroll-video.js sets video.currentTime (even to seek to the
+             very first frame), the browser swaps the poster for a
+             decoded video frame, and a <video> showing a frame (rather
+             than its static poster) isn't eligible as a Largest
+             Contentful Paint candidate at all — measured against the
+             live site, LCP was crediting a small text hint instead of
+             this hero image. This <img> sits behind the video in DOM
+             order (so the video naturally paints over it once ready)
+             and is what actually gets measured/painted first. -->
+        <img class="walkthrough__poster" src="assets/videos/herovideo-poster.jpg" alt="" aria-hidden="true" fetchpriority="high">
 
         <video id="walkthroughVideo" class="walkthrough__video" muted playsinline preload="metadata"
           poster="assets/videos/herovideo-poster.jpg" aria-hidden="true">
