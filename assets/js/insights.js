@@ -1,15 +1,34 @@
 /*
   Insights listing — renders the article grid on insights.html from
   window.G29_INSIGHTS, newest first, with a lightweight category filter.
+
+  Mobile/tablet only (max-width:1024px, matching style.css): the grid
+  becomes a swipeable slider using the same G29_initDraggableGallery
+  helper as the homepage's card rails. Re-synced after every render
+  (initial load and each filter change) since the cards are replaced
+  each time, and on a matchMedia listener as that breakpoint is crossed.
 */
 (function () {
   const insights = (window.G29_INSIGHTS || []).slice().sort((a, b) => new Date(b.date) - new Date(a.date));
   const grid = document.getElementById('insightsGrid');
+  const galleryEl = document.getElementById('insightsGallery');
+  const prevBtn = document.getElementById('insightsPrev');
+  const nextBtn = document.getElementById('insightsNext');
   if (!grid) return;
 
   const filterBar = document.getElementById('insightsFilters');
   const countEl = document.getElementById('insightsCount');
   const categories = ['All'].concat(Array.from(new Set(insights.map((a) => a.category))));
+  const sliderQuery = window.matchMedia('(max-width: 1024px)');
+
+  const syncSlider = () => {
+    if (!galleryEl || !prevBtn || !nextBtn || !window.G29_initDraggableGallery) return;
+    if (sliderQuery.matches) {
+      window.G29_initDraggableGallery(grid, galleryEl, prevBtn, nextBtn);
+    } else if (window.G29_destroyDraggableGallery) {
+      window.G29_destroyDraggableGallery(grid);
+    }
+  };
 
   const dateFormatter = new Intl.DateTimeFormat('en-GB', { day: 'numeric', month: 'long', year: 'numeric' });
 
@@ -31,6 +50,8 @@
         </div>
       </a>
     `).join('');
+
+    requestAnimationFrame(syncSlider);
   }
 
   if (filterBar) {
@@ -47,4 +68,5 @@
   }
 
   render('All');
+  sliderQuery.addEventListener('change', syncSlider);
 })();

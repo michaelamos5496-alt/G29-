@@ -915,11 +915,33 @@ a { text-decoration: none; color: inherit; }
 }
 .insight-body p { margin: 0 0 var(--space-4); }
 
+/* Mobile/tablet only: slider instead of a stacked grid, same pattern as
+   Featured Properties/Services on the homepage (see assets/js/insights.js
+   and G29_initDraggableGallery). Desktop keeps the 3-column grid as-is. */
 @media (max-width: 1024px) {
-  .insight-grid { grid-template-columns: repeat(2, 1fr); }
+  .insight-grid {
+    display: flex;
+    gap: var(--space-6);
+    margin: 0 0 var(--space-8);
+    padding: 0;
+    cursor: grab;
+    touch-action: pan-y;
+  }
+  .insight-grid.cards--native-scroll { overflow-x: auto; scroll-snap-type: x mandatory; scrollbar-width: none; cursor: auto; }
+  .insight-grid.cards--native-scroll::-webkit-scrollbar { display: none; }
+  .insight-grid.cards--native-scroll > .insight-card { scroll-snap-align: start; }
+  .insight-card {
+    flex: 0 0 auto;
+    width: min(320px, 78vw);
+  }
 }
-@media (max-width: 768px) {
-  .insight-grid { grid-template-columns: 1fr; gap: var(--space-6); }
+
+/* Compound selector (not just .insights-actions) so this reliably beats
+   the shared, later-declared `.actions { display: flex }` base rule,
+   which has equal specificity on its own. */
+.property-grid-section .insights-actions { display: none; }
+@media (max-width: 1024px) {
+  .property-grid-section .insights-actions { display: flex; }
 }
 
 /* ==========================================================================
@@ -958,6 +980,15 @@ a { text-decoration: none; color: inherit; }
   display: grid;
   grid-template-columns: repeat(4, 1fr);
   width: 100%;
+}
+
+/* Prev/Next arrows only make sense once .services-grid becomes a slider
+   below (mobile/tablet, max-width:1024px) — hidden on desktop's grid.
+   Compound selector so this reliably beats the shared, later-declared
+   `.actions { display: flex }` base rule (equal specificity otherwise). */
+.services-hero .services-hero__actions { display: none; }
+@media (max-width: 1024px) {
+  .services-hero .services-hero__actions { display: flex; margin: var(--space-6) 0 0; }
 }
 
 .service-tile {
@@ -2140,7 +2171,25 @@ a { text-decoration: none; color: inherit; }
    Responsive
    ========================================================================== */
 @media (max-width: 1024px) {
-  .services-grid { grid-template-columns: repeat(2, 1fr); }
+  /* Slider instead of a stacked grid — see .services-hero__actions above
+     and assets/js/services-slider.js (same G29_initDraggableGallery
+     helper as the other card rails on this page). */
+  .services-grid {
+    display: flex;
+    gap: var(--space-4);
+    width: auto;
+    padding: 0 var(--space-6);
+    cursor: grab;
+    touch-action: pan-y;
+  }
+  .services-grid.cards--native-scroll { overflow-x: auto; scroll-snap-type: x mandatory; scrollbar-width: none; cursor: auto; }
+  .services-grid.cards--native-scroll::-webkit-scrollbar { display: none; }
+  .services-grid.cards--native-scroll > .service-tile { scroll-snap-align: start; }
+  .service-tile {
+    flex: 0 0 auto;
+    width: min(280px, 74vw);
+    border-radius: var(--radius-card);
+  }
   .services-hero__intro { grid-template-columns: 1fr; gap: var(--space-6); }
   .services-hero__intro h2 { font-size: 36px; }
   .footer-brand { font-size: 72px; }
@@ -2205,7 +2254,6 @@ a { text-decoration: none; color: inherit; }
 }
 
 @media (max-width: 560px) {
-  .services-grid { grid-template-columns: 1fr; }
   .service-tile { aspect-ratio: 4 / 3; }
   .services-hero__intro h2 { font-size: 28px; }
   .about__heading { font-size: 44px; }
