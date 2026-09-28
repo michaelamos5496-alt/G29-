@@ -130,8 +130,13 @@
   }
 
   /* ----------------------------------------------------------------------
-     Progress line — a fixed rail whose fill height tracks page scroll,
-     plus the (previously static) dot on the properties scrubber track.
+     Progress line — a fixed rail whose fill height tracks page scroll.
+     The properties scrubber dot is NOT handled here on purpose — it used
+     to be scroll-linked (vertical scroll through .property-grid-section),
+     completely decoupled from which card the horizontal drag/swipe was
+     actually showing. It's now driven directly by drag progress instead
+     (see assets/js/properties-showcase.js and the onProgress callback in
+     assets/js/motion/draggable-gallery.js).
      -------------------------------------------------------------------- */
   function progressLine() {
     var fill = document.getElementById('progressFill');
@@ -143,21 +148,6 @@
         scrollTrigger: {
           trigger: document.body,
           start: 'top top',
-          end: 'bottom bottom',
-          scrub: true
-        }
-      });
-    }
-
-    var dot = document.querySelector('.property-grid__dot');
-    var track = document.querySelector('.property-grid__track');
-    if (dot && track) {
-      gsap.to(dot, {
-        left: '100%',
-        ease: 'none',
-        scrollTrigger: {
-          trigger: document.querySelector('.property-grid-section'),
-          start: 'top 70%',
           end: 'bottom bottom',
           scrub: true
         }

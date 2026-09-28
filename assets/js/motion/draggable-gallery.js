@@ -9,6 +9,14 @@
   G29_initDraggableGallery() again after re-rendering the `<li>` cards
   (e.g. on filter change) — it tears down any previous instance on the
   same cardsEl first.
+
+  Optional 5th arg `onProgress(progress)` — called with the actual
+  horizontal scroll progress (0 at the first card, 1 at the last) on
+  every drag/throw/goTo/resize update. Used by the "Browse by Category"
+  scrubber dot, which used to be driven by vertical scroll position
+  instead (see cinematic.js) — completely decoupled from which card was
+  actually in view, so the dot could read as almost-finished while the
+  very first card was still showing.
 */
 (function () {
   var instances = new WeakMap();
@@ -21,7 +29,7 @@
     }
   };
 
-  window.G29_initDraggableGallery = function (cardsEl, containerEl, prevBtn, nextBtn) {
+  window.G29_initDraggableGallery = function (cardsEl, containerEl, prevBtn, nextBtn, onProgress) {
     var previous = instances.get(cardsEl);
     if (previous) previous.destroy();
 
@@ -40,11 +48,22 @@
       prevBtn.addEventListener('click', onPrev);
       nextBtn.addEventListener('click', onNext);
 
+      var onNativeScroll = function () {
+        if (!onProgress) return;
+        var maxScroll = cardsEl.scrollWidth - cardsEl.clientWidth;
+        onProgress(maxScroll > 0 ? gsap.utils.clamp(0, 1, cardsEl.scrollLeft / maxScroll) : 0);
+      };
+      if (onProgress) {
+        cardsEl.addEventListener('scroll', onNativeScroll, { passive: true });
+        onNativeScroll();
+      }
+
       var nativeController = {
         destroy: function () {
           cardsEl.classList.remove('cards--native-scroll');
           prevBtn.removeEventListener('click', onPrev);
           nextBtn.removeEventListener('click', onNext);
+          if (onProgress) cardsEl.removeEventListener('scroll', onNativeScroll);
         }
       };
       instances.set(cardsEl, nativeController);
@@ -62,6 +81,12 @@
     var maxX = 0;
 
     var recheckLazyBg = function () { if (window.G29_recheckLazyBg) window.G29_recheckLazyBg(); };
+    var reportProgress = function () {
+      if (!onProgress) return;
+      var x = gsap.getProperty(cardsEl, 'x');
+      onProgress(minX < 0 ? gsap.utils.clamp(0, 1, x / minX) : 0);
+    };
+    var onUpdateTick = function () { recheckLazyBg(); reportProgress(); };
 
     var draggable = Draggable.create(cardsEl, {
       type: 'x',
@@ -73,15 +98,17 @@
       snap: {
         x: function (value) { return gsap.utils.clamp(minX, maxX, Math.round(value / step) * step); }
       },
-      onDrag: recheckLazyBg,
-      onThrowUpdate: recheckLazyBg
+      onDrag: onUpdateTick,
+      onThrowUpdate: onUpdateTick
     })[0];
+
+    reportProgress();
 
     function goTo(index) {
       var maxIndex = Math.round(-minX / step);
       var clampedIndex = Math.max(0, Math.min(maxIndex, index));
       var targetX = gsap.utils.clamp(minX, maxX, -clampedIndex * step);
-      gsap.to(cardsEl, { x: targetX, duration: 0.6, ease: 'power2.out', onUpdate: function () { draggable.update(); recheckLazyBg(); } });
+      gsap.to(cardsEl, { x: targetX, duration: 0.6, ease: 'power2.out', onUpdate: function () { draggable.update(); onUpdateTick(); } });
     }
 
     var onPrevDrag = function () { goTo(Math.round(-gsap.getProperty(cardsEl, 'x') / step) - 1); };
@@ -105,6 +132,7 @@
       var currentX = gsap.getProperty(cardsEl, 'x');
       var clamped = gsap.utils.clamp(minX, maxX, currentX);
       if (clamped !== currentX) gsap.set(cardsEl, { x: clamped });
+      reportProgress();
     };
     window.addEventListener('resize', onResize);
 

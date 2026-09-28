@@ -43,7 +43,17 @@
 
   if (window.G29_lazyLoadBg) window.G29_lazyLoadBg(cardsEl);
 
+  // Scrubber dot tracks actual drag/swipe progress through the cards, not
+  // scroll position — it used to be driven by vertical scroll (see the
+  // now-removed block in cinematic.js), completely decoupled from which
+  // card was actually in view.
+  const dot = document.querySelector('.property-grid__dot');
+
   requestAnimationFrame(() => {
-    if (window.G29_initDraggableGallery) window.G29_initDraggableGallery(cardsEl, galleryEl, prevBtn, nextBtn);
+    if (window.G29_initDraggableGallery) {
+      window.G29_initDraggableGallery(cardsEl, galleryEl, prevBtn, nextBtn, dot
+        ? (progress) => { dot.style.left = (progress * 100) + '%'; }
+        : null);
+    }
   });
 })();
