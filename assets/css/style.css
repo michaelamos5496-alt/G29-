@@ -1842,7 +1842,6 @@ a { text-decoration: none; color: inherit; }
   background: var(--color-accent);
   color: var(--color-primary);
 }
-
 /* Explore / Services columns */
 .footer-nav {
   display: flex;
@@ -2352,12 +2351,11 @@ a { text-decoration: none; color: inherit; }
 }
 
 /* ==========================================================================
-   Featured Properties (homepage) — editorial cards, larger than the
-   category-browse grid, with specs revealed on hover.
+   .featured-properties__head is shared with the "Browse by Category"
+   (Discover) section's own head, which is why it's kept here even though
+   the old Featured Properties section (editorial cards, .featured-card
+   etc.) was removed.
    ========================================================================== */
-.featured-properties {
-  padding: var(--space-24) 0 var(--space-16);
-}
 .featured-properties__head {
   display: flex;
   align-items: flex-end;
@@ -2370,140 +2368,6 @@ a { text-decoration: none; color: inherit; }
   font-size: 40px;
   color: var(--color-primary);
   margin: 0;
-}
-.featured-properties__all {
-  font-size: 14px;
-  font-weight: 600;
-  color: var(--color-primary);
-  white-space: nowrap;
-  padding-bottom: 4px;
-  border-bottom: 1px solid var(--color-border);
-  transition: border-color 0.2s ease, color 0.2s ease;
-}
-.featured-properties__all:hover {
-  color: var(--color-accent);
-  border-color: var(--color-accent);
-}
-
-.featured-grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: var(--space-8);
-}
-
-/* Prev/Next arrows only make sense once .featured-grid becomes a slider
-   below (mobile/tablet, max-width:1024px) — hidden on desktop's grid.
-   Compound selector (not just .featured-properties__actions) so this
-   reliably beats the shared, later-declared `.actions { display: flex }`
-   base rule, which has equal specificity on its own. */
-.featured-properties .featured-properties__actions { display: none; }
-@media (max-width: 1024px) {
-  .featured-properties .featured-properties__actions { display: flex; }
-}
-
-.featured-card { display: block; }
-
-.featured-card__frame {
-  position: relative;
-  aspect-ratio: 4 / 5;
-  border-radius: var(--radius-card);
-  overflow: hidden;
-  margin-bottom: var(--space-4);
-}
-.featured-card__image {
-  width: 100%;
-  height: 100%;
-  background-size: cover;
-  background-position: center;
-  transition: transform 0.6s ease;
-}
-.featured-card:hover .featured-card__image {
-  transform: scale(1.06);
-}
-
-.featured-card__status {
-  position: absolute;
-  top: var(--space-4);
-  left: var(--space-4);
-  background: var(--glass-bg-strong);
-  backdrop-filter: var(--glass-blur);
-  -webkit-backdrop-filter: var(--glass-blur);
-  border-radius: 999px;
-  padding: 6px 14px;
-  font-size: 12px;
-  font-weight: 600;
-  color: var(--color-primary);
-}
-
-.featured-card__hover {
-  position: absolute;
-  inset: auto 0 0 0;
-  display: flex;
-  gap: var(--space-4);
-  padding: var(--space-4);
-  background: linear-gradient(to top, rgba(31, 36, 34, 0.85), transparent);
-  opacity: 0;
-  transform: translateY(8px);
-  transition: opacity 0.3s ease, transform 0.3s ease;
-}
-.featured-card:hover .featured-card__hover {
-  opacity: 1;
-  transform: translateY(0);
-}
-.featured-card__spec {
-  font-size: 13px;
-  font-weight: 600;
-  color: #fff;
-}
-
-.featured-card__title-row {
-  display: flex;
-  align-items: baseline;
-  justify-content: space-between;
-  flex-wrap: wrap;
-  gap: var(--space-1) var(--space-3);
-}
-.featured-card__title {
-  font-family: var(--font-heading);
-  font-size: 19px;
-  color: var(--color-text);
-  margin: 0;
-}
-.featured-card__price {
-  font-size: 13px;
-  font-weight: 600;
-  color: var(--color-accent);
-  white-space: nowrap;
-}
-.featured-card__location {
-  display: block;
-  font-size: 13px;
-  color: var(--color-text-muted);
-  margin-top: 4px;
-}
-
-/* Mobile/tablet only: Featured Properties becomes a swipeable slider
-   instead of a stacked grid, matching the "Browse by Category" rail
-   further down the page (see .gallery/.cards/.actions and
-   assets/js/motion/draggable-gallery.js — properties-featured.js calls
-   the same G29_initDraggableGallery helper, gated to this same
-   max-width:1024px breakpoint). Desktop keeps the 3-column grid as-is. */
-@media (max-width: 1024px) {
-  .featured-grid {
-    display: flex;
-    gap: var(--space-6);
-    margin: 0 0 var(--space-8);
-    padding: 0;
-    cursor: grab;
-    touch-action: pan-y;
-  }
-  .featured-grid.cards--native-scroll { overflow-x: auto; scroll-snap-type: x mandatory; scrollbar-width: none; cursor: auto; }
-  .featured-grid.cards--native-scroll::-webkit-scrollbar { display: none; }
-  .featured-grid.cards--native-scroll > .featured-card { scroll-snap-align: start; }
-  .featured-card {
-    flex: 0 0 auto;
-    width: min(320px, 78vw);
-  }
 }
 @media (max-width: 768px) {
   .featured-properties__head { flex-direction: column; align-items: flex-start; gap: var(--space-3); }
