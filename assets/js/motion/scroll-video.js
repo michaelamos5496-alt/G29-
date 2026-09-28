@@ -1,7 +1,7 @@
 /*
   Scroll-video controller — translates scroll progress into video
   playback position (scroll-scrubbed cinematic walkthrough), plus a
-  scroll-drawn "G29" outline wordmark and a section progress indicator.
+  scroll-drawn G29 flower logo mark and a section progress indicator.
 
   Architecture note: this project is static HTML/CSS/JS (no React/Next.js
   build step), so this is a plain-JS controller rather than a component
@@ -24,7 +24,7 @@
   var hintEl = document.getElementById('walkthroughHint');
   var ctaEl = document.getElementById('walkthroughCtaGroup');
   var wordmarkEl = document.getElementById('walkthroughWordmark');
-  var wordmarkText = document.getElementById('walkthroughWordmarkText');
+  var petalEls = wordmarkEl ? Array.prototype.slice.call(wordmarkEl.querySelectorAll('.wm-petal')) : [];
   var wordmarkSub = document.getElementById('walkthroughWordmarkSub');
   var fadeOutEl = document.getElementById('walkthroughFadeOut');
   var sections = window.G29_WALKTHROUGH_SECTIONS || [];
@@ -38,29 +38,49 @@
   }).join('');
   var progressItems = progressEl.querySelectorAll('.walkthrough__progress-item');
 
-  // ---- Wordmark "write-on": one continuous motion across the whole
-  // scroll — the outline draws AND fills solid white together, both
-  // completing exactly at 100% scroll (not draw-then-pause-then-fill).
-  var wordmarkLength = 0;
-  if (wordmarkText && wordmarkText.getComputedTextLength) {
-    try { wordmarkLength = wordmarkText.getComputedTextLength(); } catch (e) { wordmarkLength = 0; }
-  }
-  if (wordmarkLength) {
-    wordmarkText.style.strokeDasharray = wordmarkLength;
-    wordmarkText.style.strokeDashoffset = wordmarkLength;
-  }
+  // ---- Logo mark "draw-on": each of the 5 flower petals outlines in,
+  // staggered like a bloom, then the whole mark solidifies to a filled
+  // white flower — replacing the old "G29" text write-on. Each petal is
+  // one path combining its outer boundary and inner hole (fill-rule:
+  // evenodd — see index.html/.wm-petal), so getTotalLength() measures
+  // both subpaths together and the stroke-dasharray reveal draws both
+  // the outer AND inner edge of the ring at once.
+  var PETAL_STAGGER = 0.09;
+  var PETAL_DRAW_DURATION = 0.24;
+  var DRAW_END = (petalEls.length - 1) * PETAL_STAGGER + PETAL_DRAW_DURATION; // 0.6 for 5 petals
+  var petalLengths = petalEls.map(function (petal) {
+    var len = 0;
+    if (petal.getTotalLength) {
+      try { len = petal.getTotalLength(); } catch (e) { len = 0; }
+    }
+    if (len) {
+      petal.style.strokeDasharray = len;
+      petal.style.strokeDashoffset = len;
+    }
+    return len;
+  });
+
   function setWordmarkProgress(progress) {
-    if (!wordmarkLength) return;
+    if (!petalEls.length) return;
     // Snaps to fully invisible at progress 0 and ramps in over the first
     // 2% of scroll — stroke-dasharray alone doesn't guarantee a perfectly
-    // empty first frame across multiple glyph subpaths, so opacity is the
+    // empty first frame across multiple petal subpaths, so opacity is the
     // hard guarantee that nothing shows until scrolling actually begins.
     if (wordmarkEl) wordmarkEl.style.opacity = Math.min(progress / 0.02, 1);
-    wordmarkText.style.strokeDashoffset = wordmarkLength * (1 - progress);
-    wordmarkText.style.fillOpacity = progress;
 
-    // "PROPERTY CONSULT" writes in underneath during the last stretch,
-    // as G29 finishes turning solid white.
+    var fillProgress = Math.max(0, Math.min((progress - DRAW_END) / (1 - DRAW_END), 1));
+
+    petalEls.forEach(function (petal, i) {
+      var len = petalLengths[i];
+      if (!len) return;
+      var start = i * PETAL_STAGGER;
+      var drawProgress = Math.max(0, Math.min((progress - start) / PETAL_DRAW_DURATION, 1));
+      petal.style.strokeDashoffset = len * (1 - drawProgress);
+      petal.style.fillOpacity = fillProgress;
+    });
+
+    // "G29 PROPERTY CONSULT" writes in underneath during the last
+    // stretch, as the flower finishes solidifying.
     if (wordmarkSub) {
       var subProgress = Math.max(0, Math.min((progress - 0.65) / 0.35, 1));
       wordmarkSub.style.opacity = subProgress;

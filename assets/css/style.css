@@ -274,7 +274,7 @@ a { text-decoration: none; color: inherit; }
   left: 50%;
   z-index: 2;
   transform: translate(-50%, -50%);
-  width: min(84vw, 980px);
+  width: min(46vw, 340px);
   height: auto;
   overflow: visible;
   opacity: 0;
@@ -282,26 +282,32 @@ a { text-decoration: none; color: inherit; }
   user-select: none;
   /* opacity driven by scroll-video.js — guarantees nothing is visible on
      the very first frame, since stroke-dasharray alone isn't perfectly
-     precise across multiple glyph subpaths. */
+     precise across multiple petal subpaths. Width/viewBox (512x580) is
+     roughly square-ish rather than the old wide text lockup's, so it's
+     sized down from that width considerably to read as a compact emblem
+     rather than dominate the frame. */
 }
-.walkthrough__wordmark #walkthroughWordmarkText {
-  font-family: var(--font-body);
-  font-weight: 800;
-  font-size: 210px;
-  fill: #fff;
+.wm-petal {
+  /* Brand teal fill once solidified (matches assets/images/g29-icon.png
+     and --color-accent exactly) instead of plain white — the stroke
+     stays white throughout as the "ink" color for the draw-on itself
+     and a thin rim once filled. */
+  fill: var(--color-accent);
   fill-opacity: 0;
+  fill-rule: evenodd;
   stroke: rgba(255, 255, 255, 0.9);
-  stroke-width: 2;
+  stroke-width: 4;
   /* stroke-dasharray/-dashoffset and fill-opacity set inline by
-     scroll-video.js: the outline draws on first, then solidifies to a
-     full white fill by the end of the pinned scroll. */
+     scroll-video.js: each petal's outline (both its outer edge and inner
+     hole, combined in one path) draws on first, then the whole mark
+     solidifies to a filled flower by the end of the pinned scroll. */
 }
 
 .walkthrough__wordmark #walkthroughWordmarkSub {
   font-family: var(--font-body);
   font-weight: 600;
-  font-size: 26px;
-  letter-spacing: 10px;
+  font-size: 22px;
+  letter-spacing: 6px;
   fill: #fff;
   fill-opacity: 0.9;
   opacity: 0;
@@ -409,7 +415,7 @@ a { text-decoration: none; color: inherit; }
 
 @media (max-width: 768px) {
   .walkthrough__progress { display: none; }
-  .walkthrough__wordmark { width: 82vw; }
+  .walkthrough__wordmark { width: min(58vw, 260px); }
 }
 
 /* ==========================================================================
