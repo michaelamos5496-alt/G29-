@@ -95,11 +95,11 @@
         <div class="property-inquiry__card" data-reveal="right">
           <h3>Interested in this property?</h3>
           <p>Speak with a G29 advisor about viewings, pricing, or financing options.</p>
-          <form onsubmit="return false;">
-            <input type="text" placeholder="Full Name" required>
-            <input type="email" placeholder="Email Address" required>
-            <input type="tel" placeholder="Phone Number">
-            <textarea rows="3" placeholder="I'm interested in ${property.title}..."></textarea>
+          <form id="viewingRequestForm">
+            <input type="text" name="name" placeholder="Full Name" required>
+            <input type="email" name="email" placeholder="Email Address" required>
+            <input type="tel" name="phone" placeholder="Phone Number">
+            <textarea name="message" rows="3" placeholder="I'm interested in ${property.title}..."></textarea>
             <button type="submit" class="btn btn-primary">Request Viewing</button>
           </form>
           <div class="property-inquiry__direct">
@@ -115,4 +115,32 @@
       <a href="index.html#properties" class="property-related__link">View all properties <span aria-hidden="true">&#8594;</span></a>
     </section>
   `;
+
+  // No backend on this static site — "Request Viewing" hands the enquiry
+  // straight to WhatsApp instead of silently going nowhere. Same number as
+  // the floating contact button (assets/js/floating-contact.js).
+  const PHONE_WHATSAPP = '233246381172'; // wa.me format: no plus, no leading zero
+  const viewingForm = root.querySelector('#viewingRequestForm');
+  if (viewingForm) {
+    viewingForm.addEventListener('submit', (e) => {
+      e.preventDefault();
+      const name = viewingForm.name.value.trim();
+      const email = viewingForm.email.value.trim();
+      const phone = viewingForm.phone.value.trim();
+      const message = viewingForm.message.value.trim() || `I'm interested in ${property.title}.`;
+
+      const lines = [
+        `Hi G29, I'd like to request a viewing.`,
+        ``,
+        `Property: ${property.title} (${property.location})`,
+        `Name: ${name}`,
+        email ? `Email: ${email}` : null,
+        phone ? `Phone: ${phone}` : null,
+        ``,
+        message
+      ].filter((line) => line !== null);
+
+      window.open(`https://wa.me/${PHONE_WHATSAPP}?text=${encodeURIComponent(lines.join('\n'))}`, '_blank', 'noopener');
+    });
+  }
 })();
