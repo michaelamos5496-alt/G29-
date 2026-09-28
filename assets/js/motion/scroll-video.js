@@ -69,6 +69,12 @@
     if (wordmarkEl) wordmarkEl.style.opacity = Math.min(progress / 0.02, 1);
 
     var fillProgress = Math.max(0, Math.min((progress - DRAW_END) / (1 - DRAW_END), 1));
+    // Stroke fades from white (the draw-on "ink" color) to the same brand
+    // teal as the fill, so nothing is left white once fully solidified —
+    // '#59C2BF' must match --color-accent in style.css.
+    var strokeColor = typeof gsap !== 'undefined'
+      ? gsap.utils.interpolate('rgba(255,255,255,0.9)', '#59C2BF', fillProgress)
+      : null;
 
     petalEls.forEach(function (petal, i) {
       var len = petalLengths[i];
@@ -77,6 +83,7 @@
       var drawProgress = Math.max(0, Math.min((progress - start) / PETAL_DRAW_DURATION, 1));
       petal.style.strokeDashoffset = len * (1 - drawProgress);
       petal.style.fillOpacity = fillProgress;
+      if (strokeColor) petal.style.stroke = strokeColor;
     });
 
     // "G29 PROPERTY CONSULT" writes in underneath during the last
