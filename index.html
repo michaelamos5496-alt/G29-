@@ -270,62 +270,42 @@
 
     </section>
 
-    <!-- Section 03: About — redesigned mobile-first (editorial two-column
-         layout: content + tag pills on one side, a full-height photo with
-         numbered "why G29" tabs and floating trust stats on the other),
-         with a neighborhood thumbnail strip up top. Built mobile-first and
-         applied to all breakpoints (matching the Team section redesign). -->
+    <!-- Section 03: About (replicates reference layout) -->
     <section class="about" id="about" aria-labelledby="about-heading">
-      <div class="container about__topstrip" data-reveal="fade-up">
-        <span class="about__topstrip-label">Where We Work</span>
-        <div class="gallery" id="aboutAreasGallery">
-          <div class="about__areas" id="aboutAreasGrid"></div>
-          <div class="actions about__areas-actions">
-            <button type="button" class="prev" id="aboutAreasPrev" aria-label="Previous area">
-              <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg>
-            </button>
-            <button type="button" class="next" id="aboutAreasNext" aria-label="Next area">
-              <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg>
-            </button>
+      <div class="container">
+        <h2 id="about-heading" class="about__heading" data-reveal="mask">About Us.</h2>
+
+        <div class="about__intro">
+          <nav class="about__nav" data-reveal="fade-up">
+            <a href="#about">About us.</a>
+            <a href="#team">Our team.</a>
+            <span class="about__nav-disabled">Press.</span>
+          </nav>
+
+          <div class="about__body">
+            <p>
+              Your life’s changing. Don’t just find a
+              place — find what’s next. We help you
+              move forward with clarity, confidence,
+              and the right agent by your side. <span class="about__highlight">Property Management</span>,
+              <span class="about__highlight">Real Estate Brokerage</span>,
+              <span class="about__highlight">Property Valuation</span>, and
+              <span class="about__highlight">Advisory Services</span> &mdash; helping owners,
+              investors, and buyers navigate Accra's market with confidence.
+            </p>
           </div>
         </div>
       </div>
 
-      <div class="container about__main">
-        <div class="about__content">
-          <span class="eyebrow" data-reveal="fade-up">About G29</span>
-          <h2 id="about-heading" data-reveal="mask">Don&rsquo;t just find a place.<br>Find what&rsquo;s next.</h2>
-          <p>
-            We help you move forward with clarity, confidence, and the right advisor
-            by your side &mdash; helping owners, investors, and buyers navigate Accra&rsquo;s
-            market with results you can see.
-          </p>
-          <div class="about__tags" data-reveal="fade-up">
-            <a href="service-detail.html?slug=property-management">#PropertyManagement</a>
-            <a href="service-detail.html?slug=real-estate-brokerage">#RealEstateBrokerage</a>
-            <a href="service-detail.html?slug=property-valuation">#PropertyValuation</a>
-            <a href="service-detail.html?slug=advisory-services">#AdvisoryServices</a>
-          </div>
-          <a href="#team" class="btn btn-primary about__cta" data-reveal="fade-up">Meet Our Team <span aria-hidden="true">&#8594;</span></a>
-        </div>
-
-        <div class="about__visual" data-reveal="fade-in">
-          <div class="about__why" id="aboutWhy">
-            <button type="button" class="about__why-tab is-active" data-index="0">01</button>
-            <button type="button" class="about__why-tab" data-index="1">02</button>
-            <button type="button" class="about__why-tab" data-index="2">03</button>
-          </div>
-          <div class="about__photo">
-            <div class="about__photo-img" id="aboutPhotoImg" style="background-image: url('assets/videos/herovideo-poster.jpg');"></div>
-            <span class="about__callout about__callout--1">
-              <span class="about__callout-dot" aria-hidden="true"></span>10+ Years in Accra
-            </span>
-            <span class="about__callout about__callout--2">
-              <span class="about__callout-dot" aria-hidden="true"></span>500+ Clients Served
-            </span>
-            <p class="about__why-copy" id="aboutWhyCopy">Local Expertise &mdash; our advisors live and work in the neighborhoods we list, not just on paper.</p>
-          </div>
-        </div>
+      <div class="about__video" data-reveal="fade-in">
+        <video id="aboutVideo" poster="assets/videos/herovideo-poster.jpg" autoplay muted loop playsinline preload="metadata">
+          <!-- Reusing the real interior walkthrough footage here since it's
+               the only real video asset available. NEEDS INPUT: swap for a
+               dedicated BTS clip of staff/management at work once one exists. -->
+          <source src="assets/videos/herovideo-mobile.mp4" type="video/mp4" media="(max-width: 768px)">
+          <source src="assets/videos/herovideo.mp4" type="video/mp4">
+          Your browser does not support embedded video.
+        </video>
       </div>
     </section>
 
@@ -635,7 +615,6 @@
   <script src="assets/js/motion/draggable-gallery.js" defer></script>
   <script src="assets/js/services-slider.js" defer></script>
   <script src="assets/js/properties-showcase.js" defer></script>
-  <script src="assets/js/about.js" defer></script>
   <script src="assets/js/team-carousel.js" defer></script>
   <script src="assets/js/testimonials.js" defer></script>
   <script src="assets/js/motion/reveal.js" defer></script>

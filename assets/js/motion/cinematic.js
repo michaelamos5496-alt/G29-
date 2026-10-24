@@ -65,7 +65,7 @@
   }
 
   function manifesto() {
-    var block = document.querySelector('.about__content p');
+    var block = document.querySelector('.about__body');
     if (!block) return;
 
     var words = splitWords(block);
@@ -107,23 +107,20 @@
   }
 
   /* ----------------------------------------------------------------------
-     Photo zoom-out — the About photo starts overscaled and settles to 1:1
+     Video zoom-out — the About clip starts overscaled and settles to 1:1
      as it crosses the viewport, so the frame breathes with the scroll.
-     Scales .about__photo-img (the background-image layer) specifically,
-     not .about__photo itself, so the overlaid callouts/tab copy don't
-     scale/blur along with it.
      -------------------------------------------------------------------- */
   function videoZoom() {
-    var img = document.getElementById('aboutPhotoImg');
-    if (!img) return;
+    var video = document.getElementById('aboutVideo');
+    if (!video) return;
 
-    gsap.fromTo(img,
+    gsap.fromTo(video,
       { scale: 1.2 },
       {
         scale: 1,
         ease: 'none',
         scrollTrigger: {
-          trigger: img.closest('.about__photo') || img,
+          trigger: video.closest('.about__video') || video,
           start: 'top bottom',
           end: 'bottom top',
           scrub: true
