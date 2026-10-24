@@ -309,7 +309,12 @@
       </div>
     </section>
 
-    <!-- Section 04: Team Carousel (replicates reference layout) -->
+    <!-- Section 04: Team — card grid on desktop, swipeable slider on
+         mobile/tablet (same G29_initDraggableGallery pattern as Discover,
+         Featured Properties, Services, and Insights). Replaces the old
+         hover-to-expand filmstrip, which was a desktop-first interaction
+         (thin unreadable slivers + hover reveal) awkwardly adapted down
+         to a tap-and-horizontal-scroll gesture on touch. -->
     <section class="team-carousel" id="team" aria-labelledby="team-heading">
       <div class="container team-carousel__head">
         <div data-reveal="fade-up">
@@ -320,14 +325,18 @@
             to clarity, professionalism, and results for every client.
           </p>
         </div>
-        <div class="team-carousel__nav">
-          <button type="button" id="teamPrev" aria-label="Previous team member">&#8249;</button>
-          <button type="button" id="teamNext" aria-label="Next team member">&#8250;</button>
-        </div>
       </div>
 
-      <div class="container">
-        <div class="team-strip" id="teamStrip"></div>
+      <div class="container gallery" id="teamGallery">
+        <div class="team-grid" id="teamGrid" data-reveal-container></div>
+        <div class="actions team-carousel__actions">
+          <button type="button" class="prev" id="teamPrev" aria-label="Previous team member">
+            <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg>
+          </button>
+          <button type="button" class="next" id="teamNext" aria-label="Next team member">
+            <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg>
+          </button>
+        </div>
       </div>
     </section>
 

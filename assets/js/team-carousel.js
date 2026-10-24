@@ -1,5 +1,7 @@
 /*
-  Team carousel — filmstrip of narrow slices, one expanded/active at a time.
+  Team — card grid on desktop, swipeable slider on mobile/tablet
+  (max-width:1024px, matching style.css), using the same
+  G29_initDraggableGallery helper as the other card rails on this page.
   Placeholder team members/photos — swap for real names, titles, and
   photography once provided (see /docs/project-requirements.md).
 */
@@ -14,63 +16,39 @@
     { name: 'Richard Boadi', title: 'Operations Director', image: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?q=80&w=800&auto=format&fit=crop' }
   ];
 
-  let activeIndex = 2;
-
-  const strip = document.getElementById('teamStrip');
+  const grid = document.getElementById('teamGrid');
+  const galleryEl = document.getElementById('teamGallery');
   const prevBtn = document.getElementById('teamPrev');
   const nextBtn = document.getElementById('teamNext');
 
-  if (!strip) return;
+  if (!grid) return;
 
-  const canHover = window.matchMedia('(hover: hover) and (pointer: fine)').matches;
+  grid.innerHTML = team.map((member) => `
+    <div class="team-card" data-reveal="glance" data-reveal-group="team-grid">
+      <div class="team-card__frame">
+        <div class="team-card__image" data-bg="${member.image}"></div>
+      </div>
+      <div class="team-card__caption">
+        <h3 class="team-card__name">${member.name}</h3>
+        <span class="team-card__title">${member.title}</span>
+      </div>
+    </div>
+  `).join('');
 
-  function render() {
-    strip.innerHTML = team.map((member, i) => `
-      <button type="button" class="team-slice${i === activeIndex ? ' is-active' : ''}"
-        data-reveal="fade-up" data-reveal-group="team-strip"
-        style="background-image: url('${member.image}');" data-index="${i}"
-        aria-label="${member.name}, ${member.title}">
-        <span class="team-slice__overlay"></span>
-        <span class="team-slice__info">
-          <span class="team-slice__title">${member.title}</span>
-          <span class="team-slice__name">${member.name}</span>
-        </span>
-      </button>
-    `).join('');
+  if (window.G29_lazyLoadBg) window.G29_lazyLoadBg(grid);
 
-    strip.querySelectorAll('.team-slice').forEach((el) => {
-      el.addEventListener('click', () => {
-        activeIndex = Number(el.dataset.index);
-        render();
-      });
+  if (galleryEl && prevBtn && nextBtn && window.G29_initDraggableGallery) {
+    const sliderQuery = window.matchMedia('(max-width: 1024px)');
 
-      // Desktop: expand on hover instead of requiring a click.
-      // Touch devices keep tap-to-open via the click handler above.
-      if (canHover) {
-        el.addEventListener('mouseenter', () => {
-          activeIndex = Number(el.dataset.index);
-          render();
-        });
+    const sync = () => {
+      if (sliderQuery.matches) {
+        window.G29_initDraggableGallery(grid, galleryEl, prevBtn, nextBtn);
+      } else if (window.G29_destroyDraggableGallery) {
+        window.G29_destroyDraggableGallery(grid);
       }
-    });
+    };
 
-    // On mobile the strip scrolls horizontally (see the max-width:768px
-    // rule in style.css) — activating a slice near either edge would
-    // otherwise expand it partly out of view since re-rendering doesn't
-    // move the scroll position on its own.
-    var activeEl = strip.querySelector('.team-slice.is-active');
-    if (activeEl) activeEl.scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' });
+    requestAnimationFrame(sync);
+    sliderQuery.addEventListener('change', sync);
   }
-
-  prevBtn.addEventListener('click', () => {
-    activeIndex = (activeIndex - 1 + team.length) % team.length;
-    render();
-  });
-
-  nextBtn.addEventListener('click', () => {
-    activeIndex = (activeIndex + 1) % team.length;
-    render();
-  });
-
-  render();
 })();

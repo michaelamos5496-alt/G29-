@@ -1193,17 +1193,14 @@ a { text-decoration: none; color: inherit; }
 
 
 /* ==========================================================================
-   Team Carousel (replicates reference: filmstrip with one expanded slice)
+   Team — card grid on desktop, swipeable slider on mobile/tablet (see
+   assets/js/team-carousel.js and the max-width:1024px rules below).
    ========================================================================== */
 .team-carousel {
   padding: var(--space-24) 0;
 }
 
 .team-carousel__head {
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-end;
-  gap: var(--space-8);
   margin-bottom: var(--space-12);
 }
 
@@ -1222,107 +1219,68 @@ a { text-decoration: none; color: inherit; }
   font-size: 16px;
 }
 
-.team-carousel__nav {
-  display: flex;
-  gap: var(--space-2);
-  flex-shrink: 0;
+.team-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: var(--space-6);
 }
 
-.team-carousel__nav button {
-  width: 44px;
-  height: 44px;
-  border-radius: 50%;
-  border: 1px solid var(--color-border);
-  background: #fff;
-  color: var(--color-primary);
-  font-size: 20px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  transition: background 0.2s ease, border-color 0.2s ease;
-}
-.team-carousel__nav button:hover {
-  background: var(--color-surface);
-  border-color: var(--color-accent);
-}
+.team-card { display: block; }
 
-.team-strip {
-  display: flex;
-  gap: var(--space-2);
-  height: 460px;
-}
-
-.team-slice {
+.team-card__frame {
   position: relative;
-  flex: 1 1 0;
-  min-width: 64px;
-  border: none;
-  padding: 0;
+  aspect-ratio: 3 / 4;
   border-radius: var(--radius-card);
   overflow: hidden;
-  cursor: pointer;
+  margin-bottom: var(--space-4);
+}
+.team-card__image {
+  width: 100%;
+  height: 100%;
   background-size: cover;
   background-position: center;
-  filter: grayscale(1);
-  box-shadow: 0 0 0 rgba(31, 36, 34, 0);
-  transition:
-    flex-grow 0.65s cubic-bezier(0.4, 0, 0.2, 1),
-    filter 0.5s ease,
-    background-size 0.65s cubic-bezier(0.4, 0, 0.2, 1),
-    box-shadow 0.5s ease;
+  transition: transform 0.6s ease;
+}
+.team-card:hover .team-card__image {
+  transform: scale(1.06);
 }
 
-.team-slice.is-active {
-  flex-grow: 6;
-  filter: grayscale(0);
-  background-size: 108%;
-  box-shadow: 0 24px 60px rgba(31, 36, 34, 0.3);
+.team-card__name {
+  font-family: var(--font-heading);
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--color-text);
+  margin: 0 0 2px;
 }
-
-.team-slice__overlay {
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(160deg, rgba(31, 36, 34, 0.05), rgba(31, 36, 34, 0.65));
-  opacity: 0;
-  transition: opacity 0.5s ease 0.05s;
-}
-.team-slice.is-active .team-slice__overlay {
-  opacity: 1;
-  background: linear-gradient(160deg, rgba(89, 194, 191, 0.15), rgba(31, 36, 34, 0.55));
-}
-
-.team-slice__info {
-  position: absolute;
-  left: var(--space-6);
-  top: var(--space-6);
-  right: var(--space-6);
-  text-align: left;
-  color: #fff;
-  opacity: 0;
-  transform: translateY(14px);
-  transition: opacity 0.4s ease 0.2s, transform 0.4s cubic-bezier(0.4, 0, 0.2, 1) 0.2s;
-}
-.team-slice.is-active .team-slice__info {
-  opacity: 1;
-  transform: translateY(0);
-}
-
-.team-slice__title {
+.team-card__title {
   display: block;
   font-size: 12px;
-  letter-spacing: 0.08em;
+  letter-spacing: 0.06em;
   text-transform: uppercase;
   color: var(--color-accent);
-  margin-bottom: 4px;
 }
 
-.team-slice__name {
-  display: block;
-  font-family: var(--font-heading);
-  font-size: 24px;
-  font-weight: 700;
-  line-height: 1.2;
+/* Prev/Next arrows only make sense once .team-grid becomes a slider below
+   (mobile/tablet, max-width:1024px) — hidden on desktop's grid. Compound
+   selector so this reliably beats the shared, later-declared
+   `.actions { display: flex }` base rule (equal specificity otherwise). */
+.team-carousel .team-carousel__actions { display: none; }
+@media (max-width: 1024px) {
+  .team-carousel .team-carousel__actions { display: flex; margin-top: var(--space-6); }
+  .team-grid {
+    display: flex;
+    gap: var(--space-4);
+    padding: 0;
+    cursor: grab;
+    touch-action: pan-y;
+  }
+  .team-grid.cards--native-scroll { overflow-x: auto; scroll-snap-type: x mandatory; scrollbar-width: none; cursor: auto; }
+  .team-grid.cards--native-scroll::-webkit-scrollbar { display: none; }
+  .team-grid.cards--native-scroll > .team-card { scroll-snap-align: start; }
+  .team-card {
+    flex: 0 0 auto;
+    width: min(240px, 62vw);
+  }
 }
 
 /* ==========================================================================
@@ -2233,30 +2191,7 @@ a { text-decoration: none; color: inherit; }
   .footer-banner { height: 240px; }
   .footer-grid { grid-template-columns: 1fr; gap: var(--space-8); }
   .footer-brand { font-size: 56px; }
-  .team-carousel__head { flex-direction: column; align-items: flex-start; gap: var(--space-4); }
-  /* Same grayscale-filmstrip-with-one-expanding-slice treatment as
-     desktop (see base .team-strip/.team-slice rules above) — a fixed
-     flex row can't fit all 7 slices at once at this width, so the strip
-     scrolls horizontally instead. Collapsed slices get a fixed width
-     (flex:1 1 0's even-split math needs a container wide enough to
-     divide, which mobile isn't) and the active one expands to a large
-     but not full-bleed width so the next slice still peeks in as a
-     scroll affordance. */
-  .team-strip {
-    height: 380px;
-    overflow-x: auto;
-    scroll-snap-type: x proximity;
-    -webkit-overflow-scrolling: touch;
-  }
-  .team-slice {
-    flex: 0 0 56px;
-    min-width: 56px;
-    scroll-snap-align: start;
-  }
-  .team-slice.is-active {
-    flex: 0 0 82%;
-    scroll-snap-align: center;
-  }
+  .team-card { width: min(220px, 70vw); }
   .property-grid__item { flex: 0 0 70%; }
   .property-gallery { grid-template-columns: 1fr; }
   .property-gallery__thumbs { flex-direction: row; overflow-x: auto; }
