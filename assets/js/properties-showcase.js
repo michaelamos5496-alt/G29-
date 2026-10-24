@@ -20,21 +20,35 @@
 
   const pad = (n) => String(n).padStart(2, '0');
 
-  function countFor(subtitle) {
-    return properties.filter((p) => p.subtitle === subtitle).length;
+  function statsFor(subtitle) {
+    const list = properties.filter((p) => p.subtitle === subtitle);
+    const forSale = list.filter((p) => p.status === 'For Sale').length;
+    const forRent = list.filter((p) => p.status === 'For Rent').length;
+    return { count: list.length, forSale, forRent };
   }
 
-  cardsEl.innerHTML = locations.map((l, i) => {
-    const count = countFor(l.subtitle);
+  cardsEl.innerHTML = locations.map((l) => {
+    const stats = statsFor(l.subtitle);
+    const tags = [
+      stats.forSale ? `${stats.forSale} For Sale` : null,
+      stats.forRent ? `${stats.forRent} For Rent` : null
+    ].filter(Boolean);
+
     return `
-      <li class="gallery-card" data-bg="${l.image}">
-        <a class="gallery-card__link" href="properties-category.html?location=${encodeURIComponent(l.subtitle)}" aria-label="${l.name}"></a>
-        <span class="gallery-card__status">${pad(i + 1)}</span>
-        <div class="gallery-card__caption">
-          <h3 class="gallery-card__title">${l.name}</h3>
-          <span class="gallery-card__location">${l.description}</span>
-          <span class="gallery-card__price">${count} listing${count === 1 ? '' : 's'}</span>
+      <li class="location-card" data-bg="${l.image}">
+        <a class="location-card__link" href="properties-category.html?location=${encodeURIComponent(l.subtitle)}" aria-label="Explore ${l.name}"></a>
+        <div class="location-card__gradient"></div>
+        <div class="location-card__content">
+          <div class="location-card__head">
+            <h3 class="location-card__title">${l.name}</h3>
+            <span class="location-card__badge">${stats.count} Listing${stats.count === 1 ? '' : 's'}</span>
+          </div>
+          <p class="location-card__desc">${l.description}</p>
+          <div class="location-card__tags">
+            ${tags.map((t) => `<span class="location-card__tag">${t}</span>`).join('')}
+          </div>
         </div>
+        <span class="location-card__cta">Explore ${l.name}</span>
       </li>
     `;
   }).join('');

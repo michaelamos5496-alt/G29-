@@ -2496,6 +2496,7 @@ a { text-decoration: none; color: inherit; }
 }
 .cards--native-scroll::-webkit-scrollbar { display: none; }
 .cards--native-scroll > .gallery-card { scroll-snap-align: start; }
+.cards--native-scroll > .location-card { scroll-snap-align: start; }
 
 .gallery-card {
   position: relative;
@@ -2548,6 +2549,114 @@ a { text-decoration: none; color: inherit; }
   font-size: 13px;
   font-weight: 600;
   color: var(--color-accent);
+}
+
+/* ==========================================================================
+   Browse by Location cards (homepage) — dedicated to this rail, NOT
+   shared with .gallery-card (used by properties-category.html's listing
+   gallery) so this redesign can't affect that page.
+   ========================================================================== */
+.location-card {
+  position: relative;
+  flex: 0 0 auto;
+  width: min(320px, 78vw);
+  height: 500px;
+  border-radius: var(--radius-card);
+  background-size: cover;
+  background-position: center;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+}
+.location-card__link {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+}
+.location-card__gradient {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, rgba(31, 36, 34, 0) 0%, rgba(31, 36, 34, 0.25) 45%, rgba(31, 36, 34, 0.92) 100%);
+}
+
+.location-card__content {
+  position: relative;
+  z-index: 1;
+  padding: var(--space-5) var(--space-5) 0;
+  color: #fff;
+}
+.location-card__head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--space-3);
+  margin-bottom: var(--space-2);
+}
+.location-card__title {
+  font-family: var(--font-heading);
+  font-size: 22px;
+  font-weight: 700;
+  margin: 0;
+}
+.location-card__badge {
+  flex-shrink: 0;
+  background: rgba(255, 255, 255, 0.18);
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
+  border-radius: 999px;
+  padding: 6px 12px;
+  font-size: 12px;
+  font-weight: 600;
+  white-space: nowrap;
+}
+.location-card__desc {
+  font-size: 13px;
+  line-height: 1.6;
+  color: rgba(255, 255, 255, 0.8);
+  margin: 0 0 var(--space-4);
+}
+.location-card__tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+  margin-bottom: var(--space-4);
+}
+.location-card__tag {
+  background: rgba(255, 255, 255, 0.18);
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
+  border-radius: 999px;
+  padding: 6px 12px;
+  font-size: 12px;
+  font-weight: 600;
+  color: #fff;
+}
+
+.location-card__cta {
+  position: relative;
+  z-index: 1;
+  display: block;
+  margin: 0 var(--space-5) var(--space-5);
+  background: #fff;
+  color: var(--color-primary);
+  text-align: center;
+  font-weight: 700;
+  font-size: 14px;
+  border-radius: 999px;
+  padding: 14px;
+  transition: background 0.2s ease, color 0.2s ease;
+}
+.location-card:hover .location-card__cta {
+  background: var(--color-accent);
+  color: #fff;
+}
+
+@media (max-width: 560px) {
+  .location-card { width: min(260px, 82vw); height: 460px; }
+  .location-card__title { font-size: 19px; }
+  .location-card__content { padding: var(--space-4) var(--space-4) 0; }
+  .location-card__cta { margin: 0 var(--space-4) var(--space-4); }
 }
 
 .gallery__empty {
