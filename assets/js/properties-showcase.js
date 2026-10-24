@@ -4,6 +4,10 @@
   neighborhood; clicking one opens properties-category.html filtered to
   that location. Listing counts are computed from the shared listings
   data (see assets/js/properties-data.js).
+
+  .location-card__dots is decorative only (matches the reference card
+  design's pagination dots) — each location has a single photo, not an
+  in-card carousel, so there's nothing for them to actually page through.
 */
 (function () {
   const locations = window.G29_LOCATIONS || [];
@@ -38,6 +42,9 @@
       <li class="location-card" data-bg="${l.image}">
         <a class="location-card__link" href="properties-category.html?location=${encodeURIComponent(l.subtitle)}" aria-label="Explore ${l.name}"></a>
         <div class="location-card__gradient"></div>
+        <div class="location-card__dots" aria-hidden="true">
+          <span class="is-active"></span><span></span><span></span>
+        </div>
         <div class="location-card__content">
           <div class="location-card__head">
             <h3 class="location-card__title">${l.name}</h3>

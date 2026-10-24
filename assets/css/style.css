@@ -2560,8 +2560,8 @@ a { text-decoration: none; color: inherit; }
   position: relative;
   flex: 0 0 auto;
   width: min(320px, 78vw);
-  height: 500px;
-  border-radius: var(--radius-card);
+  height: 520px;
+  border-radius: 28px;
   background-size: cover;
   background-position: center;
   overflow: hidden;
@@ -2572,18 +2572,44 @@ a { text-decoration: none; color: inherit; }
 .location-card__link {
   position: absolute;
   inset: 0;
-  z-index: 2;
+  z-index: 3;
 }
+/* Stays fully bright/photographic until just past the halfway point —
+   darkening is concentrated in the bottom third, not spread evenly
+   top-to-bottom, so the photo itself stays clearly visible (matches
+   the reference card, not a generic "dark card" treatment). */
 .location-card__gradient {
   position: absolute;
   inset: 0;
-  background: linear-gradient(180deg, rgba(31, 36, 34, 0) 0%, rgba(31, 36, 34, 0.25) 45%, rgba(31, 36, 34, 0.92) 100%);
+  background: linear-gradient(180deg,
+    rgba(10, 12, 10, 0) 0%,
+    rgba(10, 12, 10, 0) 42%,
+    rgba(10, 12, 10, 0.55) 58%,
+    rgba(10, 12, 10, 0.94) 100%);
+}
+
+.location-card__dots {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  justify-content: center;
+  gap: 6px;
+  padding-bottom: var(--space-4);
+}
+.location-card__dots span {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.4);
+}
+.location-card__dots span.is-active {
+  background: #fff;
 }
 
 .location-card__content {
   position: relative;
   z-index: 1;
-  padding: var(--space-5) var(--space-5) 0;
+  padding: 0 var(--space-5);
   color: #fff;
 }
 .location-card__head {
@@ -2595,39 +2621,40 @@ a { text-decoration: none; color: inherit; }
 }
 .location-card__title {
   font-family: var(--font-heading);
-  font-size: 22px;
+  font-size: 26px;
   font-weight: 700;
   margin: 0;
 }
 .location-card__badge {
   flex-shrink: 0;
-  background: rgba(255, 255, 255, 0.18);
+  background: rgba(20, 20, 20, 0.6);
   backdrop-filter: var(--glass-blur);
   -webkit-backdrop-filter: var(--glass-blur);
   border-radius: 999px;
-  padding: 6px 12px;
-  font-size: 12px;
-  font-weight: 600;
+  padding: 8px 14px;
+  font-size: 13px;
+  font-weight: 700;
   white-space: nowrap;
+  margin-top: 4px;
 }
 .location-card__desc {
-  font-size: 13px;
+  font-size: 14px;
   line-height: 1.6;
-  color: rgba(255, 255, 255, 0.8);
+  color: rgba(255, 255, 255, 0.75);
   margin: 0 0 var(--space-4);
 }
 .location-card__tags {
   display: flex;
   flex-wrap: wrap;
   gap: var(--space-2);
-  margin-bottom: var(--space-4);
+  margin-bottom: var(--space-5);
 }
 .location-card__tag {
-  background: rgba(255, 255, 255, 0.18);
+  background: rgba(255, 255, 255, 0.16);
   backdrop-filter: var(--glass-blur);
   -webkit-backdrop-filter: var(--glass-blur);
   border-radius: 999px;
-  padding: 6px 12px;
+  padding: 7px 14px;
   font-size: 12px;
   font-weight: 600;
   color: #fff;
@@ -2637,14 +2664,14 @@ a { text-decoration: none; color: inherit; }
   position: relative;
   z-index: 1;
   display: block;
-  margin: 0 var(--space-5) var(--space-5);
+  margin: 0 var(--space-3) var(--space-3);
   background: #fff;
-  color: var(--color-primary);
+  color: #111;
   text-align: center;
   font-weight: 700;
-  font-size: 14px;
-  border-radius: 999px;
-  padding: 14px;
+  font-size: 15px;
+  border-radius: 20px;
+  padding: 18px;
   transition: background 0.2s ease, color 0.2s ease;
 }
 .location-card:hover .location-card__cta {
@@ -2653,10 +2680,10 @@ a { text-decoration: none; color: inherit; }
 }
 
 @media (max-width: 560px) {
-  .location-card { width: min(260px, 82vw); height: 460px; }
-  .location-card__title { font-size: 19px; }
-  .location-card__content { padding: var(--space-4) var(--space-4) 0; }
-  .location-card__cta { margin: 0 var(--space-4) var(--space-4); }
+  .location-card { width: min(260px, 82vw); height: 480px; }
+  .location-card__title { font-size: 21px; }
+  .location-card__content { padding: 0 var(--space-4); }
+  .location-card__cta { margin: 0 var(--space-2) var(--space-2); padding: 16px; }
 }
 
 .gallery__empty {
