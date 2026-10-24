@@ -26,13 +26,20 @@
   typeSelect.insertAdjacentHTML('beforeend', types.map((t) => `<option value="${t}">${t}</option>`).join(''));
   bedsSelect.insertAdjacentHTML('beforeend', bedCounts.map((b) => `<option value="${b}">${b}+ bed${b === 1 ? '' : 's'}</option>`).join(''));
 
-  // ?type= (from the homepage category tiles) seeds the type filter.
+  // ?type= (from the homepage category tiles) seeds the type filter;
+  // ?location= (from the homepage "Browse by Location" rail) seeds the
+  // location filter. Both can't come from the same link, but the filters
+  // themselves are independent so either (or neither) may be present.
   const initialType = params.get('type') || '';
   if (initialType) typeSelect.value = initialType;
+  const initialLocation = params.get('location') || '';
+  if (initialLocation) locationSelect.value = initialLocation;
 
   function currentLabel() {
     const category = categories.find((c) => c.type === typeSelect.value);
-    return category ? category.name : 'All Properties';
+    if (category) return category.name;
+    if (locationSelect.value) return locationSelect.value;
+    return 'All Properties';
   }
 
   function render() {

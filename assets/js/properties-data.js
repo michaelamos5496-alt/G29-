@@ -906,6 +906,51 @@ window.G29_CATEGORIES = [
   }
 ];
 
+// Homepage "Browse by Location" rail. `subtitle` must match properties'
+// own `subtitle` field exactly — that's what properties-category.js's
+// location filter (and the ?location= URL param it reads) matches
+// against. Limited to the better-populated neighborhoods (2+ listings
+// each) rather than all 13 locations in the data, several of which
+// only have a single listing right now.
+window.G29_LOCATIONS = [
+  {
+    name: 'East Legon',
+    subtitle: 'East Legon, Accra',
+    description: "Accra's most established residential address",
+    image: 'https://images.unsplash.com/photo-1512917774080-9991f1c4c750?q=80&w=800&auto=format&fit=crop'
+  },
+  {
+    name: 'Cantonments',
+    subtitle: 'Cantonments, Accra',
+    description: 'Diplomatic quarter, embassies, and tree-lined streets',
+    image: 'https://images.unsplash.com/photo-1600566753190-17f0baa2a6c3?q=80&w=800&auto=format&fit=crop'
+  },
+  {
+    name: 'Airport Residential',
+    subtitle: 'Airport Residential Area, Accra',
+    description: 'Premium living minutes from Kotoka International',
+    image: 'https://images.unsplash.com/photo-1580587771525-78b9dba3b914?q=80&w=800&auto=format&fit=crop'
+  },
+  {
+    name: 'Ridge',
+    subtitle: 'Ridge, Accra',
+    description: 'Central, walkable, and close to the business district',
+    image: 'https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?q=80&w=800&auto=format&fit=crop'
+  },
+  {
+    name: 'Osu',
+    subtitle: 'Osu, Accra',
+    description: 'City-center energy with beachside nightlife nearby',
+    image: 'https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?q=80&w=800&auto=format&fit=crop'
+  },
+  {
+    name: 'North Ridge',
+    subtitle: 'North Ridge, Accra',
+    description: 'Elevated, established, and close to the city center',
+    image: 'https://images.unsplash.com/photo-1613977257592-4871e5fcd7c4?q=80&w=800&auto=format&fit=crop'
+  }
+];
+
 window.G29_propertyDetailUrl = function (slug) {
   return 'property-detail.html?slug=' + encodeURIComponent(slug);
 };

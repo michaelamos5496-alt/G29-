@@ -1,12 +1,12 @@
 /*
-  Property categories — draggable card gallery (see
-  assets/js/motion/draggable-gallery.js). Each card represents a property
-  type; clicking one opens properties-category.html filtered to that type.
-  Category counts are computed from the shared listings data (see
-  assets/js/properties-data.js).
+  Browse by Location — draggable card gallery (see
+  assets/js/motion/draggable-gallery.js). Each card represents a
+  neighborhood; clicking one opens properties-category.html filtered to
+  that location. Listing counts are computed from the shared listings
+  data (see assets/js/properties-data.js).
 */
 (function () {
-  const categories = window.G29_CATEGORIES || [];
+  const locations = window.G29_LOCATIONS || [];
   const properties = window.G29_PROPERTIES || [];
 
   const galleryEl = document.getElementById('categoryTileGallery');
@@ -20,26 +20,26 @@
 
   const pad = (n) => String(n).padStart(2, '0');
 
-  function countFor(type) {
-    return properties.filter((p) => p.category === type).length;
+  function countFor(subtitle) {
+    return properties.filter((p) => p.subtitle === subtitle).length;
   }
 
-  cardsEl.innerHTML = categories.map((c, i) => {
-    const count = countFor(c.type);
+  cardsEl.innerHTML = locations.map((l, i) => {
+    const count = countFor(l.subtitle);
     return `
-      <li class="gallery-card" data-bg="${c.image}">
-        <a class="gallery-card__link" href="properties-category.html?type=${encodeURIComponent(c.type)}" aria-label="${c.name}"></a>
+      <li class="gallery-card" data-bg="${l.image}">
+        <a class="gallery-card__link" href="properties-category.html?location=${encodeURIComponent(l.subtitle)}" aria-label="${l.name}"></a>
         <span class="gallery-card__status">${pad(i + 1)}</span>
         <div class="gallery-card__caption">
-          <h3 class="gallery-card__title">${c.name}</h3>
-          <span class="gallery-card__location">${c.description}</span>
+          <h3 class="gallery-card__title">${l.name}</h3>
+          <span class="gallery-card__location">${l.description}</span>
           <span class="gallery-card__price">${count} listing${count === 1 ? '' : 's'}</span>
         </div>
       </li>
     `;
   }).join('');
 
-  endEl.textContent = pad(categories.length) + '.';
+  endEl.textContent = pad(locations.length) + '.';
 
   if (window.G29_lazyLoadBg) window.G29_lazyLoadBg(cardsEl);
 
