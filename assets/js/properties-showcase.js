@@ -33,29 +33,34 @@
 
   cardsEl.innerHTML = locations.map((l) => {
     const stats = statsFor(l.subtitle);
-    const tags = [
-      stats.forSale ? `${stats.forSale} For Sale` : null,
-      stats.forRent ? `${stats.forRent} For Rent` : null
-    ].filter(Boolean);
 
     return `
-      <li class="location-card" data-bg="${l.image}">
+      <li class="location-card">
         <a class="location-card__link" href="properties-category.html?location=${encodeURIComponent(l.subtitle)}" aria-label="Explore ${l.name}"></a>
-        <div class="location-card__gradient"></div>
-        <div class="location-card__dots" aria-hidden="true">
-          <span class="is-active"></span><span></span><span></span>
-        </div>
-        <div class="location-card__content">
-          <div class="location-card__head">
+        <div class="location-card__photo" data-bg="${l.image}"></div>
+        <div class="location-card__body">
+          <div class="location-card__row1">
             <h3 class="location-card__title">${l.name}</h3>
-            <span class="location-card__badge">${stats.count} Listing${stats.count === 1 ? '' : 's'}</span>
+            <svg class="location-card__verified" viewBox="0 0 24 24" width="18" height="18" fill="none" aria-hidden="true">
+              <circle cx="12" cy="12" r="10" fill="#34c759"/>
+              <path d="M8 12.5l2.5 2.5 5-5" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
           </div>
           <p class="location-card__desc">${l.description}</p>
-          <div class="location-card__tags">
-            ${tags.map((t) => `<span class="location-card__tag">${t}</span>`).join('')}
+          <div class="location-card__footer">
+            <div class="location-card__stats">
+              <span class="location-card__stat">
+                <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 10.5L12 3l9 7.5"/><path d="M5 9.5V21h14V9.5"/></svg>
+                ${stats.count}
+              </span>
+              <span class="location-card__stat">
+                <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 3h12v18l-6-4-6 4V3z"/></svg>
+                ${stats.forSale}
+              </span>
+            </div>
+            <span class="location-card__cta">Explore <span aria-hidden="true">+</span></span>
           </div>
         </div>
-        <span class="location-card__cta">Explore ${l.name}</span>
       </li>
     `;
   }).join('');
