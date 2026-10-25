@@ -2564,9 +2564,9 @@ a { text-decoration: none; color: inherit; }
   flex: 0 0 auto;
   width: min(300px, 78vw);
   border-radius: 32px;
-  background: #1c1c1e;
+  background: linear-gradient(165deg, #123937 0%, #0A2321 100%);
   overflow: hidden;
-  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.25);
+  box-shadow: 0 20px 40px rgba(6, 20, 19, 0.35);
 }
 .location-card__link {
   position: absolute;
@@ -2584,19 +2584,21 @@ a { text-decoration: none; color: inherit; }
 
 .location-card__body {
   position: relative;
-  padding: var(--space-4) var(--space-5) var(--space-5);
+  padding: var(--space-5) var(--space-5) var(--space-5);
   color: #fff;
 }
 .location-card__row1 {
   display: flex;
   align-items: center;
   gap: 8px;
-  margin-bottom: var(--space-2);
+  margin-bottom: var(--space-3);
 }
 .location-card__title {
   font-family: var(--font-heading);
-  font-size: 22px;
-  font-weight: 700;
+  font-size: 21px;
+  font-weight: 600;
+  line-height: 1.25;
+  letter-spacing: -0.01em;
   margin: 0;
 }
 .location-card__verified {
@@ -2604,9 +2606,10 @@ a { text-decoration: none; color: inherit; }
 }
 .location-card__desc {
   font-size: 14px;
-  line-height: 1.6;
-  color: rgba(255, 255, 255, 0.55);
-  margin: 0 0 var(--space-4);
+  line-height: 1.65;
+  letter-spacing: 0.01em;
+  color: rgba(255, 255, 255, 0.6);
+  margin: 0 0 var(--space-5);
 }
 
 .location-card__footer {
@@ -2624,25 +2627,27 @@ a { text-decoration: none; color: inherit; }
   display: inline-flex;
   align-items: center;
   gap: 6px;
+  line-height: 1;
   font-size: 14px;
   font-weight: 500;
-  color: rgba(255, 255, 255, 0.7);
+  color: rgba(255, 255, 255, 0.65);
 }
 .location-card__cta {
   flex-shrink: 0;
   display: inline-flex;
   align-items: center;
   gap: 4px;
-  background: rgba(255, 255, 255, 0.1);
-  color: #fff;
-  font-weight: 600;
+  line-height: 1;
+  background: var(--color-accent);
+  color: #0A2321;
+  font-weight: 700;
   font-size: 14px;
   border-radius: 999px;
-  padding: 10px 18px;
-  transition: background 0.2s ease;
+  padding: 11px 18px;
+  transition: filter 0.2s ease;
 }
 .location-card:hover .location-card__cta {
-  background: var(--color-accent);
+  filter: brightness(1.08);
 }
 
 @media (max-width: 560px) {
