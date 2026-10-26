@@ -1193,94 +1193,295 @@ a { text-decoration: none; color: inherit; }
 
 
 /* ==========================================================================
-   Team — card grid on desktop, swipeable slider on mobile/tablet (see
-   assets/js/team-carousel.js and the max-width:1024px rules below).
+   Team — "spotlight" (see assets/js/team-carousel.js). Dark brand section:
+   one large portrait + bio for the selected member, an avatar strip to
+   switch between them, and a progress ring on the active avatar while it
+   auto-advances (.is-playing on the section).
    ========================================================================== */
-.team-carousel {
+.team-spot {
+  position: relative;
   padding: var(--space-24) 0;
+  background:
+    radial-gradient(60% 50% at 85% 10%, rgba(89, 194, 191, 0.16), transparent 70%),
+    linear-gradient(165deg, #123937 0%, #0A2321 100%);
+  color: #fff;
+  overflow: hidden;
 }
 
-.team-carousel__head {
-  margin-bottom: var(--space-12);
+.team-spot__head {
+  margin-bottom: var(--space-8);
 }
-
-.team-carousel__head h1 {
+.team-spot__head h2 {
   font-family: var(--font-heading);
   font-size: 44px;
-  font-weight: 700;
-  color: var(--color-primary);
+  line-height: 1.1;
+  letter-spacing: -0.02em;
   margin: 0 0 var(--space-4);
 }
-
-.team-carousel__head p {
+.team-spot__head p {
   margin: 0;
-  max-width: 56ch;
-  color: var(--color-text-muted);
+  max-width: 52ch;
   font-size: 16px;
+  color: rgba(255, 255, 255, 0.7);
 }
 
-.team-grid {
+.team-spot__stage {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: var(--space-6);
+  grid-template-columns: minmax(0, 4fr) minmax(0, 7fr);
+  gap: var(--space-16);
+  align-items: center;
 }
 
-.team-card { display: block; }
-
-.team-card__frame {
+/* ---- Portrait ---- */
+.team-spot__portrait {
   position: relative;
-  aspect-ratio: 3 / 4;
-  border-radius: var(--radius-card);
+  aspect-ratio: 4 / 5;
+  max-height: min(600px, 74vh);
+  border-radius: 32px;
   overflow: hidden;
+  background: rgba(255, 255, 255, 0.06);
+  box-shadow: 0 30px 60px rgba(0, 0, 0, 0.35);
+  touch-action: pan-y;
+}
+/* Offset teal outline frame behind the photo. */
+.team-spot__portrait::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  border-radius: inherit;
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.12);
+  pointer-events: none;
+}
+.team-spot__photo {
+  position: absolute;
+  inset: 0;
+  background-size: cover;
+  background-position: center top;
+  opacity: 0;
+  transform: scale(1.08);
+  filter: grayscale(0.4);
+  transition: opacity 0.7s ease, transform 1.4s cubic-bezier(0.22, 1, 0.36, 1), filter 1.4s ease;
+}
+.team-spot__photo.is-active {
+  opacity: 1;
+  transform: scale(1);
+  filter: grayscale(0);
+}
+.team-spot__portrait::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  background: linear-gradient(to top, rgba(10, 35, 33, 0.7), transparent 45%);
+  pointer-events: none;
+}
+/* Big number over the photo's bottom-left corner. */
+.team-spot__num {
+  position: absolute;
+  left: var(--space-6);
+  bottom: var(--space-4);
+  z-index: 3;
+  font-family: var(--font-heading);
+  font-size: 96px;
+  font-weight: 800;
+  line-height: 0.85;
+  letter-spacing: -0.04em;
+  color: rgba(255, 255, 255, 0.9);
+  pointer-events: none;
+}
+
+/* ---- Text ---- */
+.team-spot__text {
+  min-height: 330px;
+}
+.team-spot__text.is-changing > * {
+  animation: team-text-in 0.6s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+.team-spot__text.is-changing > :nth-child(2) { animation-delay: 40ms; }
+.team-spot__text.is-changing > :nth-child(3) { animation-delay: 80ms; }
+.team-spot__text.is-changing > :nth-child(4) { animation-delay: 120ms; }
+.team-spot__text.is-changing > :nth-child(5) { animation-delay: 160ms; }
+.team-spot__text.is-changing > :nth-child(6) { animation-delay: 200ms; }
+
+.team-spot__count {
+  display: block;
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  color: rgba(255, 255, 255, 0.5);
   margin-bottom: var(--space-4);
 }
-.team-card__image {
-  width: 100%;
-  height: 100%;
-  background-size: cover;
-  background-position: center;
-  transition: transform 0.6s ease;
-}
-.team-card:hover .team-card__image {
-  transform: scale(1.06);
-}
-
-.team-card__name {
+.team-spot__name {
   font-family: var(--font-heading);
-  font-size: 18px;
+  font-size: 56px;
   font-weight: 700;
-  color: var(--color-text);
-  margin: 0 0 2px;
+  line-height: 1.05;
+  letter-spacing: -0.03em;
+  margin: 0 0 var(--space-3);
 }
-.team-card__title {
+.team-spot__role {
   display: block;
-  font-size: 12px;
-  letter-spacing: 0.06em;
+  font-size: 14px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
   text-transform: uppercase;
   color: var(--color-accent);
+  margin-bottom: var(--space-6);
+}
+.team-spot__bio {
+  max-width: 48ch;
+  font-size: 17px;
+  line-height: 1.65;
+  color: rgba(255, 255, 255, 0.78);
+  margin: 0 0 var(--space-6);
+}
+.team-spot__tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+  list-style: none;
+  margin: 0 0 var(--space-8);
+  padding: 0;
+}
+.team-spot__tags li {
+  padding: 7px 14px;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  font-size: 13px;
+  font-weight: 500;
+  color: rgba(255, 255, 255, 0.9);
+}
+.team-spot__cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  height: 50px;
+  padding: 0 24px;
+  border: 0;
+  border-radius: 999px;
+  background: var(--color-accent);
+  color: #0A2321;
+  font-family: var(--font-body);
+  font-size: 15px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: filter 0.2s ease, transform 0.2s ease;
+}
+.team-spot__cta:hover { filter: brightness(1.08); }
+.team-spot__cta:active { transform: scale(0.97); }
+
+/* ---- Avatar strip ---- */
+.team-spot__strip {
+  display: flex;
+  gap: var(--space-3);
+  margin-top: var(--space-8);
+  padding-top: var(--space-6);
+  border-top: 1px solid rgba(255, 255, 255, 0.12);
+}
+.team-spot__avatar {
+  position: relative;
+  flex-shrink: 0;
+  width: 64px;
+  height: 64px;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  background: none;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+.team-spot__avatar:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 3px;
+}
+.team-spot__avatar-img {
+  position: absolute;
+  inset: 5px;
+  border-radius: 50%;
+  background-color: rgba(255, 255, 255, 0.08);
+  background-size: cover;
+  background-position: center top;
+  filter: grayscale(1);
+  opacity: 0.55;
+  transition: filter 0.3s ease, opacity 0.3s ease, transform 0.3s ease;
+}
+.team-spot__avatar:hover .team-spot__avatar-img { opacity: 0.85; }
+.team-spot__avatar.is-active .team-spot__avatar-img {
+  filter: none;
+  opacity: 1;
+  transform: scale(1.04);
+}
+.team-spot__ring {
+  position: absolute;
+  inset: 0;
+  transform: rotate(-90deg);
+  fill: none;
+  stroke: var(--color-accent);
+  stroke-width: 2.5;
+  stroke-linecap: round;
+  stroke-dasharray: 188.5;
+  stroke-dashoffset: 188.5;
+  opacity: 0;
+}
+/* Static full ring when not autoplaying; animated fill while it is. */
+.team-spot__avatar.is-active .team-spot__ring {
+  opacity: 1;
+  stroke-dashoffset: 0;
+}
+.team-spot.is-playing .team-spot__avatar.is-active .team-spot__ring {
+  animation: team-ring 6s linear both;
 }
 
-/* Prev/Next arrows only make sense once .team-grid becomes a slider below
-   (mobile/tablet, max-width:1024px) — hidden on desktop's grid. Compound
-   selector so this reliably beats the shared, later-declared
-   `.actions { display: flex }` base rule (equal specificity otherwise). */
-.team-carousel .team-carousel__actions { display: none; }
+@keyframes team-ring {
+  from { stroke-dashoffset: 188.5; }
+  to { stroke-dashoffset: 0; }
+}
+@keyframes team-text-in {
+  from { opacity: 0; transform: translateY(14px); }
+  to { opacity: 1; transform: none; }
+}
+
 @media (max-width: 1024px) {
-  .team-carousel .team-carousel__actions { display: flex; margin-top: var(--space-6); }
-  .team-grid {
-    display: flex;
-    gap: var(--space-4);
-    padding: 0;
-    cursor: grab;
-    touch-action: pan-y;
+  .team-spot { padding: var(--space-16) 0; }
+  .team-spot__head { margin-bottom: var(--space-8); }
+  .team-spot__head h2 { font-size: clamp(32px, 9vw, 44px); }
+  .team-spot__stage {
+    grid-template-columns: minmax(0, 1fr);
+    gap: var(--space-6);
   }
-  .team-grid.cards--native-scroll { overflow-x: auto; scroll-snap-type: x mandatory; scrollbar-width: none; cursor: auto; }
-  .team-grid.cards--native-scroll::-webkit-scrollbar { display: none; }
-  .team-grid.cards--native-scroll > .team-card { scroll-snap-align: start; }
-  .team-card {
-    flex: 0 0 auto;
-    width: min(240px, 62vw);
+  .team-spot__portrait { max-height: 62svh; }
+  .team-spot__num { font-size: 72px; }
+  .team-spot__text { min-height: 0; }
+  .team-spot__name { font-size: clamp(34px, 9vw, 48px); }
+  .team-spot__bio { font-size: 16px; }
+  .team-spot__tags { margin-bottom: var(--space-6); }
+  /* Strip sits directly under the portrait on mobile/tablet (order), and
+     scrolls sideways if the avatars don't fit. */
+  .team-spot__info { display: flex; flex-direction: column; }
+  .team-spot__strip {
+    order: -1;
+    margin: 0 calc(-1 * var(--space-6)) var(--space-8);
+    padding: 4px var(--space-6);
+    border-top: 0;
+    overflow-x: auto;
+    scrollbar-width: none;
   }
+  .team-spot__strip::-webkit-scrollbar { display: none; }
+  .team-spot__avatar { width: 56px; height: 56px; }
+}
+
+/* Tablet: portrait and text side by side again, narrower portrait. */
+@media (min-width: 760px) and (max-width: 1024px) {
+  .team-spot__stage {
+    grid-template-columns: minmax(0, 5fr) minmax(0, 6fr);
+    align-items: start;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .team-spot__photo { transition: opacity 0.2s linear; transform: none; }
+  .team-spot__text.is-changing > * { animation: none; }
 }
 
 /* ==========================================================================
@@ -1456,160 +1657,337 @@ a { text-decoration: none; color: inherit; }
    Contact Hero (replicates reference: blurred background + centered card)
    ========================================================================== */
 /* ==========================================================================
-   Contact — split editorial layout (image panel + info/form panel),
-   modeled on gallerist/architecture-studio contact pages: quiet, direct,
-   no modal hop for the primary contact section.
+   Contact — full-bleed map with the contact card floating over it (see
+   assets/js/contact-map.js). Desktop: card on the left, map fading in
+   from behind it. Mobile/tablet: map on top, card overlapping its bottom
+   edge like a sheet.
    ========================================================================== */
-.contact-split {
-  display: grid;
-  grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
-  min-height: 100vh;
-  min-height: 100dvh;
-}
-
-.contact-split__media {
+.contact-map {
   position: relative;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  padding: var(--space-24) 0;
+  background: #0A2321;
   overflow: hidden;
+  isolation: isolate;
 }
-.contact-split__image {
+.contact-map__canvas {
   position: absolute;
   inset: 0;
-  background-size: cover;
-  background-position: center;
+  z-index: 0;
+  background: #0A2321;
+}
+/* Turn standard (light) OSM tiles into a dark, brand-teal map: invert to
+   dark, then sepia + hue-rotate pulls the remaining tones toward teal. */
+.contact-map__canvas .leaflet-tile-pane {
+  filter: grayscale(1) invert(1) brightness(0.75) contrast(1.15) sepia(0.6) hue-rotate(130deg) saturate(1.6);
+}
+.contact-map__canvas .leaflet-control-attribution {
+  background: rgba(10, 35, 33, 0.6);
+  color: rgba(255, 255, 255, 0.55);
+  font-size: 10px;
+  border-radius: 6px 0 0 0;
+}
+.contact-map__canvas .leaflet-control-attribution a { color: rgba(255, 255, 255, 0.75); }
+
+/* Fades the map out behind the card so the form stays readable. */
+.contact-map__shade {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  background:
+    linear-gradient(90deg, rgba(10, 35, 33, 0.55) 0%, rgba(10, 35, 33, 0.25) 38%, transparent 62%),
+    linear-gradient(to bottom, rgba(10, 35, 33, 0.5) 0%, transparent 18%, transparent 82%, rgba(10, 35, 33, 0.6) 100%);
 }
 
-.contact-split__panel {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  padding: var(--space-16) var(--space-16) var(--space-16) var(--space-12);
+.contact-map__inner {
+  position: relative;
+  z-index: 2;
+  width: 100%;
+  pointer-events: none; /* let the map behind receive drags beside the card */
 }
 
-.contact-split__nav {
-  display: flex;
-  justify-content: flex-end;
-  gap: var(--space-8);
-  margin-bottom: var(--space-24);
-  font-size: 13px;
-  font-weight: 500;
+/* ---- Card (glassmorphism over the map) ---- */
+.contact-card {
+  position: relative;
+  pointer-events: auto;
+  width: min(480px, 100%);
+  padding: var(--space-8);
+  border-radius: 28px;
+  background: linear-gradient(145deg, rgba(255, 255, 255, 0.16) 0%, rgba(255, 255, 255, 0.05) 100%);
+  backdrop-filter: blur(22px) saturate(160%);
+  -webkit-backdrop-filter: blur(22px) saturate(160%);
+  border: 1px solid rgba(255, 255, 255, 0.22);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.25),
+    0 30px 70px rgba(0, 0, 0, 0.45);
+  color: #fff;
+  overflow: hidden;
 }
-.contact-split__nav a {
-  color: var(--color-text-muted);
-  transition: color 0.2s ease;
+/* Soft teal glow in the corner of the glass. */
+.contact-card::before {
+  content: '';
+  position: absolute;
+  top: -120px;
+  right: -120px;
+  width: 280px;
+  height: 280px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(89, 194, 191, 0.35), transparent 70%);
+  pointer-events: none;
 }
-.contact-split__nav a:hover { color: var(--color-primary); }
-.contact-split__nav-current {
-  color: var(--color-primary);
-  font-weight: 600;
-}
-
-.contact-split__body { max-width: 480px; }
-
-.contact-split__body h1 {
+.contact-card > * { position: relative; }
+.contact-card h2 {
   font-family: var(--font-heading);
-  font-size: clamp(48px, 6vw, 72px);
-  color: var(--color-primary);
-  margin: 0 0 var(--space-6);
-  line-height: 1;
-}
-.contact-split__intro {
-  font-size: 15px;
-  line-height: 1.7;
-  color: var(--color-text-muted);
-  margin: 0 0 var(--space-16);
-  max-width: 42ch;
-}
-
-.contact-split__info {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: var(--space-8);
-  padding-bottom: var(--space-16);
-  margin-bottom: var(--space-16);
-  border-bottom: 1px solid var(--color-border);
-}
-.contact-split__info h3 {
-  font-size: 12px;
-  font-weight: 600;
-  text-transform: uppercase;
-  letter-spacing: 0.06em;
-  color: var(--color-text-muted);
+  font-size: 40px;
+  line-height: 1.08;
+  letter-spacing: -0.02em;
+  color: #fff;
   margin: 0 0 var(--space-3);
 }
-.contact-split__info p {
-  font-size: 14px;
+.contact-card__intro {
+  font-size: 15px;
   line-height: 1.6;
-  color: var(--color-text);
-  margin: 0 0 var(--space-2);
+  color: rgba(255, 255, 255, 0.75);
+  margin: 0 0 var(--space-6);
 }
-.contact-split__info a { color: var(--color-text); }
-.contact-split__info a:hover { color: var(--color-accent); }
 
-.contact-split__form {
+.contact-card__quick {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--space-2);
+  margin-bottom: var(--space-6);
+}
+.contact-card__chip {
   display: flex;
   flex-direction: column;
-  gap: var(--space-6);
-}
-.contact-split__form input,
-.contact-split__form textarea {
-  border: none;
-  border-bottom: 1px solid var(--color-border);
-  padding: var(--space-2) 0;
-  font-family: var(--font-body);
-  font-size: 15px;
-  color: var(--color-text);
-  background: transparent;
-  resize: none;
-}
-.contact-split__form input::placeholder,
-.contact-split__form textarea::placeholder { color: var(--color-text-muted); }
-.contact-split__form input:focus,
-.contact-split__form textarea:focus {
-  outline: none;
-  border-bottom-color: var(--color-accent);
-}
-
-.contact-split__submit {
-  display: inline-flex;
   align-items: center;
-  gap: var(--space-3);
-  align-self: flex-start;
-  margin-top: var(--space-4);
-  background: none;
-  border: none;
-  padding: 0;
-  font-family: var(--font-body);
-  font-size: 14px;
+  gap: 6px;
+  padding: 14px 8px;
+  border-radius: 16px;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  font-size: 13px;
   font-weight: 600;
-  letter-spacing: 0.02em;
-  color: var(--color-primary);
-  cursor: pointer;
+  color: #fff;
+  transition: background 0.2s ease, border-color 0.2s ease, transform 0.2s ease;
 }
-.contact-split__submit-icon {
+.contact-card__chip svg { color: var(--color-accent); }
+.contact-card__chip:hover {
+  background: rgba(255, 255, 255, 0.16);
+  border-color: rgba(89, 194, 191, 0.6);
+}
+.contact-card__chip:active { transform: scale(0.97); }
+
+.contact-card__details {
+  margin: 0 0 var(--space-6);
+  padding: var(--space-4) 0;
+  border-top: 1px solid rgba(255, 255, 255, 0.14);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.14);
+  display: grid;
+  gap: var(--space-2);
+}
+.contact-card__details > div {
+  display: grid;
+  grid-template-columns: 64px 1fr;
+  gap: var(--space-3);
+  font-size: 14px;
+  line-height: 1.5;
+}
+.contact-card__details dt {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--color-accent);
+  padding-top: 2px;
+}
+.contact-card__details dd {
+  margin: 0;
+  color: rgba(255, 255, 255, 0.9);
+}
+.contact-card__details a { color: rgba(255, 255, 255, 0.9); }
+.contact-card__details a:hover { color: var(--color-accent); }
+
+.contact-card__form {
+  display: grid;
+  gap: var(--space-3);
+}
+.contact-card__row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-3);
+}
+.contact-card__form input,
+.contact-card__form textarea {
+  width: 100%;
+  padding: 13px 16px;
+  border-radius: 14px;
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  background: rgba(255, 255, 255, 0.07);
+  font-family: var(--font-body);
+  font-size: 16px; /* 16px stops iOS zooming in on focus */
+  color: #fff;
+  resize: vertical;
+  transition: background 0.2s ease, border-color 0.2s ease;
+}
+.contact-card__form input::placeholder,
+.contact-card__form textarea::placeholder { color: rgba(255, 255, 255, 0.55); }
+.contact-card__form input:focus,
+.contact-card__form textarea:focus {
+  outline: none;
+  border-color: var(--color-accent);
+  background: rgba(255, 255, 255, 0.12);
+}
+.contact-card__submit {
   display: flex;
   align-items: center;
-  justify-content: center;
+  justify-content: space-between;
+  height: 54px;
+  padding: 0 8px 0 22px;
+  border: 0;
+  border-radius: 999px;
+  background: var(--color-accent);
+  color: #0A2321;
+  font-family: var(--font-body);
+  font-size: 15px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: filter 0.2s ease;
+}
+.contact-card__submit:hover { filter: brightness(1.08); }
+.contact-card__submit-icon {
+  display: grid;
+  place-items: center;
   width: 40px;
   height: 40px;
   border-radius: 50%;
-  border: 1px solid var(--color-accent);
+  background: #0A2321;
   color: var(--color-accent);
-  transition: background 0.2s ease, color 0.2s ease;
+  transition: transform 0.25s ease;
 }
-.contact-split__submit:hover .contact-split__submit-icon {
-  background: var(--color-accent);
-  color: #fff;
+.contact-card__submit:hover .contact-card__submit-icon { transform: translateX(3px); }
+
+/* Without backdrop-filter support the glass would be unreadable over the
+   map, so fall back to a solid dark card. */
+@supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+  .contact-card { background: rgba(10, 35, 33, 0.94); }
 }
 
+/* ---- Office pin (Leaflet divIcon) ---- */
+.contact-pin { overflow: visible; }
+.contact-pin__dot {
+  position: absolute;
+  left: -22px;
+  top: -22px;
+  width: 44px;
+  height: 44px;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  background: #fff;
+  box-shadow: 0 0 0 4px var(--color-accent), 0 10px 24px rgba(0, 0, 0, 0.45);
+}
+.contact-pin__dot img { width: 24px; height: 24px; }
+.contact-pin__pulse {
+  position: absolute;
+  left: -22px;
+  top: -22px;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  border: 2px solid var(--color-accent);
+  animation: contact-pin-pulse 2.4s cubic-bezier(0.22, 1, 0.36, 1) infinite;
+}
+.contact-pin__pulse--late { animation-delay: 1.2s; }
+.contact-pin__label {
+  position: absolute;
+  left: 34px;
+  top: -22px;
+  display: flex;
+  flex-direction: column;
+  padding: 7px 12px;
+  border-radius: 12px;
+  background: rgba(10, 35, 33, 0.85);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  color: rgba(255, 255, 255, 0.75);
+  font-family: var(--font-body);
+  font-size: 12px;
+  line-height: 1.35;
+  white-space: nowrap;
+}
+.contact-pin__label strong {
+  color: #fff;
+  font-size: 13px;
+}
+@keyframes contact-pin-pulse {
+  from { transform: scale(1); opacity: 0.9; }
+  to { transform: scale(3.2); opacity: 0; }
+}
+
+/* ---- Directions chip (top-right over the map) ---- */
+.contact-map__directions {
+  position: absolute;
+  top: var(--space-24);
+  right: var(--space-6);
+  z-index: 3;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  height: 44px;
+  padding: 0 18px;
+  border-radius: 999px;
+  background: var(--color-accent);
+  color: #0A2321;
+  font-size: 14px;
+  font-weight: 700;
+  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.35);
+  transition: filter 0.2s ease;
+}
+.contact-map__directions:hover { filter: brightness(1.08); }
+
 @media (max-width: 1024px) {
-  .contact-split { grid-template-columns: 1fr; }
-  .contact-split__media { min-height: 42vh; }
-  .contact-split__panel { padding: var(--space-16) var(--space-6); }
-  .contact-split__nav { justify-content: flex-start; flex-wrap: wrap; gap: var(--space-4); margin-bottom: var(--space-12); }
-  .contact-split__body { max-width: none; }
+  /* Map stays full-bleed behind the whole section; the card starts below
+     the pin (which contact-map.js places in the top band) and floats over
+     the rest of the map. */
+  .contact-map {
+    display: block;
+    min-height: 0;
+    padding: max(46svh, 340px) 0 var(--space-12);
+  }
+  .contact-map__shade {
+    background: linear-gradient(to bottom, rgba(10, 35, 33, 0.55) 0%, transparent 12%, transparent 30%, rgba(10, 35, 33, 0.35) 60%, rgba(10, 35, 33, 0.75) 100%);
+  }
+  .contact-card {
+    width: 100%;
+    max-width: 560px;
+    margin: 0 auto;
+    padding: var(--space-6);
+  }
+  .contact-card h2 { font-size: clamp(30px, 8.5vw, 40px); }
+  .contact-map__directions {
+    top: var(--space-6);
+    right: var(--space-4);
+  }
 }
 @media (max-width: 560px) {
-  .contact-split__info { grid-template-columns: 1fr; gap: var(--space-6); }
+  .contact-card__row { grid-template-columns: 1fr; }
+  /* Label below the pin so it can't run off the screen edge. */
+  .contact-pin__label {
+    left: 0;
+    top: 34px;
+    transform: translateX(-50%);
+    align-items: center;
+    font-size: 11px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .contact-pin__pulse { animation: none; opacity: 0; }
 }
 
 /* ---- Contact modal (used by data-contact-trigger CTAs elsewhere on the
@@ -2191,7 +2569,6 @@ a { text-decoration: none; color: inherit; }
   .footer-banner { height: 240px; }
   .footer-grid { grid-template-columns: 1fr; gap: var(--space-8); }
   .footer-brand { font-size: 56px; }
-  .team-card { width: min(220px, 70vw); }
   .property-grid__item { flex: 0 0 70%; }
   .property-gallery { grid-template-columns: 1fr; }
   .property-gallery__thumbs { flex-direction: row; overflow-x: auto; }
@@ -2695,4 +3072,214 @@ a { text-decoration: none; color: inherit; }
 
 @media (max-width: 560px) {
   .gallery-card { height: 360px; }
+}
+
+/* ==========================================================================
+   Discover — featured listings (homepage, after the hero)
+   Photo cards with the details overlaid on a dark fade: big title, status/
+   location on the left, Living / Beds stat columns split by a hairline on
+   the right (see assets/js/properties-showcase.js).
+   ========================================================================== */
+.discover {
+  padding: var(--space-24) 0;
+}
+.discover__head {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: var(--space-6);
+  margin-bottom: var(--space-12);
+}
+.discover__head h2 {
+  font-family: var(--font-heading);
+  font-size: 40px;
+  line-height: 1.1;
+  color: var(--color-primary);
+  margin: 0;
+}
+.discover__tabs {
+  display: flex;
+  gap: var(--space-2);
+}
+.discover__tab {
+  height: 40px;
+  padding: 0 18px;
+  border-radius: 999px;
+  border: 1px solid var(--color-border);
+  background: #fff;
+  font-family: var(--font-body);
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--color-text);
+  cursor: pointer;
+  white-space: nowrap;
+  transition: background 0.2s ease, color 0.2s ease, border-color 0.2s ease;
+}
+.discover__tab:hover { border-color: var(--color-primary); }
+.discover__tab.is-active {
+  background: var(--color-primary);
+  border-color: var(--color-primary);
+  color: #fff;
+}
+
+.discover__cards {
+  display: flex;
+  gap: var(--space-6);
+  list-style: none;
+  margin: 0;
+  /* Room below for the card shadow (overflow-x clips it otherwise),
+     pulled back with the negative margin so spacing doesn't grow. */
+  padding: 4px 0 var(--space-12);
+  margin-bottom: calc(-1 * var(--space-6));
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  scroll-behavior: smooth;
+  scrollbar-width: none;
+}
+.discover__cards::-webkit-scrollbar { display: none; }
+
+.discover-card {
+  position: relative;
+  flex: 0 0 380px;
+  scroll-snap-align: start;
+  aspect-ratio: 9 / 10;
+  border-radius: 20px;
+  overflow: hidden;
+  background-color: #1A1D1A;
+  background-size: cover;
+  background-position: center;
+  box-shadow: 0 18px 36px rgba(0, 0, 0, 0.18);
+  transition: transform 0.35s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.35s ease;
+}
+.discover-card__link {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  border-radius: inherit;
+}
+.discover-card__link:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 3px;
+}
+.discover-card__body {
+  position: absolute;
+  inset: auto 0 0 0;
+  z-index: 1;
+  padding: 120px 20px 24px;
+  background: linear-gradient(to top, rgba(20, 22, 18, 0.92) 0%, rgba(20, 22, 18, 0.72) 45%, transparent 100%);
+  color: #fff;
+}
+/* Hairline along the bottom edge, as in the reference card. */
+.discover-card__body::after {
+  content: '';
+  position: absolute;
+  left: 20px;
+  right: 20px;
+  bottom: 10px;
+  height: 1px;
+  background: rgba(255, 255, 255, 0.18);
+}
+.discover-card__title {
+  font-family: var(--font-heading);
+  font-size: 26px;
+  font-weight: 700;
+  line-height: 1.15;
+  letter-spacing: -0.02em;
+  margin: 0 0 var(--space-2);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.discover-card__row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-4);
+}
+.discover-card__meta {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  font-size: 14px;
+  line-height: 1.5;
+  color: rgba(255, 255, 255, 0.85);
+}
+.discover-card__meta span {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.discover-card__stats {
+  flex-shrink: 0;
+  display: flex;
+}
+.discover-card__stat {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  padding: 0 14px;
+  font-size: 16px;
+  font-weight: 500;
+  line-height: 1.1;
+}
+.discover-card__stat:last-child { padding-right: 0; }
+.discover-card__stat + .discover-card__stat {
+  border-left: 1px solid rgba(255, 255, 255, 0.25);
+}
+.discover-card__stat small {
+  font-size: 14px;
+  color: rgba(255, 255, 255, 0.85);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .discover-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 26px 48px rgba(0, 0, 0, 0.24);
+  }
+}
+
+.discover__foot {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-4);
+  margin-top: var(--space-2);
+}
+.discover__arrows button:disabled {
+  opacity: 0.35;
+  cursor: default;
+}
+.discover__all {
+  display: inline-block;
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--color-primary);
+  border-bottom: 2px solid var(--color-accent);
+  padding-bottom: 2px;
+}
+
+/* Mobile/tablet: swipeable scroll-snap row that bleeds to the screen edge. */
+@media (max-width: 1024px) {
+  .discover { padding: var(--space-16) 0; }
+  .discover__head {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--space-4);
+    margin-bottom: var(--space-6);
+  }
+  .discover__head h2 { font-size: clamp(32px, 9vw, 40px); }
+  .discover__cards {
+    gap: var(--space-4);
+    scroll-padding: 0 var(--space-6);
+    margin: 0 calc(-1 * var(--space-6));
+    padding: 4px var(--space-6) var(--space-12);
+    margin-bottom: calc(-1 * var(--space-6));
+  }
+  .discover-card { flex-basis: min(340px, 86vw); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .discover-card { transition: none; }
+  .discover__cards { scroll-behavior: auto; }
 }
