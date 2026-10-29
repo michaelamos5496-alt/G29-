@@ -59,6 +59,20 @@
     const container = document.getElementById('floatingContact');
     const toggle = document.getElementById('floatingContactToggle');
 
+    // Stays out of the way during the homepage hero; appears once it's
+    // scrolled past. (Hidden on mobile/tablet in style.css, where the nav
+    // bar already carries call/WhatsApp/email.)
+    const hero = document.getElementById('walkthrough');
+    if (hero) {
+      const syncVisibility = () => {
+        const pastHero = hero.getBoundingClientRect().bottom < window.innerHeight * 0.5;
+        container.classList.toggle('is-away', !pastHero);
+        if (!pastHero) container.classList.remove('is-open');
+      };
+      window.addEventListener('scroll', syncVisibility, { passive: true });
+      syncVisibility();
+    }
+
     toggle.addEventListener('click', () => {
       const isOpen = container.classList.toggle('is-open');
       toggle.setAttribute('aria-expanded', String(isOpen));

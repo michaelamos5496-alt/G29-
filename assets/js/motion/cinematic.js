@@ -28,64 +28,6 @@
   if (M.reducedMotion) return;
 
   /* ----------------------------------------------------------------------
-     Manifesto word reveal — the About paragraph brightens word by word.
-     stagger:1 is not a one-second delay here: under a scrub, the stagger
-     is spread across the trigger's scroll range, so it becomes a strictly
-     sequential reveal keyed to how far you've scrolled.
-     -------------------------------------------------------------------- */
-  function splitWords(root) {
-    var words = [];
-    var walker = document.createTreeWalker(root, NodeFilter.SHOW_TEXT, null);
-    var textNodes = [];
-    while (walker.nextNode()) textNodes.push(walker.currentNode);
-
-    textNodes.forEach(function (node) {
-      // Split on whitespace but keep it, so the original spacing (and any
-      // inline markup like .about__highlight) survives the rewrite.
-      var parts = node.textContent.split(/(\s+)/);
-      var frag = document.createDocumentFragment();
-
-      parts.forEach(function (part) {
-        if (!part) return;
-        if (/^\s+$/.test(part)) {
-          frag.appendChild(document.createTextNode(part));
-          return;
-        }
-        var span = document.createElement('span');
-        span.className = 'mm-word';
-        span.textContent = part;
-        frag.appendChild(span);
-        words.push(span);
-      });
-
-      node.parentNode.replaceChild(frag, node);
-    });
-
-    return words;
-  }
-
-  function manifesto() {
-    var block = document.querySelector('.about__body');
-    if (!block) return;
-
-    var words = splitWords(block);
-    if (!words.length) return;
-
-    gsap.set(words, { opacity: 0.16 });
-    gsap.to(words, {
-      opacity: 1,
-      stagger: 1,
-      ease: 'none',
-      scrollTrigger: {
-        trigger: block,
-        start: 'top 78%',
-        end: 'bottom 55%',
-        scrub: true
-      }
-    });
-  }
-
-  /* ----------------------------------------------------------------------
      Curtain reveal — the contact backdrop opens from a letterbox slit to
      full bleed as the section arrives.
      -------------------------------------------------------------------- */
@@ -191,7 +133,6 @@
   }
 
   document.addEventListener('DOMContentLoaded', function () {
-    manifesto();
     curtain();
     videoZoom();
     progressLine();

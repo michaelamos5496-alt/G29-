@@ -1,61 +1,47 @@
 /*
-  Discover — featured listings on the homepage. Renders the featured
-  properties (see assets/js/properties-data.js) as photo cards with the
-  details overlaid on a dark fade, plus All / For Sale / For Rent tabs.
-  Cards sit in a native scroll-snap slider at every width, with Prev/Next
-  buttons stepping one card at a time.
+  Discover — browse by location on the homepage. One photo card per
+  neighbourhood (window.G29_LOCATIONS in assets/js/properties-data.js)
+  with the details overlaid on a dark fade; each opens
+  properties-category.html filtered to that location. Listing counts are
+  computed from the shared listings data. Cards sit in a native
+  scroll-snap slider at every width, with Prev/Next buttons stepping one
+  card at a time.
 */
 (function () {
+  const locations = window.G29_LOCATIONS || [];
   const properties = window.G29_PROPERTIES || [];
   const cardsEl = document.getElementById('discoverCards');
-  const tabsEl = document.getElementById('discoverTabs');
 
   if (!cardsEl) return;
 
-  // Featured listings first, then the rest, so each tab still fills up to
-  // LIMIT cards even when few featured listings match it.
-  const pool = properties.filter((p) => p.featured).concat(properties.filter((p) => !p.featured));
-  const LIMIT = 6;
+  function statsFor(subtitle) {
+    const list = properties.filter((p) => p.subtitle === subtitle);
+    return {
+      count: list.length,
+      forSale: list.filter((p) => p.status === 'For Sale').length
+    };
+  }
 
-  function card(p) {
-    const roomLabel = p.category === 'Commercial' ? 'Rooms' : 'Beds';
+  cardsEl.innerHTML = locations.map((l) => {
+    const stats = statsFor(l.subtitle);
     return `
-      <li class="discover-card" data-bg="${p.image}">
-        <a class="discover-card__link" href="${window.G29_propertyDetailUrl(p.slug)}" aria-label="${p.title}"></a>
+      <li class="discover-card" data-bg="${l.image}">
+        <a class="discover-card__link" href="properties-category.html?location=${encodeURIComponent(l.subtitle)}" aria-label="Explore ${l.name}"></a>
         <div class="discover-card__body">
-          <h3 class="discover-card__title">${p.title}</h3>
+          <h3 class="discover-card__title">${l.name}</h3>
           <div class="discover-card__row">
-            <div class="discover-card__meta">
-              <span>${p.status} &middot; ${p.category}</span>
-              <span>${p.subtitle}</span>
-            </div>
+            <p class="discover-card__meta">${l.description}</p>
             <div class="discover-card__stats">
-              <span class="discover-card__stat">${p.floorArea}<small>Living</small></span>
-              <span class="discover-card__stat">${p.beds}<small>${roomLabel}</small></span>
+              <span class="discover-card__stat">${stats.count}<small>Listing${stats.count === 1 ? '' : 's'}</small></span>
+              <span class="discover-card__stat">${stats.forSale}<small>For sale</small></span>
             </div>
           </div>
         </div>
       </li>
     `;
-  }
+  }).join('');
 
-  function render(status) {
-    const list = pool.filter((p) => !status || p.status === status).slice(0, LIMIT);
-    cardsEl.innerHTML = list.map(card).join('');
-    cardsEl.scrollLeft = 0;
-    if (window.G29_lazyLoadBg) window.G29_lazyLoadBg(cardsEl);
-    requestAnimationFrame(syncArrows);
-  }
-
-  tabsEl.addEventListener('click', (e) => {
-    const tab = e.target.closest('.discover__tab');
-    if (!tab) return;
-    tabsEl.querySelectorAll('.discover__tab').forEach((el) => {
-      el.classList.toggle('is-active', el === tab);
-      el.setAttribute('aria-pressed', String(el === tab));
-    });
-    render(tab.dataset.status);
-  });
+  if (window.G29_lazyLoadBg) window.G29_lazyLoadBg(cardsEl);
 
   // Cards in the scroll-snap row only enter the viewport sideways, which
   // the lazy-bg loader's window scroll listener never hears about.
@@ -83,5 +69,5 @@
   cardsEl.addEventListener('scroll', syncArrows, { passive: true });
   window.addEventListener('resize', syncArrows);
 
-  render('');
+  requestAnimationFrame(syncArrows);
 })();
