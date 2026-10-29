@@ -189,5 +189,16 @@
     window.matchMedia('(min-width: 1025px)').addEventListener('change', (e) => { if (e.matches) closeMenu(); });
 
     window.addEventListener('hashchange', () => setActive(keyFromUrl()));
+
+    // Footer "Back to top" — goes through ScrollSmoother when it's running
+    // (desktop), otherwise a native smooth scroll.
+    document.querySelectorAll('[data-back-to-top]').forEach((el) => {
+      el.addEventListener('click', (e) => {
+        e.preventDefault();
+        const smoother = typeof ScrollSmoother !== 'undefined' && ScrollSmoother.get();
+        if (smoother) smoother.scrollTo(0, true);
+        else window.scrollTo({ top: 0, behavior: 'smooth' });
+      });
+    });
   });
 })();
