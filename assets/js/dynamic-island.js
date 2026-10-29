@@ -89,6 +89,7 @@
     if (path.includes('property-detail') || path.includes('properties-category')) return 'properties';
     if (path.includes('service-detail')) return 'services';
     if (path.includes('insights') || path.includes('insight-detail')) return 'insights';
+    if (path.includes('team')) return 'about';
     if (path.includes('privacy-policy') || path.includes('terms-of-use')) return null;
     const hash = window.location.hash.replace('#', '');
     return items.some((i) => i.key === hash) ? hash : 'home';

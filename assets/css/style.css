@@ -1215,6 +1215,7 @@ a { text-decoration: none; color: inherit; }
   max-width: 640px;
   margin: 0 auto var(--space-16);
 }
+.team-org__head h1,
 .team-org__head h2 {
   font-family: var(--font-heading);
   font-size: 44px;
@@ -1227,6 +1228,21 @@ a { text-decoration: none; color: inherit; }
   font-size: 16px;
   color: rgba(255, 255, 255, 0.7);
 }
+
+/* Standalone team page (team.html): dark from the top, so the breadcrumb
+   sits on the same background as the chart. */
+.team-page {
+  background:
+    radial-gradient(60% 40% at 50% 0%, rgba(89, 194, 191, 0.16), transparent 70%),
+    linear-gradient(165deg, #123937 0%, #0A2321 100%);
+}
+.team-page .team-org { background: none; }
+.team-page__crumb { color: rgba(255, 255, 255, 0.55); }
+.team-page__crumb a { color: rgba(255, 255, 255, 0.7); }
+.team-page__crumb a:hover { color: #fff; }
+.team-page__crumb span:last-child { color: #fff; }
+.team-page .team-org { padding-top: var(--space-12); }
+.team-page + .site-footer { margin-top: 0; }
 
 /* ---- Cards ---- */
 .org-card {
@@ -1472,7 +1488,8 @@ a { text-decoration: none; color: inherit; }
 @media (max-width: 1024px) {
   .team-org { padding: var(--space-16) 0; }
   .team-org__head { margin-bottom: var(--space-12); }
-  .team-org__head h2 { font-size: clamp(32px, 9vw, 44px); }
+  .team-org__head h1,
+.team-org__head h2 { font-size: clamp(32px, 9vw, 44px); }
 
   .org-card--lead { padding: var(--space-6) var(--space-8); width: 100%; max-width: 340px; }
   .org-card--lead.org-card--photo { padding: 0; width: min(320px, 100%); }
