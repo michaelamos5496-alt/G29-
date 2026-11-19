@@ -3890,6 +3890,10 @@ html.nav-menu-open { overflow: hidden; }
   transition: filter 0.2s ease, transform 0.2s ease;
 }
 .finder-launcher[hidden] { display: none; }
+/* Dims when idle (see finder-popup.js); full strength on hover/touch/drag. */
+.finder-launcher { opacity: 1; transition: opacity 0.5s ease, filter 0.2s ease, transform 0.2s ease; }
+.finder-launcher.is-idle { opacity: 0.4; }
+.finder-launcher.is-idle:hover, .finder-launcher.is-idle:focus-visible, .finder-launcher.is-dragging { opacity: 1; }
 .finder-launcher:hover { filter: brightness(1.06); transform: translateY(-2px); }
 /* The contact bubble steps up so the launcher can sit in its spot. */
 body.has-finder-launcher .floating-contact { bottom: calc(var(--space-6) + 70px); }
@@ -3924,7 +3928,7 @@ body.has-finder-launcher .floating-contact { bottom: calc(var(--space-6) + 70px)
 @media (hover: hover) and (pointer: fine) { html.finder-open { overflow: hidden; } }
 
 @media (max-width: 640px) {
-  .finder-launcher { right: var(--space-4); bottom: var(--space-4); width: 56px; padding: 0; justify-content: center; touch-action: none; user-select: none; -webkit-user-select: none; -webkit-touch-callout: none; transition: filter 0.2s ease, transform 0.2s ease, left 0.28s cubic-bezier(0.22, 1, 0.36, 1), bottom 0.28s cubic-bezier(0.22, 1, 0.36, 1); }
+  .finder-launcher { right: var(--space-4); bottom: var(--space-4); width: 56px; padding: 0; justify-content: center; touch-action: none; user-select: none; -webkit-user-select: none; -webkit-touch-callout: none; transition: opacity 0.5s ease, filter 0.2s ease, transform 0.2s ease, left 0.28s cubic-bezier(0.22, 1, 0.36, 1), bottom 0.28s cubic-bezier(0.22, 1, 0.36, 1); }
   .finder-launcher.is-dragging { transition: none; transform: scale(1.1); box-shadow: 0 16px 34px rgba(0, 0, 0, 0.3); cursor: grabbing; }
   .finder-launcher span { display: none; }
   .finder-pop { padding: 0; align-items: flex-end; }

@@ -251,6 +251,19 @@
     }, { passive: false });
 
     makeLauncherDraggable();
+
+    // Idle fade (like iOS AssistiveTouch): the button dims to 40% after a
+    // few seconds untouched, and comes back to full strength the moment it
+    // is hovered, touched or focused (and whenever it re-appears).
+    let idleTimer = null;
+    const wake = () => {
+      launcher.classList.remove('is-idle');
+      clearTimeout(idleTimer);
+      idleTimer = setTimeout(() => launcher.classList.add('is-idle'), 2500);
+    };
+    ['pointerenter', 'pointerdown', 'pointerup', 'focus', 'touchstart'].forEach((ev) => launcher.addEventListener(ev, wake, { passive: true }));
+    launcher.addEventListener('pointerleave', wake, { passive: true });
+    new MutationObserver(() => { if (!launcher.hidden) wake(); }).observe(launcher, { attributes: true, attributeFilter: ['hidden'] });
     const warm = () => { ensureMatcher(); };
     launcher.addEventListener('pointerdown', warm, { once: true });
     launcher.addEventListener('pointerenter', warm, { once: true });

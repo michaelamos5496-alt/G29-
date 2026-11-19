@@ -23,7 +23,6 @@
     { key: 'properties', label: 'Properties', href: 'index.html#properties' },
     { key: 'services', label: 'Services', href: 'index.html#services' },
     { key: 'about', label: 'About', href: 'index.html#about' },
-    { key: 'insights', label: 'Insights', href: 'insights.html' },
     { key: 'contact', label: 'Contact', href: 'contact.html' }
   ];
 
@@ -89,7 +88,6 @@
     const path = window.location.pathname;
     if (path.includes('property-detail') || path.includes('find-property') || path.includes('properties-category')) return 'properties';
     if (path.includes('service-detail')) return 'services';
-    if (path.includes('insights') || path.includes('insight-detail')) return 'insights';
     if (path.includes('team')) return 'about';
     if (path.includes('contact')) return 'contact';
     if (path.includes('privacy-policy') || path.includes('terms-of-use')) return null;
