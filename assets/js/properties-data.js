@@ -712,10 +712,10 @@ window.G29_PROPERTIES = [
     "video": null,
     "floorPlans": [],
     "marketSnapshot": null,
-    "image": "assets/images/properties/wentworth-place/01.jpg",
+    "image": "assets/images/properties/wentworth-place/02.jpg",
     "gallery": [
-      "assets/images/properties/wentworth-place/01.jpg",
       "assets/images/properties/wentworth-place/02.jpg",
+      "assets/images/properties/wentworth-place/01.jpg",
       "assets/images/properties/wentworth-place/03.jpg",
       "assets/images/properties/wentworth-place/04.jpg",
       "assets/images/properties/wentworth-place/05.jpg",
