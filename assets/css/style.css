@@ -2770,11 +2770,11 @@ html.nav-menu-open { overflow: hidden; }
   .nav__menu-btn { display: grid; }
 
   /* Compact full-screen menu on phones/tablets */
-  .nav-menu { padding: calc(env(safe-area-inset-top, 0px) + 60px + var(--space-4)) var(--space-5) calc(var(--space-4) + env(safe-area-inset-bottom, 0px)); }
-  .nav-menu__link { padding: 7px 0; gap: var(--space-3); }
+  .nav-menu { padding: calc(env(safe-area-inset-top, 0px) + 60px + 20px) 24px calc(16px + env(safe-area-inset-bottom, 0px)); }
+  .nav-menu__link { padding: 7px 0; gap: 12px; }
   .nav-menu__num { width: 22px; font-size: 11px; }
   .nav-menu__label { font-size: clamp(24px, 6.5vw, 32px); }
-  .nav-menu__foot { gap: var(--space-3); margin-top: var(--space-5); }
+  .nav-menu__foot { gap: 12px; margin-top: 20px; }
   .nav-menu__cta { height: 46px; font-size: 15px; }
   .nav-menu__quick a { padding: 10px 6px; border-radius: 14px; font-size: 12px; gap: 4px; }
   .nav-menu__meta { font-size: 12px; }
