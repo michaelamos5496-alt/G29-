@@ -22,7 +22,7 @@
     return;
   }
 
-  document.title = `${article.title} | G29 Property Consult`;
+  document.title = `${article.title} | G29 Property Consults`;
   const metaDesc = document.getElementById('pageDescription');
   if (metaDesc) {
     metaDesc.setAttribute('content', article.excerpt);
@@ -61,10 +61,10 @@
         <div class="property-inquiry__card" data-reveal="right">
           <h3>Have a question for a G29 advisor?</h3>
           <p>Get in touch and we'll walk you through your options.</p>
-          <a href="index.html#contact" class="btn btn-primary">Request a Consultation</a>
+          <a href="contact.html" class="btn btn-primary">Request a Consultation</a>
           <div class="property-inquiry__direct">
-            <a href="tel:+233246381172">&#128222; +233 24 638 1172</a>
-            <a href="mailto:info@g29propertyconsult.com">&#9993; info@g29propertyconsult.com</a>
+            <a href="tel:+233549933727">&#128222; +233 54 993 3727</a>
+            <a href="mailto:info@g29propertyconsults.com">&#9993; info@g29propertyconsults.com</a>
           </div>
         </div>
       </aside>

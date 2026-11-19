@@ -36,7 +36,12 @@
     var cards = Array.from(cardsEl.children);
     if (!cards.length) return null;
 
-    var canDraggable = typeof gsap !== 'undefined' && typeof Draggable !== 'undefined' && typeof InertiaPlugin !== 'undefined';
+    // Phones/tablets use native scroll-snap (mandatory + stop:always in CSS):
+    // the browser's own touch scrolling moves exactly one card per swipe and
+    // is far more reliable than emulating it with Draggable. Desktop keeps
+    // the Draggable rail with momentum.
+    var useNative = window.matchMedia('(max-width: 1024px)').matches;
+    var canDraggable = !useNative && typeof gsap !== 'undefined' && typeof Draggable !== 'undefined' && typeof InertiaPlugin !== 'undefined';
 
     if (!canDraggable) {
       cardsEl.classList.add('cards--native-scroll');
@@ -51,7 +56,7 @@
       var onNativeScroll = function () {
         if (!onProgress) return;
         var maxScroll = cardsEl.scrollWidth - cardsEl.clientWidth;
-        onProgress(maxScroll > 0 ? gsap.utils.clamp(0, 1, cardsEl.scrollLeft / maxScroll) : 0);
+        onProgress(maxScroll > 0 ? Math.max(0, Math.min(1, cardsEl.scrollLeft / maxScroll)) : 0);
       };
       if (onProgress) {
         cardsEl.addEventListener('scroll', onNativeScroll, { passive: true });
@@ -88,18 +93,39 @@
     };
     var onUpdateTick = function () { recheckLazyBg(); reportProgress(); };
 
+    // Mobile/tablet: a swipe is a *slide* — it advances exactly one card
+    // (or springs back), never flings across several. Desktop keeps the
+    // free drag with momentum and snap.
+    var slideMode = window.matchMedia('(max-width: 1024px)').matches;
+    var slideStartIndex = 0;
+    var slideStartX = 0;
+
     var draggable = Draggable.create(cardsEl, {
       type: 'x',
       bounds: { minX: minX, maxX: maxX },
-      inertia: true,
+      inertia: !slideMode,
       edgeResistance: 0.85,
       cursor: 'grab',
       activeCursor: 'grabbing',
-      snap: {
+      snap: slideMode ? undefined : {
         x: function (value) { return gsap.utils.clamp(minX, maxX, Math.round(value / step) * step); }
       },
+      onPress: function () {
+        gsap.killTweensOf(cardsEl);
+        slideStartX = gsap.getProperty(cardsEl, 'x');
+        slideStartIndex = Math.round(-slideStartX / step);
+      },
       onDrag: onUpdateTick,
-      onThrowUpdate: onUpdateTick
+      onThrowUpdate: onUpdateTick,
+      onRelease: function () {
+        if (!slideMode) return;
+        var moved = gsap.getProperty(cardsEl, 'x') - slideStartX;
+        var threshold = Math.min(48, step * 0.2);
+        var target = slideStartIndex;
+        if (moved <= -threshold) target = slideStartIndex + 1;
+        else if (moved >= threshold) target = slideStartIndex - 1;
+        goTo(target);
+      }
     })[0];
 
     reportProgress();

@@ -70,7 +70,9 @@
       wrapper: '#smooth-wrapper',
       content: '#smooth-content',
       smooth: 1.1,
-      normalizeScroll: true
+      // allowNestedScroll: lets scrollable panels inside the page (the
+      // property matcher dialog) scroll instead of being swallowed.
+      normalizeScroll: { allowNestedScroll: true }
     });
     hasScrollSmoother = true;
   } else {

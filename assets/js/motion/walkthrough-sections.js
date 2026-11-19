@@ -12,38 +12,38 @@
 window.G29_WALKTHROUGH_SECTIONS = [
   {
     start: 0,
-    end: 0.18,
+    end: 0.14,
     label: '01',
     title: 'Arrival',
     description: 'A first impression shaped by space and light.'
   },
   {
-    start: 0.18,
-    end: 0.40,
+    start: 0.14,
+    end: 0.32,
     label: '02',
     title: 'Living',
     description: 'Open-plan living designed around natural light.'
   },
   {
-    start: 0.40,
-    end: 0.58,
+    start: 0.32,
+    end: 0.48,
     label: '03',
     title: 'Kitchen',
     description: 'Contemporary interiors built for everyday living.'
   },
   {
-    start: 0.58,
-    end: 0.78,
+    start: 0.48,
+    end: 0.66,
     label: '04',
     title: 'The Suite',
     description: 'A private retreat designed for quiet moments.'
   },
   {
-    start: 0.78,
+    start: 0.66,
     end: 1.0,
     label: '05',
     title: 'The View',
-    description: 'Discover what G29 Property Consult has to offer.',
+    description: 'Discover what G29 Property Consults has to offer.',
     cta: true
   }
 ];

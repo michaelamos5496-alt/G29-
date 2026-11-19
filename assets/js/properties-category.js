@@ -57,7 +57,7 @@
     });
 
     const label = currentLabel();
-    document.title = `${label} | G29 Property Consult`;
+    document.title = `${label} | G29 Property Consults`;
     document.getElementById('categoryBreadcrumb').textContent = label;
     document.getElementById('category-heading').textContent = label;
     document.getElementById('categoryCount').textContent =
@@ -66,7 +66,7 @@
     if (matches.length === 0) {
       window.G29_destroyDraggableGallery(cardsEl);
       galleryEl.classList.add('gallery--empty');
-      cardsEl.innerHTML = `<li class="gallery__empty">No listings match those filters yet. <a href="index.html#contact">Contact us</a> and we'll help you find one.</li>`;
+      cardsEl.innerHTML = `<li class="gallery__empty">No listings match those filters yet. <a href="contact.html">Contact us</a> and we'll help you find one.</li>`;
       return;
     }
     galleryEl.classList.remove('gallery--empty');

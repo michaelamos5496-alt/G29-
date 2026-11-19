@@ -17,9 +17,10 @@
   property page's Request Viewing form (see property-detail.js).
 */
 (function () {
-  // Acacia Court, King Hassan Road, Osu (OpenStreetMap node 6051355022).
-  const OFFICE = [5.56121, -0.19308];
-  const PHONE_WHATSAPP = '233246381172'; // wa.me format: no plus, no leading zero
+  // 50 Mango Tree Avenue, Accra. NEEDS INPUT: approximate coordinates for
+  // Mango Tree Avenue (Asylum Down) — confirm the exact pin on a map.
+  const OFFICE = [5.5690, -0.2070];
+  const PHONE_WHATSAPP = '233549933727'; // wa.me format: no plus, no leading zero
 
   const sectionEl = document.getElementById('contact');
   const mapEl = document.getElementById('contactMap');
@@ -53,6 +54,7 @@
   // Pixel offset that moves the office from the map's centre to where it
   // should sit on screen.
   function pinOffset() {
+    if (mapEl.hasAttribute('data-pin-center')) return [0, 0];
     const w = mapEl.clientWidth;
     const h = mapEl.clientHeight;
     if (compactMq.matches) {
@@ -96,7 +98,7 @@
           <span class="contact-pin__pulse"></span>
           <span class="contact-pin__pulse contact-pin__pulse--late"></span>
           <span class="contact-pin__dot"><img src="assets/images/g29-icon.png" alt=""></span>
-          <span class="contact-pin__label"><strong>G29 Property Consult</strong>Acacia Court, Osu</span>
+          <span class="contact-pin__label"><strong>G29 Property Consults</strong>50 Mango Tree Avenue</span>
         `
       })
     }).addTo(map);

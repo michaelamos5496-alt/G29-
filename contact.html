@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<script>if ('scrollRestoration' in history) { history.scrollRestoration = 'manual'; window.scrollTo(0, 0); }</script>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Contact | G29 Property Consults</title>
+<link rel="icon" type="image/png" href="assets/images/g29-icon-32.png">
+<link rel="apple-touch-icon" href="assets/images/g29-icon-180.png">
+<meta name="description" content="Contact G29 Property Consults in Accra: call, WhatsApp, email or visit us to talk about a property, rental, renovation or facility management enquiry.">
+<link rel="preconnect" href="https://images.unsplash.com">
+<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css">
+<link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body>
+
+<!-- Scroll progress rail -->
+<div class="progress-line" aria-hidden="true"><span class="progress-line__fill" id="progressFill"></span></div>
+
+<div id="smooth-wrapper">
+<div id="smooth-content">
+
+<main class="contact-split">
+
+  <section class="contact-split__panel contact-light" aria-labelledby="contact-heading">
+    <div class="contact-split__content">
+      <div class="property-breadcrumb contact-hero__crumb">
+        <a href="index.html">Home</a> <span aria-hidden="true">/</span>
+        <span>Contact</span>
+      </div>
+
+      <div class="contact-hero__head" data-reveal="fade-up">
+        <span class="eyebrow">Contact</span>
+        <h1 id="contact-heading">Let&rsquo;s talk property.</h1>
+        <p>Speak with a G29 advisor about a property, a rental, a renovation, or a facility management enquiry. We typically respond within one business day.</p>
+      </div>
+
+      <div class="contact-methods" data-reveal="fade-up">
+      <a class="contact-method" href="tel:+233549933727">
+        <span class="contact-method__icon"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3.1 19.5 19.5 0 0 1-6-6A19.8 19.8 0 0 1 2.1 4.2 2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7c.1.9.4 1.8.7 2.7a2 2 0 0 1-.5 2.1L8 9.8a16 16 0 0 0 6 6l1.3-1.3a2 2 0 0 1 2.1-.4c.9.3 1.8.6 2.7.7a2 2 0 0 1 1.7 2z"/></svg></span>
+        <span class="contact-method__label">Call us</span>
+        <span class="contact-method__value">+233 54 993 3727</span>
+      </a>
+      <a class="contact-method" href="https://wa.me/233549933727" target="_blank" rel="noopener">
+        <span class="contact-method__icon"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 11.5a8.4 8.4 0 0 1-12.4 7.4L3 21l2.1-5.4A8.4 8.4 0 1 1 21 11.5z"/></svg></span>
+        <span class="contact-method__label">WhatsApp</span>
+        <span class="contact-method__value">Chat with an advisor</span>
+      </a>
+      <a class="contact-method" href="mailto:info@g29propertyconsults.com">
+        <span class="contact-method__icon"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 7l9 6 9-6"/></svg></span>
+        <span class="contact-method__label">Email</span>
+        <span class="contact-method__value">info@g29propertyconsults.com</span>
+      </a>
+      <a class="contact-method" href="https://www.google.com/maps/dir/?api=1&amp;destination=50+Mango+Tree+Avenue,+Accra,+Ghana" target="_blank" rel="noopener">
+        <span class="contact-method__icon"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 21s-7-6.2-7-11a7 7 0 0114 0c0 4.8-7 11-7 11z"/><circle cx="12" cy="10" r="2.5"/></svg></span>
+        <span class="contact-method__label">Visit</span>
+        <span class="contact-method__value">50 Mango Tree Avenue, Accra</span>
+      </a>
+      </div>
+
+      <form class="contact-card__form contact-split__form" id="contactForm">
+        <h2>Send us a message</h2>
+        <div class="contact-card__row">
+          <input type="text" name="name" placeholder="Full name" aria-label="Full name" autocomplete="name" required>
+          <input type="email" name="email" placeholder="Email" aria-label="Email" autocomplete="email" required>
+        </div>
+        <textarea name="message" rows="4" placeholder="How can we help?" aria-label="Message" required></textarea>
+        <button type="submit" class="contact-card__submit">
+          Send via WhatsApp
+          <span class="contact-card__submit-icon" aria-hidden="true">&#8594;</span>
+        </button>
+      </form>
+
+      <dl class="contact-card__details">
+        <div><dt>Office</dt><dd>50 Mango Tree Avenue, P.O. Box 1237, Accra</dd></div>
+        <div><dt>Hours</dt><dd>Mon &ndash; Fri, 9:00 am &ndash; 5:00 pm GMT</dd></div>
+        <div><dt>Email</dt><dd><a href="mailto:info@g29propertyconsults.com">info@g29propertyconsults.com</a> &middot; <a href="mailto:fm@g29propertyconsults.com">fm@g29propertyconsults.com</a></dd></div>
+        <div><dt>Phone</dt><dd><a href="tel:+233549933727">+233 54 993 3727</a> &middot; <a href="tel:+233555502334">+233 55 550 2334</a></dd></div>
+      </dl>
+    </div>
+  </section>
+
+  <!-- Map of Accra (Leaflet + OpenStreetMap, brand-tinted, initialised by
+       assets/js/contact-map.js; data-pin-center keeps the office pin in
+       the middle of this half-width map). -->
+  <section class="contact-split__map contact-map" id="contact" aria-label="Map of our office">
+    <div class="contact-map__canvas" id="contactMap" data-pin-center role="img"
+      aria-label="Map of Accra showing the G29 Property Consults office at 50 Mango Tree Avenue, Accra"></div>
+    <a class="contact-map__directions" id="contactDirections" target="_blank" rel="noopener"
+      href="https://www.google.com/maps/dir/?api=1&amp;destination=50+Mango+Tree+Avenue,+Accra,+Ghana">
+      <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 11l18-8-8 18-2-8-8-2z"/></svg>
+      Get directions
+    </a>
+  </section>
+
+</main>
+
+<footer class="site-footer">
+
+  <!-- Closing call-to-action over the property photo. -->
+  <div class="footer-band" data-bg="https://images.unsplash.com/photo-1600585154340-be6161a56a0c?q=80&w=1600&auto=format&fit=crop">
+    <div class="container footer-band__inner reveal-up">
+      <span class="eyebrow eyebrow--on-dark">Ready when you are</span>
+      <h2 class="footer-band__title">Let&rsquo;s find your next property.</h2>
+      <div class="footer-band__actions">
+        <a href="contact.html" class="btn btn-primary">Book a Viewing <span aria-hidden="true">&#8594;</span></a>
+        <a href="https://wa.me/233549933727" target="_blank" rel="noopener" class="btn btn-ghost">WhatsApp us</a>
+      </div>
+    </div>
+  </div>
+
+  <div class="footer-main">
+    <div class="container footer-grid">
+
+      <div class="footer-col footer-col--brand reveal-up">
+        <a href="index.html" class="footer-logo">
+          <img src="assets/images/g29-icon.png" alt="" width="34" height="34">
+          <span><strong>G29</strong><small>Property Consults</small></span>
+        </a>
+        <p class="footer-tagline">Trusted property solutions for buyers, owners, and investors across Accra.</p>
+        <div class="footer-social" aria-label="Social media">
+          <a href="https://www.instagram.com/g29propertyconsults" target="_blank" rel="noopener" aria-label="G29 on Instagram"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="0.6" fill="currentColor"/></svg></a>
+          <a href="https://www.facebook.com/g29propertyconsults" target="_blank" rel="noopener" aria-label="G29 on Facebook"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 8h3V4h-3a4 4 0 0 0-4 4v3H7v4h3v6h4v-6h3l1-4h-4V8z"/></svg></a>
+          <a href="https://www.tiktok.com/@g29propertyconsults" target="_blank" rel="noopener" aria-label="G29 on TikTok"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 3v11.5a3.5 3.5 0 1 1-3.5-3.5"/><path d="M14 3c.4 2.6 2 4.2 5 4.4"/></svg></a>
+        </div>
+      </div>
+
+      <nav class="footer-col footer-nav reveal-up" aria-label="Explore">
+        <span class="footer-col__heading">Explore</span>
+        <a href="index.html">Home</a>
+        <a href="index.html#about">About</a>
+        <a href="team.html">Our Team</a>
+        <a href="properties-category.html">Properties</a>
+        <a href="insights.html">Insights</a>
+        <a href="contact.html" class="active">Contact</a>
+      </nav>
+
+      <nav class="footer-col footer-nav reveal-up" aria-label="Services">
+        <span class="footer-col__heading">Services</span>
+        <a href="service-detail.html?slug=facility-management">Facility Management</a>
+        <a href="service-detail.html?slug=brokerage">Brokerage</a>
+        <a href="service-detail.html?slug=real-estate-advisory">Real Estate Advisory</a>
+        <a href="service-detail.html?slug=refurbishment-renovation">Refurbishment &amp; Renovation Works</a>
+      </nav>
+
+      <div class="footer-col footer-contact reveal-up">
+        <span class="footer-col__heading">Contact</span>
+        <a href="tel:+233549933727" class="footer-phone">+233 54 993 3727</a>
+        <a href="mailto:info@g29propertyconsults.com" class="footer-email">info@g29propertyconsults.com</a>
+        <p class="footer-address">50 Mango Tree Avenue,<br>P.O. Box 1237, Accra, Ghana</p>
+        <p class="footer-hours">Mon &ndash; Fri &middot; 9:00 am &ndash; 5:00 pm</p>
+      </div>
+
+    </div>
+
+    <div class="container">
+      <div class="footer-brand-wrap" aria-hidden="true">
+        <div class="footer-brand" id="wordmark">G29 Property Consults</div>
+      </div>
+      <div class="footer-bottom__row">
+        <p class="footer-copyright">&copy; 2026 G29 Property Consults. All rights reserved.</p>
+        <div class="footer-legal">
+          <a href="privacy-policy.html">Privacy Policy</a>
+          <a href="terms-of-use.html">Terms of Use</a>
+          <span class="footer-credit">Developed by <a href="https://theimagedept.vercel.app" target="_blank" rel="noopener">TheImageDept</a></span>
+        </div>
+        <a href="#" class="footer-top" data-back-to-top>Back to top <span aria-hidden="true">&#8593;</span></a>
+      </div>
+    </div>
+  </div>
+
+</footer>
+
+</div><!-- /#smooth-content -->
+</div><!-- /#smooth-wrapper -->
+
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.15.0/dist/gsap.min.js" defer></script>
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.15.0/dist/ScrollTrigger.min.js" defer></script>
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.15.0/dist/ScrollSmoother.min.js" defer></script>
+<script src="assets/js/motion/tokens.js" defer></script>
+<script src="assets/js/motion/scroll-smoother-init.js" defer></script>
+<script src="assets/js/motion/lazy-bg.js" defer></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js" defer></script>
+<script src="assets/js/contact-map.js" defer></script>
+<script src="assets/js/motion/reveal.js" defer></script>
+<script src="assets/js/motion/cinematic.js" defer></script>
+<script src="assets/js/dynamic-island.js" defer></script>
+<script src="assets/js/floating-contact.js" defer></script>
+<script src="assets/js/finder-popup.js" defer></script>
+</body>
+</html>

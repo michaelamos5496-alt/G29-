@@ -2,29 +2,35 @@
   Nav — injected on every page that includes this script (mirrors
   floating-contact.js). This is the site's only navigation.
 
-  Desktop (>1024px): a wide glass bar — logo, inline links with the
+  Desktop (>1024px): a full-width pinned bar (transparent over the
+  homepage hero, solid white once scrolled and on other pages) — logo, inline links with the
   current one highlighted, a call button and a "Book a Viewing" CTA.
   Mobile/tablet: the same bar slimmed to logo + call + menu button; the
   menu opens full-screen with large numbered links and one-tap contact.
 
-  The bar hides while scrolling down and slides back on any scroll up.
+  The bar stays pinned while scrolling.
   On the homepage the active link follows the section in view
   (scroll-spy); on other pages it's set from the URL.
 */
 (function () {
-  const PHONE = '+233246381172';
-  const PHONE_LABEL = '+233 24 638 1172';
-  const WHATSAPP = '233246381172';
-  const EMAIL = 'info@g29propertyconsult.com';
+  const PHONE = '+233549933727';
+  const PHONE_LABEL = '+233 54 993 3727';
+  const WHATSAPP = '233549933727';
+  const EMAIL = 'info@g29propertyconsults.com';
 
   const items = [
     { key: 'home', label: 'Home', href: 'index.html' },
-    { key: 'about', label: 'About', href: 'index.html#about' },
-    { key: 'services', label: 'Services', href: 'index.html#services' },
     { key: 'properties', label: 'Properties', href: 'index.html#properties' },
+    { key: 'services', label: 'Services', href: 'index.html#services' },
+    { key: 'about', label: 'About', href: 'index.html#about' },
     { key: 'insights', label: 'Insights', href: 'insights.html' },
-    { key: 'contact', label: 'Contact', href: 'index.html#contact' }
+    { key: 'contact', label: 'Contact', href: 'contact.html' }
   ];
+
+  const isHome = () => {
+    const path = window.location.pathname;
+    return path.endsWith('/') || path.endsWith('index.html');
+  };
 
   const pad = (n) => String(n).padStart(2, '0');
 
@@ -36,11 +42,11 @@
   };
 
   const markup = `
-    <header class="nav" id="siteNav">
+    <header class="nav${isHome() ? ' is-over' : ''}" id="siteNav">
       <div class="nav__bar">
-        <a href="index.html" class="nav__logo" aria-label="G29 Property Consult — Home">
+        <a href="index.html" class="nav__logo" aria-label="G29 Property Consults — Home">
           <img src="assets/images/g29-icon.png" alt="" width="26" height="26">
-          <span class="nav__brand"><strong>G29</strong><small>Property Consult</small></span>
+          <span class="nav__brand"><strong>G29</strong><small>Property Consults</small></span>
         </a>
 
         <nav class="nav__links" aria-label="Main">
@@ -49,7 +55,7 @@
 
         <div class="nav__actions">
           <a class="nav__icon-btn" href="tel:${PHONE}" aria-label="Call G29 on ${PHONE_LABEL}">${icons.phone}</a>
-          <a class="nav__cta" href="index.html#contact">Book a Viewing ${icons.arrow}</a>
+          <a class="nav__cta" href="contact.html">Book a Viewing ${icons.arrow}</a>
           <button type="button" class="nav__menu-btn" id="menuToggle" aria-expanded="false" aria-controls="navMenu" aria-label="Open menu">
             <span class="nav__menu-lines" aria-hidden="true"><span></span><span></span></span>
           </button>
@@ -68,28 +74,24 @@
       </nav>
 
       <div class="nav-menu__foot">
-        <a class="nav-menu__cta" href="index.html#contact">Book a Viewing ${icons.arrow}</a>
+        <a class="nav-menu__cta" href="contact.html">Book a Viewing ${icons.arrow}</a>
         <div class="nav-menu__quick">
           <a href="tel:${PHONE}">${icons.phone}<span>Call</span></a>
           <a href="https://wa.me/${WHATSAPP}" target="_blank" rel="noopener">${icons.whatsapp}<span>WhatsApp</span></a>
           <a href="mailto:${EMAIL}">${icons.mail}<span>Email</span></a>
         </div>
-        <p class="nav-menu__meta">Acacia Court, Osu, Accra &middot; Mon&ndash;Fri, 9am&ndash;5pm</p>
+        <p class="nav-menu__meta">50 Mango Tree Avenue, Accra &middot; Mon&ndash;Fri, 9am&ndash;5pm</p>
       </div>
     </div>
   `;
 
-  const isHome = () => {
-    const path = window.location.pathname;
-    return path.endsWith('/') || path.endsWith('index.html');
-  };
-
   function keyFromUrl() {
     const path = window.location.pathname;
-    if (path.includes('property-detail') || path.includes('properties-category')) return 'properties';
+    if (path.includes('property-detail') || path.includes('find-property') || path.includes('properties-category')) return 'properties';
     if (path.includes('service-detail')) return 'services';
     if (path.includes('insights') || path.includes('insight-detail')) return 'insights';
     if (path.includes('team')) return 'about';
+    if (path.includes('contact')) return 'contact';
     if (path.includes('privacy-policy') || path.includes('terms-of-use')) return null;
     const hash = window.location.hash.replace('#', '');
     return items.some((i) => i.key === hash) ? hash : 'home';
@@ -129,12 +131,8 @@
       ticking = false;
       const y = window.scrollY;
       nav.classList.toggle('is-scrolled', y > 40);
-      if (!menuOpen) {
-        const goingDown = y > lastY + 4;
-        const goingUp = y < lastY - 4;
-        if (goingDown && y > 160) nav.classList.add('is-hidden');
-        else if (goingUp || y < 160) nav.classList.remove('is-hidden');
-      }
+      // Transparent over the dark hero at the very top of the homepage only.
+      nav.classList.toggle('is-over', isHome() && y <= 40);
       lastY = y;
 
       if (spy.length) {

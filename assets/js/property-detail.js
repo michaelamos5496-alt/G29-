@@ -22,10 +22,10 @@
     return;
   }
 
-  document.title = `${property.title} — ${property.subtitle} | G29 Property Consult`;
+  document.title = `${property.title} — ${property.subtitle} | G29 Property Consults`;
   const metaDesc = document.getElementById('pageDescription');
   if (metaDesc) {
-    metaDesc.setAttribute('content', `${property.title} in ${property.subtitle}. Available through G29 Property Consult.`);
+    metaDesc.setAttribute('content', `${property.title} in ${property.subtitle}. Available through G29 Property Consults.`);
   }
 
   const gallery = property.gallery && property.gallery.length ? property.gallery : [property.image];
@@ -58,11 +58,12 @@
           <div class="property-overview__price">${property.priceLabel || 'Price on Application'}</div>
         </div>
 
-        <div class="property-specs" data-reveal="fade-up">
-          <div class="property-specs__item"><strong>${property.beds}</strong><span>${property.category === 'Commercial' ? 'Office Units' : 'Bedrooms'}</span></div>
-          <div class="property-specs__item"><strong>${property.baths}</strong><span>${property.category === 'Commercial' ? 'Restrooms' : 'Bathrooms'}</span></div>
-          <div class="property-specs__item"><strong>${property.floorArea}</strong><span>Floor Area</span></div>
-          <div class="property-specs__item"><strong>${property.yearBuilt}</strong><span>Year Built</span></div>
+        <div class="property-specs property-specs--auto" data-reveal="fade-up">
+          <div class="property-specs__item"><strong>${property.bedsLabel || property.beds}</strong><span>${property.category === 'Commercial' ? 'Office Units' : 'Bedrooms'}</span></div>
+          <div class="property-specs__item"><strong>${property.bathsLabel || property.baths}</strong><span>${property.category === 'Commercial' ? 'Restrooms' : 'Bathrooms'}</span></div>
+          ${property.floorArea ? `<div class="property-specs__item"><strong>${property.floorArea}</strong><span>Floor Area</span></div>` : ''}
+          ${property.yearBuilt ? `<div class="property-specs__item"><strong>${property.yearBuilt}</strong><span>Year Built</span></div>` : ''}
+          ${property.availability ? `<div class="property-specs__item"><strong>${property.availability}</strong><span>Availability</span></div>` : ''}
         </div>
 
         <div class="property-section" data-reveal="fade-up" data-reveal-group="property-sections">
@@ -70,11 +71,23 @@
           ${property.description.map((p) => `<p>${p}</p>`).join('')}
         </div>
 
-        <div class="property-section" data-reveal="fade-up" data-reveal-group="property-sections">
-          <h2>Amenities</h2>
-          <ul class="property-amenities">
-            ${property.amenities.map((a) => `<li>${a}</li>`).join('')}
-          </ul>
+        <div class="property-section property-accordions" data-reveal="fade-up" data-reveal-group="property-sections">
+          ${(property.details || []).length ? `<details class="property-accordion">
+            <summary><span>Details</span><em>${property.details.length}</em></summary>
+            <div class="property-accordion__body">
+              <dl class="property-facts">
+                ${property.details.map((d) => { const i = d.indexOf(': '); return `<div class="property-facts__item"><dt>${d.slice(0, i)}</dt><dd>${d.slice(i + 2)}</dd></div>`; }).join('')}
+              </dl>
+            </div>
+          </details>` : ''}
+          <details class="property-accordion">
+            <summary><span>Features</span><em>${property.amenities.length}</em></summary>
+            <div class="property-accordion__body">
+              <ul class="property-features">
+                ${property.amenities.map((a) => `<li>${a}</li>`).join('')}
+              </ul>
+            </div>
+          </details>
         </div>
 
         <div class="property-section" data-reveal="fade-up" data-reveal-group="property-sections">
@@ -103,8 +116,8 @@
             <button type="submit" class="btn btn-primary">Request Viewing</button>
           </form>
           <div class="property-inquiry__direct">
-            <a href="tel:+233246381172">&#128222; +233 24 638 1172</a>
-            <a href="mailto:info@g29propertyconsult.com">&#9993; info@g29propertyconsult.com</a>
+            <a href="tel:+233549933727">&#128222; +233 54 993 3727</a>
+            <a href="mailto:info@g29propertyconsults.com">&#9993; info@g29propertyconsults.com</a>
           </div>
         </div>
       </aside>
@@ -119,7 +132,7 @@
   // No backend on this static site — "Request Viewing" hands the enquiry
   // straight to WhatsApp instead of silently going nowhere. Same number as
   // the floating contact button (assets/js/floating-contact.js).
-  const PHONE_WHATSAPP = '233246381172'; // wa.me format: no plus, no leading zero
+  const PHONE_WHATSAPP = '233549933727'; // wa.me format: no plus, no leading zero
   const viewingForm = root.querySelector('#viewingRequestForm');
   if (viewingForm) {
     viewingForm.addEventListener('submit', (e) => {

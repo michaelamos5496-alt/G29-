@@ -10,7 +10,11 @@
   with their name and role overlaid on it.
 */
 (function () {
-  const ceo = { name: 'Gynette Koranteng', title: 'CEO', image: 'assets/images/team/gynette-koranteng.jpg', photo: 'assets/images/team/gynette-koranteng-portrait.jpg' };
+  const ceo = { name: 'Gynette Koranteng', title: 'Chief Executive Officer', image: 'assets/images/team/gynette-koranteng.jpg', photo: 'assets/images/team/gynette-koranteng-portrait.jpg' };
+
+  // Director sits beside the CEO. NEEDS INPUT: photos for the Director,
+  // Operations Officer and FD Concepts administrator (monograms until then).
+  const director = { name: 'Samuel Koranteng', title: 'Director', image: null, photo: null };
 
   // Each list is in rank order.
   const branches = [
@@ -18,21 +22,23 @@
       label: 'Administration',
       members: [
         { name: 'Michael Ofori', title: 'Accounts and Administration Officer', image: null, photo: 'assets/images/team/michael-ofori-portrait.jpg' },
-        { name: 'Estherphine Arthur', title: 'Administrative Assistant / Facility Officer', image: null, photo: 'assets/images/team/estherphine-arthur-portrait.jpg' }
+        { name: 'Estherphine Arthur', title: 'Administrative Assistant', image: null, photo: 'assets/images/team/estherphine-arthur-portrait.jpg' },
+        { name: 'Owuraku Achampong Forkuo-Kyei', title: 'Operations Officer', image: null, photo: null },
+        { name: 'Gladys Dsane', title: 'Administrator - FD Concepts', image: null, photo: null }
       ]
     },
     {
       label: 'Facilities',
       members: [
-        { name: 'John Emmanuel Forde', title: 'Facility Supervisor', image: null, photo: 'assets/images/team/john-emmanuel-forde-portrait.jpg' }
+        { name: 'John Emmanuel Forde', title: 'Facilities Supervisor', image: null, photo: 'assets/images/team/john-emmanuel-forde-portrait.jpg' }
       ],
       reports: [
-        { name: 'Richmond Odoom', title: 'Facility Coordinator', image: null, photo: 'assets/images/team/richmond-odoom-portrait.jpg' },
-        { name: 'Belinda Yiadom', title: 'Facility Officer', image: null, photo: 'assets/images/team/belinda-yiadom-portrait.jpg' },
+        { name: 'Richmond Odoom', title: 'Facilities Coordinator', image: null, photo: 'assets/images/team/richmond-odoom-portrait.jpg' },
+        { name: 'Belinda Konadu Yiadom', title: 'Facility Officer', image: null, photo: 'assets/images/team/belinda-yiadom-portrait.jpg' },
         { name: 'Emmanuel Idi Dowuona', title: 'Facility Officer', image: null, photo: 'assets/images/team/emmanuel-idi-dowuona-portrait.jpg' },
         { name: 'Isaac Lamptey', title: 'Facility Officer', image: null, photo: 'assets/images/team/isaac-lamptey-portrait.jpg' },
-        { name: 'Patrick Sampson', title: 'General Services Officer', image: null, photo: 'assets/images/team/patrick-sampson-portrait.jpg' },
-        { name: 'Kobena Coleman', title: 'Facility Assistant', image: null, photo: 'assets/images/team/kobena-coleman-portrait.jpg' }
+        { name: 'Patrick Sampson', title: 'General Services, and Facility Officer', image: null, photo: 'assets/images/team/patrick-sampson-portrait.jpg' },
+        { name: 'Kobena Essandoh Coleman', title: 'Facility Assistant', image: null, photo: 'assets/images/team/kobena-coleman-portrait.jpg' }
       ]
     }
   ];
@@ -72,7 +78,10 @@
   }
 
   chartEl.innerHTML = `
-    <div class="org-top">${card(ceo, 'lead')}</div>
+    <div class="org-top">
+      <div class="org-top__ceo">${card(ceo, 'lead')}</div>
+      <div class="org-top__director">${card(director, 'small')}</div>
+    </div>
     <div class="org-branches">
       ${branches.map((b) => `
         <div class="org-branch org-branch--${b.label.toLowerCase()}">

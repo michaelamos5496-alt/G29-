@@ -86,7 +86,7 @@
       if (strokeColor) petal.style.stroke = strokeColor;
     });
 
-    // "G29 PROPERTY CONSULT" writes in underneath during the last
+    // "G29 PROPERTY CONSULTS" writes in underneath during the last
     // stretch, as the flower finishes solidifying.
     if (wordmarkSub) {
       var subProgress = Math.max(0, Math.min((progress - 0.65) / 0.35, 1));
@@ -97,7 +97,10 @@
 
   function setFadeOutProgress(progress) {
     if (!fadeOutEl) return;
-    fadeOutEl.style.opacity = progress;
+    // No fade, dim or zoom: the hero stays exactly as-is to the last frame
+    // and the properties section (rounded top edge, see .discover in
+    // style.css) simply slides up over it as the pin releases.
+    void progress;
   }
 
   // ---- Fallback: video fails to load ---------------------------------
@@ -162,16 +165,23 @@
     gsap.registerPlugin(ScrollTrigger);
 
     var duration = video.duration;
-    var contentVh = M.isMobile ? 350 : 500; // scroll distance the walkthrough narrative itself uses
 
-    // The write-on (draw + fill + subline) finishes at CONTENT_FRACTION of
-    // the *total* pin distance, leaving a genuine hold — the fully-solid
-    // wordmark just sits there, unchanging — before FADE_START begins the
-    // dissolve into the next section. Both are extra scroll distance, not
-    // a re-timing of the existing content, so nothing feels rushed.
-    var CONTENT_FRACTION = 0.72;
-    var FADE_START = 0.90;
-    var scrollLengthVh = contentVh / CONTENT_FRACTION;
+    // ---- Timeline (all values are fractions of the pin's scroll length;
+    // the video itself plays 0 -> 1 across the whole pin, so it never
+    // finishes before the page moves on) --------------------------------
+    // Total scroll distance of the hero, in viewport heights. The video is
+    // ~12s, so ~41vh of scroll per second on desktop (~33 on phones).
+    var scrollLengthVh = M.isMobile ? 420 : 500;
+    // The properties section (.discover in style.css, margin-top: -100svh)
+    // starts sliding up over the still-playing video for the last 100vh of
+    // scroll = roughly the final 2.4s of the video (3s on phones).
+    // Retime the logo + name here:
+    var WORDMARK_START = 0.15; // logo starts drawing in (~1.8s into the video)
+    var WORDMARK_END = 0.52;   // logo solid + name fully written (~6.4s), then it
+                               // stays on for ~3.4s before the next page slides in at 0.80
+    var VIDEO_END = 1;
+    var SHEET_RADIUS = 56; // px, rounded top edge of the sheet as it first appears
+    var discoverEl = document.getElementById('properties');
 
     // Matches the media query gating .walkthrough__pin's `position: sticky`
     // in style.css. Desktop (mouse/trackpad, ScrollSmoother running) keeps
@@ -200,18 +210,32 @@
       onUpdate: function (self) {
         if (self.progress > 0.001) dismissHint();
 
-        var targetTime = self.progress * duration;
+        var videoProgress = Math.min(self.progress / VIDEO_END, 1);
+        // Stop just short of `duration` so the final decoded frame stays
+        // on screen (seeking to the exact end can show nothing).
+        var targetTime = videoProgress >= 1 ? Math.max(0, duration - 0.04) : videoProgress * duration;
         // Guard against redundant seeks (video.currentTime setter is not free).
         if (Math.abs(video.currentTime - targetTime) > 0.03) {
           video.currentTime = targetTime;
         }
 
-        var contentProgress = Math.min(self.progress / CONTENT_FRACTION, 1);
-        setWordmarkProgress(contentProgress);
-        updateSection(sectionForProgress(contentProgress));
+        // Once the properties sheet has fully landed, the hero is entirely
+        // behind it — hide the pin so no strip of video/buttons can peek out
+        // from under the sheet's bottom edge while it scrolls away.
+        pinTarget.style.visibility = self.progress >= 0.999 ? 'hidden' : '';
 
-        var fadeProgress = Math.max(0, Math.min((self.progress - FADE_START) / (1 - FADE_START), 1));
-        setFadeOutProgress(fadeProgress);
+        // Curved -> sharp: the properties sheet enters with a rounded top
+        // edge that flattens to a straight edge as it lands over the video.
+        if (discoverEl) {
+          var overlap = (window.innerHeight + 100) / (window.innerHeight * scrollLengthVh / 100); // fraction of the pin the sheet travels over
+          var sheet = Math.max(0, Math.min((self.progress - (1 - overlap)) / overlap, 1));
+          var r = Math.round(SHEET_RADIUS * (1 - sheet));
+          discoverEl.style.borderRadius = r + 'px ' + r + 'px 0 0';
+        }
+
+        var wm = Math.max(0, Math.min((self.progress - WORDMARK_START) / (WORDMARK_END - WORDMARK_START), 1));
+        setWordmarkProgress(wm);
+        updateSection(sectionForProgress(self.progress));
       }
     };
 
