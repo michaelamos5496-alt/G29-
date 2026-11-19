@@ -132,6 +132,18 @@ a { text-decoration: none; color: inherit; }
   background: #060e1a;
 }
 
+/* Reserve the hero's scroll length from the first paint. The real height
+   (a GSAP pin-spacer, or an inline height on touch) is only added once the
+   video's metadata arrives, and the properties sheet below is pulled up
+   over the hero with a negative margin — so without this, a refresh briefly
+   shows the white sheet covering the hero and then jumps down. Always lower
+   than the final height, so JS simply takes over. */
+@media (prefers-reduced-motion: no-preference) {
+  .walkthrough { min-height: 400svh; }
+}
+.walkthrough.is-static,
+.walkthrough.is-fallback { min-height: 0; }
+
 .walkthrough__pin {
   position: relative;
   width: 100%;
