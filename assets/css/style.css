@@ -3343,8 +3343,19 @@ html.nav-menu-open { overflow: hidden; }
   .lifestyle-panel { height: auto; min-height: 80vh; padding: var(--space-16) 0; }
 }
 
+/* Touch devices (no ScrollSmoother): each panel is a full-screen sticky layer; the next one
+   slides up and covers it (later DOM order paints on top). Native
+   compositor-driven, so there is no scroll jitter. */
+@media not all and (hover: hover) and (pointer: fine) {
+  .lifestyle-panel { position: sticky; top: 0; height: 100vh; height: 100svh; min-height: 0; padding: 0; }
+  .lifestyle-panel__bg { will-change: auto; }
+}
 @media (max-width: 768px) {
-  .lifestyle-panel { height: auto; min-height: 90vh; padding: var(--space-16) 0; }
+  .lifestyle-panel__content { padding-top: var(--space-8); padding-bottom: var(--space-8); }
+}
+/* Reduced motion / lightweight mode: plain stacked sections, no sticky. */
+@media (prefers-reduced-motion: reduce) {
+  .lifestyle-panel { position: relative; height: auto; min-height: 80vh; padding: var(--space-16) 0; }
 }
 
 /* ==========================================================================
@@ -3998,7 +4009,7 @@ body.has-finder-launcher .floating-contact { bottom: calc(var(--space-6) + 70px)
    page for weaker phones) and reduced-motion: static layout, no blur.
    ========================================================================== */
 html.lite .walkthrough { min-height: 0; }
-html.lite .lifestyle-panel { height: auto; min-height: 80vh; padding: var(--space-16) 0; }
+html.lite .lifestyle-panel { position: relative; height: auto; min-height: 80vh; padding: var(--space-16) 0; }
 html.lite .progress-line { display: none; }
 html.lite .walkthrough__hint-line { animation: none; }
 html.lite *, html.lite *::before, html.lite *::after {

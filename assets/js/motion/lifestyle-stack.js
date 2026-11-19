@@ -18,6 +18,12 @@
 (function () {
   if (typeof gsap === 'undefined' || typeof ScrollTrigger === 'undefined') return;
   if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  // Touch devices (exactly the ones where ScrollSmoother is off — see
+  // scroll-smoother-init.js): the stacking is pure CSS (position: sticky — see
+  // .lifestyle-panel in style.css). A JS-driven pin moves the panel from the
+  // main thread a frame behind native touch scrolling, which visibly jitters,
+  // and the scrubbed zoom adds more per-scroll work, so both are desktop-only.
+  if (window.matchMedia('not all and (hover: hover) and (pointer: fine)').matches) return;
 
   document.addEventListener('DOMContentLoaded', function () {
     var panels = gsap.utils.toArray('.lifestyle-panel');
