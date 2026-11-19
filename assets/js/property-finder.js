@@ -426,15 +426,25 @@
     if (!best.length) { heading = 'No exact matches right now'; lead = 'Nothing available is for exactly that, but these could work instead.'; }
     else if (!exact) { heading = 'No exact match — here are the closest'; lead = 'Nothing fits every answer, so these are the nearest available options.'; }
 
+    // Phone pop-up: one swipeable row of cards instead of a long scrolling list,
+    // so the dialog never needs to scroll vertically.
+    const phoneRail = !!opts.popup && window.matchMedia('(max-width: 640px)').matches && allShown.length > 0;
+    const railCards = phoneRail
+      ? best.map((m, i) => resultCard(m, i, 'best', allShown)).concat(alternatives.map((m, i) => resultCard(m, i, 'alt', allShown)))
+      : [];
+
     root.innerHTML = `
       <p class="finder__step">Your matches</p>
       <h2 class="finder__q">${heading}</h2>
       ${lead ? `<p class="finder__hint">${lead}</p>` : ''}
       <ul class="finder__summary">${summary().map((b) => `<li>${esc(b)}</li>`).join('')}</ul>
+      ${phoneRail ? `
+        <div class="finder__rail" tabindex="0" aria-label="Matching properties — swipe sideways">${railCards.join('')}</div>
+        ${railCards.length > 1 ? `<p class="finder__pager"><span data-cur>1</span> of ${railCards.length} &middot; swipe for more</p>` : ''}` : `
       ${best.length ? `<div class="finder__results">${best.map((m, i) => resultCard(m, i, 'best', allShown)).join('')}</div>` : ''}
       ${alternatives.length ? `
         <h3 class="finder__sub">${best.length ? 'Other available options that could also work' : 'Available options that could work'}</h3>
-        <div class="finder__results">${alternatives.map((m, i) => resultCard(m, i, 'alt', allShown)).join('')}</div>` : ''}
+        <div class="finder__results">${alternatives.map((m, i) => resultCard(m, i, 'alt', allShown)).join('')}</div>` : ''}`}
       ${!allShown.length ? `<p class="finder__hint">Tell us what you need and we&rsquo;ll look for something that does.</p>` : ''}
       <div class="finder__nav finder__nav--end">
         <button type="button" class="finder__back finder__restart">&larr; Start over</button>
@@ -442,6 +452,9 @@
       </div>
       <p class="finder__note">Suggestions are based on our current available listings. Prices are indicative &mdash; confirm with an advisor.</p>
     `;
+    const rail = root.querySelector('.finder__rail');
+    const cur = root.querySelector('.finder__pager [data-cur]');
+    if (rail && cur) rail.addEventListener('scroll', () => { cur.textContent = String(Math.round(rail.scrollLeft / Math.max(1, rail.clientWidth)) + 1); }, { passive: true });
     root.querySelector('.finder__restart').addEventListener('click', () => {
       Object.keys(answers).forEach((k) => delete answers[k]);
       stepIndex = 0;

@@ -3945,6 +3945,31 @@ body.has-finder-launcher .floating-contact { bottom: calc(var(--space-6) + 70px)
   .finder-pop .finder-intro__points { gap: 6px; margin-bottom: 14px; }
   .finder-pop .finder-intro__points li { font-size: 12px; padding: 4px 10px 4px 24px; }
   .finder-pop .finder-intro__points li::before { left: 9px; }
+
+  /* ---- No vertical scrolling inside the phone dialog ---- */
+  .finder-pop__dialog { max-height: 94svh; }
+  .finder-pop__body { overflow-y: hidden; }
+  .finder-pop .finder__summary { flex-wrap: nowrap; overflow-x: auto; margin: 8px 0 10px; gap: 6px; scrollbar-width: none; }
+  .finder-pop .finder__summary::-webkit-scrollbar { display: none; }
+  .finder-pop .finder__summary li { flex: 0 0 auto; font-size: 12px; padding: 4px 10px; }
+  .finder-pop .finder__rail { display: flex; gap: 10px; overflow-x: auto; scroll-snap-type: x mandatory; overscroll-behavior-x: contain; margin: 0 -4px; padding: 0 4px; scrollbar-width: none; touch-action: pan-x; }
+  .finder-pop .finder__rail::-webkit-scrollbar { display: none; }
+  .finder-pop .finder__rail .finder-result { flex: 0 0 100%; scroll-snap-align: center; scroll-snap-stop: always; grid-template-columns: 1fr; }
+  .finder-pop .finder-result__img { min-height: 104px; }
+  .finder-pop .finder-result__best { top: 8px; left: 8px; padding: 3px 10px; font-size: 11px; }
+  .finder-pop .finder-result__body { padding: 12px 14px 14px; }
+  .finder-pop .finder-result__top h3 { font-size: 17px; }
+  .finder-pop .finder-result__pct { font-size: 12px; }
+  .finder-pop .finder-result__loc { font-size: 12px; margin: 4px 0 8px; }
+  .finder-pop .finder-result__why { font-size: 13px; margin-bottom: 6px; }
+  .finder-pop .finder-result__why li:nth-child(n+3) { display: none; }
+  .finder-pop .finder-result__warn { display: none; }
+  .finder-pop .finder-result__actions { margin-top: 8px; gap: 12px; }
+  .finder-pop .finder-result__actions .btn { padding: 9px 16px; font-size: 14px; }
+  .finder-pop .finder__pager { text-align: center; font-size: 12px; color: var(--color-text-muted); margin: 8px 0 0; }
+  .finder-pop .finder__nav--end { margin-top: 8px; gap: 10px; }
+  .finder-pop .finder__nav--end .btn { padding: 10px 16px; font-size: 14px; }
+  .finder-pop .finder__note { display: none; }
 }
 @media (prefers-reduced-motion: reduce) { .finder-launcher { transition: none; } }
 
