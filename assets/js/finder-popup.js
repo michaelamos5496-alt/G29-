@@ -66,31 +66,58 @@
     return loading;
   }
 
+  // The close animations use fill:'forwards' (so the dialog stays shrunk
+  // until it is hidden). If they are never cancelled, they keep holding the
+  // dialog at scale(0.08)/low opacity — and after the next open animation
+  // ends, that old held state takes over again, collapsing the reopened
+  // dialog straight back to "closed".
+  function clearHeldAnimations() {
+    [dialog, pop.querySelector('.finder-pop__backdrop')].forEach((el) => {
+      el.getAnimations().forEach((a) => a.cancel());
+    });
+  }
+
+  let opening = false;
   function open() {
     clearTimeout(autoTimer);
+    if (opening || !pop.hidden) return;
+    opening = true;
+    // Don't reveal the dialog until the matcher content is ready, otherwise
+    // it opens empty and visibly jumps in size when the content arrives.
+    // (Capped so a slow connection never leaves the button feeling dead.)
+    Promise.race([ensureMatcher(), new Promise((r) => setTimeout(r, 1500))]).then(reveal);
+  }
+
+  function reveal() {
+    opening = false;
     store.set();
+    const from = launcher.getBoundingClientRect();
+    clearHeldAnimations();
     launcher.hidden = true;
     pop.hidden = false;
     document.documentElement.classList.add('finder-open');
-    ensureMatcher();
 
-    // Grow out of the launcher if it's on screen, otherwise fade/scale in.
-    const from = launcher.getBoundingClientRect();
-    requestAnimationFrame(() => {
+    // Start the animation in the same frame the dialog appears — starting it
+    // a frame later flashes the dialog at full size first.
+    if (!reduce) {
       const to = dialog.getBoundingClientRect();
-      if (!reduce && from.width) {
+      const isPhone = window.matchMedia('(max-width: 640px)').matches;
+      if (isPhone) {
+        // Bottom sheet: slide up from the bottom edge.
+        dialog.animate([{ transform: 'translateY(40px)', opacity: 0 }, { transform: 'none', opacity: 1 }], { duration: 300, easing: 'cubic-bezier(0.22, 1, 0.36, 1)' });
+      } else if (from.width && to.width) {
         const dx = (from.left + from.width / 2) - (to.left + to.width / 2);
         const dy = (from.top + from.height / 2) - (to.top + to.height / 2);
         dialog.animate([
           { transform: `translate(${dx}px, ${dy}px) scale(0.08)`, opacity: 0 },
           { transform: 'none', opacity: 1 }
         ], { duration: 420, easing: 'cubic-bezier(0.22, 1, 0.36, 1)' });
-      } else if (!reduce) {
+      } else {
         dialog.animate([{ transform: 'translateY(24px) scale(0.96)', opacity: 0 }, { transform: 'none', opacity: 1 }], { duration: 320, easing: 'ease-out' });
       }
       pop.querySelector('.finder-pop__backdrop').animate([{ opacity: 0 }, { opacity: 1 }], { duration: 300 });
-      dialog.focus({ preventScroll: true });
-    });
+    }
+    dialog.focus({ preventScroll: true });
   }
 
   function close() {
@@ -105,6 +132,7 @@
 
     const finish = () => {
       pop.hidden = true;
+      clearHeldAnimations();
       if (!reduce) launcher.animate([{ transform: 'scale(0.6)', opacity: 0.4 }, { transform: 'scale(1.08)', opacity: 1, offset: 0.6 }, { transform: 'scale(1)', opacity: 1 }], { duration: 360, easing: 'ease-out' });
       launcher.focus({ preventScroll: true });
     };
@@ -131,15 +159,19 @@
     const SIZE = 56, EDGE = 12, TOP_MIN = 76; // keep clear of the nav bar
     let pos = null, drag = null, suppressClick = false;
     try { pos = JSON.parse(localStorage.getItem(KEY)); } catch (e) { pos = null; }
+    if (pos && typeof pos.b !== 'number') pos = null;
 
-    const clampY = (y) => Math.max(TOP_MIN, Math.min(window.innerHeight - SIZE - EDGE - 8, y));
+    // Position is stored as a distance from the BOTTOM edge: on phones the
+    // browser bars show/hide while scrolling, which changes innerHeight and
+    // would otherwise make a top-anchored button drift up and down.
+    const clampB = (b) => Math.max(EDGE, Math.min(window.innerHeight - SIZE - TOP_MIN, b));
     const clearPos = () => { ['left', 'top', 'right', 'bottom'].forEach((k) => launcher.style.removeProperty(k)); };
     function applyPos() {
       if (!mq.matches || !pos) { clearPos(); return; }
-      launcher.style.right = 'auto';
-      launcher.style.bottom = 'auto';
-      launcher.style.top = clampY(pos.y * window.innerHeight) + 'px';
-      launcher.style.left = (pos.side === 'left' ? EDGE : window.innerWidth - SIZE - EDGE) + 'px';
+      launcher.style.top = 'auto';
+      launcher.style.bottom = clampB(pos.b) + 'px';
+      launcher.style.right = pos.side === 'right' ? EDGE + 'px' : 'auto';
+      launcher.style.left = pos.side === 'left' ? EDGE + 'px' : 'auto';
     }
 
     // Registered before the open() click handler so a drag-release never opens it.
@@ -165,7 +197,7 @@
       }
       const x = Math.max(EDGE, Math.min(window.innerWidth - SIZE - EDGE, drag.ox + dx));
       launcher.style.left = x + 'px';
-      launcher.style.top = clampY(drag.oy + dy) + 'px';
+      launcher.style.top = Math.max(TOP_MIN, Math.min(window.innerHeight - SIZE - EDGE, drag.oy + dy)) + 'px';
       e.preventDefault();
     });
     function endDrag(e) {
@@ -176,10 +208,19 @@
       suppressClick = true;
       setTimeout(() => { suppressClick = false; }, 350);
       const r = launcher.getBoundingClientRect();
-      pos = { side: r.left + SIZE / 2 < window.innerWidth / 2 ? 'left' : 'right', y: clampY(r.top) / window.innerHeight };
+      pos = { side: r.left + SIZE / 2 < window.innerWidth / 2 ? 'left' : 'right', b: clampB(window.innerHeight - r.bottom) };
       try { localStorage.setItem(KEY, JSON.stringify(pos)); } catch (err) { /* ignore */ }
       launcher.classList.remove('is-dragging');
-      applyPos(); // CSS transition glides it to the edge
+      // Glide to the edge: swap to bottom/side anchoring from the dragged spot.
+      launcher.style.top = 'auto';
+      launcher.style.bottom = (window.innerHeight - r.bottom) + 'px';
+      launcher.style.right = 'auto';
+      launcher.style.left = r.left + 'px';
+      setTimeout(() => {
+        launcher.style.bottom = pos.b + 'px';
+        launcher.style.left = pos.side === 'left' ? EDGE + 'px' : (window.innerWidth - SIZE - EDGE) + 'px';
+        setTimeout(applyPos, 320); // then re-anchor to the side so it survives rotation/resizes
+      }, 30);
     }
     launcher.addEventListener('pointerup', endDrag);
     launcher.addEventListener('pointercancel', endDrag);
@@ -198,6 +239,7 @@
     // The page's smooth-scroll layer listens for wheel/touch on the document
     // and would swallow them; keep them local to the dialog's own scroller.
     const scroller = pop.querySelector('.finder-pop__body');
+    pop.addEventListener('touchmove', (e) => { if (!scroller.contains(e.target)) e.preventDefault(); }, { passive: false });
     scroller.addEventListener('touchmove', (e) => e.stopPropagation(), { passive: true });
     // Wheel is scrolled by hand so it works even when a page-level
     // smooth-scroll handler is calling preventDefault on wheel events.
@@ -209,6 +251,10 @@
     }, { passive: false });
 
     makeLauncherDraggable();
+    const warm = () => { ensureMatcher(); };
+    launcher.addEventListener('pointerdown', warm, { once: true });
+    launcher.addEventListener('pointerenter', warm, { once: true });
+    (window.requestIdleCallback || ((fn) => setTimeout(fn, 1800)))(warm, { timeout: 3000 });
     launcher.addEventListener('click', open);
     pop.querySelectorAll('[data-close]').forEach((el) => el.addEventListener('click', close));
     document.addEventListener('keydown', (e) => { if (e.key === 'Escape' && !pop.hidden) close(); });

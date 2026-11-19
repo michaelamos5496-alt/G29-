@@ -3921,14 +3921,14 @@ body.has-finder-launcher .floating-contact { bottom: calc(var(--space-6) + 70px)
 .finder-pop__head h2 { font-family: var(--font-heading); font-size: clamp(24px, 4.5vw, 34px); line-height: 1.12; margin: 0 0 8px; color: var(--color-primary); }
 .finder-pop__head p { margin: 0; color: var(--color-text-muted); }
 .finder-pop__card { box-shadow: none; padding: clamp(18px, 3vw, 30px); }
-html.finder-open { overflow: hidden; }
+@media (hover: hover) and (pointer: fine) { html.finder-open { overflow: hidden; } }
 
 @media (max-width: 640px) {
-  .finder-launcher { right: var(--space-4); bottom: var(--space-4); width: 56px; padding: 0; justify-content: center; touch-action: none; user-select: none; -webkit-user-select: none; -webkit-touch-callout: none; transition: filter 0.2s ease, transform 0.2s ease, left 0.28s cubic-bezier(0.22, 1, 0.36, 1), top 0.28s cubic-bezier(0.22, 1, 0.36, 1); }
+  .finder-launcher { right: var(--space-4); bottom: var(--space-4); width: 56px; padding: 0; justify-content: center; touch-action: none; user-select: none; -webkit-user-select: none; -webkit-touch-callout: none; transition: filter 0.2s ease, transform 0.2s ease, left 0.28s cubic-bezier(0.22, 1, 0.36, 1), bottom 0.28s cubic-bezier(0.22, 1, 0.36, 1); }
   .finder-launcher.is-dragging { transition: none; transform: scale(1.1); box-shadow: 0 16px 34px rgba(0, 0, 0, 0.3); cursor: grabbing; }
   .finder-launcher span { display: none; }
   .finder-pop { padding: 0; align-items: flex-end; }
-  .finder-pop__dialog { max-height: 78vh; max-height: 78dvh; border-radius: 22px 22px 0 0; }
+  .finder-pop__dialog { max-height: 78vh; max-height: 78svh; border-radius: 22px 22px 0 0; }
   .finder-pop__close { top: 10px; right: 10px; width: 32px; height: 32px; }
   .finder-pop__body { padding: 30px 16px calc(16px + env(safe-area-inset-bottom)); }
   .finder-pop__head { margin-bottom: 12px; }
