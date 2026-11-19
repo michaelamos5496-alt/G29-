@@ -981,11 +981,29 @@ window.G29_PROPERTIES = [
     "video": null,
     "floorPlans": [],
     "marketSnapshot": null,
-    "image": "https://images.unsplash.com/photo-1502005229762-cf1b2da7c5d6?q=80&w=800&auto=format&fit=crop",
+    "image": "assets/images/properties/toms-place/01.jpg",
     "gallery": [
-      "https://images.unsplash.com/photo-1502005229762-cf1b2da7c5d6?q=80&w=1600&auto=format&fit=crop",
-      "https://images.unsplash.com/photo-1560185127-6ed189bf02f4?q=80&w=1600&auto=format&fit=crop",
-      "https://images.unsplash.com/photo-1484154218962-a197022b5858?q=80&w=1600&auto=format&fit=crop"
+      "assets/images/properties/toms-place/01.jpg",
+      "assets/images/properties/toms-place/02.jpg",
+      "assets/images/properties/toms-place/03.jpg",
+      "assets/images/properties/toms-place/04.jpg",
+      "assets/images/properties/toms-place/05.jpg",
+      "assets/images/properties/toms-place/06.jpg",
+      "assets/images/properties/toms-place/07.jpg",
+      "assets/images/properties/toms-place/08.jpg",
+      "assets/images/properties/toms-place/09.jpg",
+      "assets/images/properties/toms-place/10.jpg",
+      "assets/images/properties/toms-place/11.jpg",
+      "assets/images/properties/toms-place/12.jpg",
+      "assets/images/properties/toms-place/13.jpg",
+      "assets/images/properties/toms-place/14.jpg",
+      "assets/images/properties/toms-place/15.jpg",
+      "assets/images/properties/toms-place/17.jpg",
+      "assets/images/properties/toms-place/18.jpg",
+      "assets/images/properties/toms-place/19.jpg",
+      "assets/images/properties/toms-place/20.jpg",
+      "assets/images/properties/toms-place/21.jpg",
+      "assets/images/properties/toms-place/22.jpg"
     ],
     "description": [
       "Furnished and unfurnished one- and two-bedroom apartments in Airport Residential, offering bright, contemporary interiors with a practical layout that can be furnished and personalised to suit your lifestyle.",
@@ -1309,9 +1327,8 @@ window.G29_PROPERTIES = [
     "video": null,
     "floorPlans": [],
     "marketSnapshot": null,
-    "image": "assets/images/properties/vida-villa-aburi/29.jpg",
+    "image": "assets/images/properties/vida-villa-aburi/01.jpg",
     "gallery": [
-      "assets/images/properties/vida-villa-aburi/29.jpg",
       "assets/images/properties/vida-villa-aburi/01.jpg",
       "assets/images/properties/vida-villa-aburi/03.jpg",
       "assets/images/properties/vida-villa-aburi/04.jpg",
@@ -1334,7 +1351,8 @@ window.G29_PROPERTIES = [
       "assets/images/properties/vida-villa-aburi/23.jpg",
       "assets/images/properties/vida-villa-aburi/24.jpg",
       "assets/images/properties/vida-villa-aburi/25.jpg",
-      "assets/images/properties/vida-villa-aburi/27.jpg"
+      "assets/images/properties/vida-villa-aburi/27.jpg",
+      "assets/images/properties/vida-villa-aburi/29.jpg"
     ],
     "description": [
       "Tucked away in the hills of Aburi, Vida Villa is where quiet mornings, fresh air and peaceful nights come together — a place to reset, breathe and unwind. The outdoor lounge is where mornings feel slower and sunsets last longer.",
