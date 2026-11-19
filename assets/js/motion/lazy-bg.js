@@ -32,6 +32,13 @@
     if (!url) return;
     el.style.backgroundImage = "url('" + url + "')";
     el.removeAttribute('data-bg');
+    // Elements in a group load together: the first one to get close pulls in
+    // the rest (used for the pinned lifestyle panels, which slide over each
+    // other, so a later panel isn't "near" by position until it's on screen).
+    var group = el.dataset.bgGroup;
+    if (group) {
+      document.querySelectorAll('[data-bg-group="' + group + '"][data-bg]').forEach(applyBg);
+    }
   }
 
   function isNear(el) {

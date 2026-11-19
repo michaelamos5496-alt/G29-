@@ -1,6 +1,11 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+  <!-- Lightweight mode for weaker phones (<= 4GB RAM, Data Saver, 2G/3G): the
+       site then takes its reduced-motion path — static hero instead of the
+       scroll-scrubbed video, no scroll-linked animation, no blur effects.
+       Runs first so every script and stylesheet sees it. -->
+  <script>(function(){try{var n=navigator,c=n.connection||{};var q=location.search;var low=/[?&]lite=1\b/.test(q)||(!/[?&]lite=0\b/.test(q)&&((n.deviceMemory&&n.deviceMemory<=4)||c.saveData===true||/(^|-)2g$|3g/.test(c.effectiveType||'')));if(low){document.documentElement.classList.add('lite');window.G29_LITE=true;var mm=window.matchMedia.bind(window);window.matchMedia=function(q){if(/prefers-reduced-motion:\s*reduce/.test(q)){return{matches:true,media:q,onchange:null,addEventListener:function(){},removeEventListener:function(){},addListener:function(){},removeListener:function(){},dispatchEvent:function(){return false}};}return mm(q);};}}catch(e){}})();</script>
 <script>if ('scrollRestoration' in history) { history.scrollRestoration = 'manual'; window.scrollTo(0, 0); }</script>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
@@ -123,7 +128,7 @@
 
       <div class="footer-col footer-col--brand reveal-up">
         <a href="index.html" class="footer-logo">
-          <img src="assets/images/g29-icon.png" alt="" width="34" height="34">
+          <img src="assets/images/g29-icon-96.png" alt="" width="34" height="34">
           <span><strong>G29</strong><small>Property Consults</small></span>
         </a>
         <p class="footer-tagline">Trusted property solutions for buyers, owners, and investors across Accra.</p>

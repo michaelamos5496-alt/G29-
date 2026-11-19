@@ -44,7 +44,7 @@
     <header class="nav${isHome() ? ' is-over' : ''}" id="siteNav">
       <div class="nav__bar">
         <a href="index.html" class="nav__logo" aria-label="G29 Property Consults — Home">
-          <img src="assets/images/g29-icon.png" alt="" width="26" height="26">
+          <img src="assets/images/g29-icon-96.png" alt="" width="26" height="26">
           <span class="nav__brand"><strong>G29</strong><small>Property Consults</small></span>
         </a>
 

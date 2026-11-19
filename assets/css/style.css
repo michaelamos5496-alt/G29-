@@ -3991,3 +3991,25 @@ body.has-finder-launcher .floating-contact { bottom: calc(var(--space-6) + 70px)
 .finder-pop__card { border: 0; background: transparent; padding: 8px 4px 4px; }
 .finder-pop__body { padding-top: 40px; }
 .finder-pop__card .finder__progress { background: #fff; }
+
+
+/* ==========================================================================
+   Lightweight mode (html.lite — set by the inline script at the top of every
+   page for weaker phones) and reduced-motion: static layout, no blur.
+   ========================================================================== */
+html.lite .walkthrough { min-height: 0; }
+html.lite .lifestyle-panel { height: auto; min-height: 80vh; padding: var(--space-16) 0; }
+html.lite .progress-line { display: none; }
+html.lite .walkthrough__hint-line { animation: none; }
+html.lite *, html.lite *::before, html.lite *::after {
+  -webkit-backdrop-filter: none !important;
+  backdrop-filter: none !important;
+}
+/* With the hero static (no scroll-scrubbed pin), the properties section must
+   not be pulled up over it. */
+html.lite .discover,
+body:has(.walkthrough.is-static) .discover,
+body:has(.walkthrough.is-fallback) .discover { margin-top: 0; min-height: 0; border-radius: 0; box-shadow: none; }
+@media (prefers-reduced-motion: reduce) {
+  .discover { margin-top: 0; min-height: 0; border-radius: 0; box-shadow: none; }
+}

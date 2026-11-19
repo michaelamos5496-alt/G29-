@@ -2,6 +2,11 @@
 <html lang="en">
 
 <head>
+  <!-- Lightweight mode for weaker phones (<= 4GB RAM, Data Saver, 2G/3G): the
+       site then takes its reduced-motion path — static hero instead of the
+       scroll-scrubbed video, no scroll-linked animation, no blur effects.
+       Runs first so every script and stylesheet sees it. -->
+  <script>(function(){try{var n=navigator,c=n.connection||{};var q=location.search;var low=/[?&]lite=1\b/.test(q)||(!/[?&]lite=0\b/.test(q)&&((n.deviceMemory&&n.deviceMemory<=4)||c.saveData===true||/(^|-)2g$|3g/.test(c.effectiveType||'')));if(low){document.documentElement.classList.add('lite');window.G29_LITE=true;var mm=window.matchMedia.bind(window);window.matchMedia=function(q){if(/prefers-reduced-motion:\s*reduce/.test(q)){return{matches:true,media:q,onchange:null,addEventListener:function(){},removeEventListener:function(){},addListener:function(){},removeListener:function(){},dispatchEvent:function(){return false}};}return mm(q);};}}catch(e){}})();</script>
   <!-- A refresh/reload should land on the top of the page, not wherever the
        browser last scrolled to — must run before the browser applies its
        own scroll restoration. -->
@@ -19,7 +24,8 @@
   <!-- Hero poster is the page's LCP image (see .walkthrough__poster) —
        starts this fetch immediately rather than waiting for the parser
        to reach the <img> in <body>. -->
-  <link rel="preload" as="image" href="assets/videos/herovideo-poster.jpg" fetchpriority="high">
+  <link rel="preload" as="image" href="assets/videos/herovideo-poster-mobile.jpg" media="(max-width: 768px)" fetchpriority="high">
+  <link rel="preload" as="image" href="assets/videos/herovideo-poster.jpg" media="(min-width: 769px)" fetchpriority="high">
 </head>
 
 <body>
@@ -54,7 +60,7 @@
              this hero image. This <img> sits behind the video in DOM
              order (so the video naturally paints over it once ready)
              and is what actually gets measured/painted first. -->
-        <img class="walkthrough__poster" src="assets/videos/herovideo-poster.jpg" alt="" aria-hidden="true" fetchpriority="high">
+        <img class="walkthrough__poster" src="assets/videos/herovideo-poster.jpg" srcset="assets/videos/herovideo-poster-mobile.jpg 828w, assets/videos/herovideo-poster.jpg 1920w" sizes="100vw" alt="" aria-hidden="true" fetchpriority="high">
 
         <video id="walkthroughVideo" class="walkthrough__video" muted playsinline preload="metadata"
           poster="assets/videos/herovideo-poster.jpg" aria-hidden="true">
@@ -169,7 +175,7 @@
       <div class="services-grid" id="servicesGrid" data-reveal-container>
 
         <a href="service-detail.html?slug=facility-management" class="service-tile" data-reveal="glance" data-reveal-group="services-grid"
-          style="background-image: url('https://images.unsplash.com/photo-1600585154340-be6161a56a0c?q=80&w=1200&auto=format&fit=crop');">
+          data-bg="https://images.unsplash.com/photo-1600585154340-be6161a56a0c?q=65&w=900&auto=format&fit=crop">
           <span class="service-tile__overlay"></span>
           <span class="service-tile__content">
             <span class="service-tile__label">Facility Management</span>
@@ -179,7 +185,7 @@
         </a>
 
         <a href="service-detail.html?slug=brokerage" class="service-tile" data-reveal="glance" data-reveal-group="services-grid"
-          style="background-image: url('https://images.unsplash.com/photo-1600047509807-ba8f99d2cdde?q=80&w=1200&auto=format&fit=crop');">
+          data-bg="https://images.unsplash.com/photo-1600047509807-ba8f99d2cdde?q=65&w=900&auto=format&fit=crop">
           <span class="service-tile__overlay"></span>
           <span class="service-tile__content">
             <span class="service-tile__label">Brokerage (Sales &amp; Rentals)</span>
@@ -189,7 +195,7 @@
         </a>
 
         <a href="service-detail.html?slug=real-estate-advisory" class="service-tile" data-reveal="glance" data-reveal-group="services-grid"
-          style="background-image: url('https://images.unsplash.com/photo-1613977257363-707ba9348227?q=80&w=1200&auto=format&fit=crop');">
+          data-bg="https://images.unsplash.com/photo-1613977257363-707ba9348227?q=65&w=900&auto=format&fit=crop">
           <span class="service-tile__overlay"></span>
           <span class="service-tile__content">
             <span class="service-tile__label">Real Estate Advisory</span>
@@ -199,7 +205,7 @@
         </a>
 
         <a href="service-detail.html?slug=refurbishment-renovation" class="service-tile" data-reveal="glance" data-reveal-group="services-grid"
-          style="background-image: url('https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?q=80&w=1200&auto=format&fit=crop');">
+          data-bg="https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?q=65&w=900&auto=format&fit=crop">
           <span class="service-tile__overlay"></span>
           <span class="service-tile__content">
             <span class="service-tile__label">Refurbishment &amp; Renovation Works</span>
@@ -228,7 +234,7 @@
 
       <div class="lifestyle-panel">
         <div class="lifestyle-panel__bg"
-          style="background-image: url('assets/images/beyond-the-walls.jpg');"></div>
+          data-bg="assets/images/beyond-the-walls.jpg" data-bg-group="lifestyle"></div>
         <div class="lifestyle-panel__gradient"></div>
         <div class="container lifestyle-panel__content lifestyle-panel__content--intro">
           <span class="eyebrow eyebrow--on-dark">Beyond the Walls</span>
@@ -243,7 +249,7 @@
 
       <div class="lifestyle-panel">
         <div class="lifestyle-panel__bg"
-          style="background-image: url('assets/images/architecture-space.jpg');"></div>
+          data-bg="assets/images/architecture-space.jpg" data-bg-group="lifestyle"></div>
         <div class="lifestyle-panel__gradient"></div>
         <div class="container lifestyle-panel__content">
           <span class="lifestyle-panel__index">01</span>
@@ -254,7 +260,7 @@
 
       <div class="lifestyle-panel">
         <div class="lifestyle-panel__bg"
-          style="background-image: url('https://images.unsplash.com/photo-1516156008625-3a9d6067fab5?q=80&w=1800&auto=format&fit=crop');"></div>
+          data-bg="https://images.unsplash.com/photo-1516156008625-3a9d6067fab5?q=65&w=1400&auto=format&fit=crop" data-bg-group="lifestyle"></div>
         <div class="lifestyle-panel__gradient"></div>
         <div class="container lifestyle-panel__content">
           <span class="lifestyle-panel__index">02</span>
@@ -265,7 +271,7 @@
 
       <div class="lifestyle-panel">
         <div class="lifestyle-panel__bg"
-          style="background-image: url('https://images.unsplash.com/photo-1600566752355-35792bedcfea?q=80&w=1800&auto=format&fit=crop');"></div>
+          data-bg="https://images.unsplash.com/photo-1600566752355-35792bedcfea?q=65&w=1400&auto=format&fit=crop" data-bg-group="lifestyle"></div>
         <div class="lifestyle-panel__gradient"></div>
         <div class="container lifestyle-panel__content">
           <span class="lifestyle-panel__index">03</span>
@@ -422,7 +428,7 @@
 
         <div class="footer-col footer-col--brand reveal-up">
           <a href="index.html" class="footer-logo">
-            <img src="assets/images/g29-icon.png" alt="" width="34" height="34">
+            <img src="assets/images/g29-icon-96.png" alt="" width="34" height="34">
             <span><strong>G29</strong><small>Property Consults</small></span>
           </a>
           <p class="footer-tagline">Trusted property solutions for buyers, owners, and investors across Accra.</p>
