@@ -35,7 +35,7 @@ window.G29_PROPERTIES = [
     "video": null,
     "floorPlans": [],
     "marketSnapshot": null,
-    "image": "assets/images/properties/acacia-court/01.jpg",
+    "image": "assets/images/properties/acacia-court/thumbs/01.jpg",
     "gallery": [
       "assets/images/properties/acacia-court/01.jpg",
       "assets/images/properties/acacia-court/02.jpg",
@@ -115,7 +115,7 @@ window.G29_PROPERTIES = [
     "video": null,
     "floorPlans": [],
     "marketSnapshot": null,
-    "image": "assets/images/properties/palm-court/01.jpg",
+    "image": "assets/images/properties/palm-court/thumbs/01.jpg",
     "gallery": [
       "assets/images/properties/palm-court/01.jpg",
       "assets/images/properties/palm-court/02.jpg",
@@ -294,7 +294,7 @@ window.G29_PROPERTIES = [
     "video": null,
     "floorPlans": [],
     "marketSnapshot": null,
-    "image": "assets/images/properties/ninth-avenue-square/01.jpg",
+    "image": "assets/images/properties/ninth-avenue-square/thumbs/01.jpg",
     "gallery": [
       "assets/images/properties/ninth-avenue-square/01.jpg",
       "assets/images/properties/ninth-avenue-square/02.jpg",
@@ -712,7 +712,7 @@ window.G29_PROPERTIES = [
     "video": null,
     "floorPlans": [],
     "marketSnapshot": null,
-    "image": "assets/images/properties/wentworth-place/02.jpg",
+    "image": "assets/images/properties/wentworth-place/thumbs/02.jpg",
     "gallery": [
       "assets/images/properties/wentworth-place/02.jpg",
       "assets/images/properties/wentworth-place/01.jpg",
@@ -981,7 +981,7 @@ window.G29_PROPERTIES = [
     "video": null,
     "floorPlans": [],
     "marketSnapshot": null,
-    "image": "assets/images/properties/toms-place/01.jpg",
+    "image": "assets/images/properties/toms-place/thumbs/01.jpg",
     "gallery": [
       "assets/images/properties/toms-place/01.jpg",
       "assets/images/properties/toms-place/02.jpg",
@@ -1327,7 +1327,7 @@ window.G29_PROPERTIES = [
     "video": null,
     "floorPlans": [],
     "marketSnapshot": null,
-    "image": "assets/images/properties/vida-villa-aburi/01.jpg",
+    "image": "assets/images/properties/vida-villa-aburi/thumbs/01.jpg",
     "gallery": [
       "assets/images/properties/vida-villa-aburi/01.jpg",
       "assets/images/properties/vida-villa-aburi/03.jpg",

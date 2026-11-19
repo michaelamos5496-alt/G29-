@@ -121,6 +121,74 @@
     anim.onfinish = () => { launcher.style.visibility = ''; finish(); };
   }
 
+
+  // ---- Draggable launcher (phones) — like iOS AssistiveTouch -----------
+  // Drag it anywhere; on release it glides to the nearest screen edge and
+  // remembers its spot. A tap (no real movement) still opens the matcher.
+  function makeLauncherDraggable() {
+    const mq = window.matchMedia('(max-width: 640px)');
+    const KEY = 'g29FinderLauncherPos';
+    const SIZE = 56, EDGE = 12, TOP_MIN = 76; // keep clear of the nav bar
+    let pos = null, drag = null, suppressClick = false;
+    try { pos = JSON.parse(localStorage.getItem(KEY)); } catch (e) { pos = null; }
+
+    const clampY = (y) => Math.max(TOP_MIN, Math.min(window.innerHeight - SIZE - EDGE - 8, y));
+    const clearPos = () => { ['left', 'top', 'right', 'bottom'].forEach((k) => launcher.style.removeProperty(k)); };
+    function applyPos() {
+      if (!mq.matches || !pos) { clearPos(); return; }
+      launcher.style.right = 'auto';
+      launcher.style.bottom = 'auto';
+      launcher.style.top = clampY(pos.y * window.innerHeight) + 'px';
+      launcher.style.left = (pos.side === 'left' ? EDGE : window.innerWidth - SIZE - EDGE) + 'px';
+    }
+
+    // Registered before the open() click handler so a drag-release never opens it.
+    launcher.addEventListener('click', (e) => {
+      if (suppressClick) { suppressClick = false; e.preventDefault(); e.stopImmediatePropagation(); }
+    });
+
+    launcher.addEventListener('pointerdown', (e) => {
+      if (!mq.matches || (e.pointerType === 'mouse' && e.button !== 0)) return;
+      const r = launcher.getBoundingClientRect();
+      drag = { id: e.pointerId, sx: e.clientX, sy: e.clientY, ox: r.left, oy: r.top, moved: false };
+    });
+    launcher.addEventListener('pointermove', (e) => {
+      if (!drag || e.pointerId !== drag.id) return;
+      const dx = e.clientX - drag.sx, dy = e.clientY - drag.sy;
+      if (!drag.moved) {
+        if (Math.hypot(dx, dy) < 8) return;
+        drag.moved = true;
+        try { launcher.setPointerCapture(e.pointerId); } catch (err) { /* ignore */ }
+        launcher.classList.add('is-dragging');
+        launcher.style.right = 'auto';
+        launcher.style.bottom = 'auto';
+      }
+      const x = Math.max(EDGE, Math.min(window.innerWidth - SIZE - EDGE, drag.ox + dx));
+      launcher.style.left = x + 'px';
+      launcher.style.top = clampY(drag.oy + dy) + 'px';
+      e.preventDefault();
+    });
+    function endDrag(e) {
+      if (!drag || e.pointerId !== drag.id) return;
+      const wasMoved = drag.moved;
+      drag = null;
+      if (!wasMoved) return;
+      suppressClick = true;
+      setTimeout(() => { suppressClick = false; }, 350);
+      const r = launcher.getBoundingClientRect();
+      pos = { side: r.left + SIZE / 2 < window.innerWidth / 2 ? 'left' : 'right', y: clampY(r.top) / window.innerHeight };
+      try { localStorage.setItem(KEY, JSON.stringify(pos)); } catch (err) { /* ignore */ }
+      launcher.classList.remove('is-dragging');
+      applyPos(); // CSS transition glides it to the edge
+    }
+    launcher.addEventListener('pointerup', endDrag);
+    launcher.addEventListener('pointercancel', endDrag);
+
+    window.addEventListener('resize', applyPos);
+    if (mq.addEventListener) mq.addEventListener('change', applyPos);
+    applyPos();
+  }
+
   document.addEventListener('DOMContentLoaded', () => {
     document.body.insertAdjacentHTML('beforeend', markup);
     launcher = document.getElementById('finderLauncher');
@@ -140,6 +208,7 @@
       scroller.scrollTop += e.deltaY * unit;
     }, { passive: false });
 
+    makeLauncherDraggable();
     launcher.addEventListener('click', open);
     pop.querySelectorAll('[data-close]').forEach((el) => el.addEventListener('click', close));
     document.addEventListener('keydown', (e) => { if (e.key === 'Escape' && !pop.hidden) close(); });

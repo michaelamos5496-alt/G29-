@@ -28,6 +28,8 @@
     metaDesc.setAttribute('content', `${property.title} in ${property.subtitle}. Available through G29 Property Consults.`);
   }
 
+  // Small thumbnail version of a local photo (assets/images/properties/<slug>/thumbs/)
+  const thumbOf = (src) => (src.indexOf('assets/images/properties/') === 0 ? src.replace(/\/([^/]+)$/, '/thumbs/$1') : src);
   const gallery = property.gallery && property.gallery.length ? property.gallery : [property.image];
 
   root.innerHTML = `
@@ -41,7 +43,7 @@
       <div class="property-gallery__main" id="galleryMain" data-reveal="scale" style="background-image: url('${gallery[0]}');"></div>
       <div class="property-gallery__thumbs" id="galleryThumbs">
         ${gallery.map((img, i) => `
-          <button type="button" class="property-gallery__thumb${i === 0 ? ' is-active' : ''}" data-image="${img}" style="background-image: url('${img}');" aria-label="Photo ${i + 1}"></button>
+          <button type="button" class="property-gallery__thumb${i === 0 ? ' is-active' : ''}" data-image="${img}" style="background-image: url('${thumbOf(img)}');" aria-label="Photo ${i + 1}"></button>
         `).join('')}
       </div>
     </section>
