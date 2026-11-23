@@ -4212,3 +4212,26 @@ html.lite .finder-pop .finder__summary li, html.lite .finder-pop .finder-intro__
 
 /* While the homepage hero fills the screen the round button steps out of the way of the video */
 .finder-launcher.is-away { opacity: 0 !important; pointer-events: none; transform: scale(0.85); visibility: hidden; }
+
+/* ==========================================================================
+   Phones, upright: ONE centred block. The logo and the two buttons stack on the centre line, and the
+   whole block (logo + gap + buttons) is centred in the visible hero — below the 60px nav bar, allowing
+   for the pinned hero being 100px taller than the screen. (Overrides the earlier separate placements.)
+   ========================================================================== */
+@media (max-width: 768px) and (orientation: portrait) {
+  .walkthrough__wordmark {
+    /* visible-centre (50% - 20px), moved up by half of (gap 28px + button row 48px) */
+    top: calc(50% - 20px - 38px);
+    left: 50%;
+    width: min(58vw, 260px);
+  }
+  .walkthrough__ctas {
+    /* visible-centre, + half the logo height (viewBox is 512x580) + the gap, i.e. directly under the logo */
+    top: calc(50% - 20px - 38px + 0.566 * min(58vw, 260px) + 28px);
+    bottom: auto;
+    left: 50%;
+    transform: translate(-50%, 8px);
+    justify-content: center;
+  }
+  .walkthrough__ctas.is-visible { transform: translate(-50%, 0); }
+}
