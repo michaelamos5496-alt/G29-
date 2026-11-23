@@ -176,9 +176,9 @@
     // same ~43vh of scroll per clip-second, so the camera really does travel
     // at 70% of the original speed per scroll on desktop. Set SLOWMO to 1 to undo.
     var SLOWMO = 0.7;
-    // Phones get a much shorter hero scroll: the footage is a sideways glide, and on a narrow
-    // screen only a slice of it is visible, so a long scroll made it look frozen.
-    var scrollLengthVh = M.isMobile ? 260 : 500 / SLOWMO;
+    // Phones get a shorter hero scroll than desktop (the footage is a sideways glide, and a very long
+    // scroll made it look frozen) — but not so short that the hero can't finish before the sheet arrives.
+    var scrollLengthVh = M.isMobile ? 380 : 500 / SLOWMO;
     // The properties section (.discover in style.css, margin-top: -100svh)
     // starts sliding up over the still-playing video for the last 100vh of
     // scroll = roughly the final 2.4s of the video (3s on phones).
@@ -255,16 +255,27 @@
 
         // Curved -> sharp: the properties sheet enters with a rounded top
         // edge that flattens to a straight edge as it lands over the video.
+        // The sheet starts sliding up at progress (1 - overlap).
+        // Scroll distance that maps to progress 0 -> 1: the whole pin on desktop (GSAP pin), but one screen
+        // less on touch devices, where the hero is a sticky section and its last screen is just the exit.
+        var travelPx = window.innerHeight * (scrollLengthVh / 100 - (isDesktopPointer ? 0 : 1));
+        var overlap = (window.innerHeight + 100) / travelPx; // fraction of the scroll the sheet travels over
         if (discoverEl) {
-          var overlap = (window.innerHeight + 100) / (window.innerHeight * scrollLengthVh / 100); // fraction of the pin the sheet travels over
           var sheet = Math.max(0, Math.min((self.progress - (1 - overlap)) / overlap, 1));
           var r = Math.round(SHEET_RADIUS * (1 - sheet));
           discoverEl.style.borderRadius = r + 'px ' + r + 'px 0 0';
         }
 
-        var wm = Math.max(0, Math.min((self.progress - WORDMARK_START) / (WORDMARK_END - WORDMARK_START), 1));
+        // The hero's own content (logo, name, section markers, buttons) is
+        // timed against `hp`: its progress up to the moment the properties
+        // sheet starts to arrive. So whatever the scroll length, the logo,
+        // name and buttons are always fully shown BEFORE the second page
+        // begins to cover them — the video keeps playing underneath it.
+        var heroEnd = Math.max(0.3, 1 - overlap);
+        var hp = Math.min(self.progress / heroEnd, 1);
+        var wm = Math.max(0, Math.min((hp - WORDMARK_START) / (WORDMARK_END - WORDMARK_START), 1));
         setWordmarkProgress(wm);
-        updateSection(sectionForProgress(self.progress));
+        updateSection(sectionForProgress(hp));
       }
     };
 

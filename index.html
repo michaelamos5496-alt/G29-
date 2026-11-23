@@ -23,7 +23,7 @@
   <!-- Hero poster is the page's LCP image (see .walkthrough__poster) —
        starts this fetch immediately rather than waiting for the parser
        to reach the <img> in <body>. -->
-  <link rel="preload" as="image" href="assets/videos/hero-final-poster-mobile.jpg" media="(max-width: 1100px)" fetchpriority="high">
+  <link rel="preload" as="image" href="assets/videos/hero-final-poster-phone.jpg" media="(max-width: 768px) and (orientation: portrait)" fetchpriority="high">
   <link rel="preload" as="image" href="assets/videos/hero-final-poster.jpg" media="(min-width: 1101px)" fetchpriority="high">
 </head>
 
@@ -59,19 +59,23 @@
              this hero image. This <img> sits behind the video in DOM
              order (so the video naturally paints over it once ready)
              and is what actually gets measured/painted first. -->
-        <img class="walkthrough__poster" src="assets/videos/hero-final-poster.jpg" srcset="assets/videos/hero-final-poster-mobile.jpg 828w, assets/videos/hero-final-poster.jpg 1920w" sizes="100vw" alt="" aria-hidden="true" fetchpriority="high">
+        <picture>
+          <source media="(max-width: 768px) and (orientation: portrait)" srcset="assets/videos/hero-final-poster-phone.jpg">
+          <img class="walkthrough__poster" src="assets/videos/hero-final-poster.jpg" srcset="assets/videos/hero-final-poster-mobile.jpg 828w, assets/videos/hero-final-poster.jpg 1920w" sizes="100vw" alt="" aria-hidden="true" fetchpriority="high">
+        </picture>
 
         <video id="walkthroughVideo" class="walkthrough__video" muted playsinline preload="auto"
           poster="assets/videos/hero-final-poster.jpg" aria-hidden="true"></video>
         <script>
           /* Pick the lightest hero video that still looks sharp on this screen, before it starts to download.
-             Phones and small screens (and very low-memory devices): 1280x720 — the whole frame is shown, not a crop.
-             Everything else: 1920x1080. */
+             Phone (upright): 608x1080 full-screen cut made for tall screens.
+             Small/landscape screens and very low-memory devices: 1280x720. Everything else: 1920x1080. */
           (function () {
             var v = document.getElementById('walkthroughVideo');
             var w = window.innerWidth, h = window.innerHeight;
             var low = (navigator.deviceMemory && navigator.deviceMemory <= 2); // only very low-memory devices step down to 720p
-            var f = (w <= 900 || low) ? 'hero-final-720.mp4'
+            var f = (w <= 768 && h > w) ? 'hero-final-phone.mp4'
+                  : (w <= 900 || low) ? 'hero-final-720.mp4'
                   : 'hero-final.mp4';
             var url = 'assets/videos/' + f;
             /* Scrubbing needs instant random access to every frame. Streamed video re-requests the network on
