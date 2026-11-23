@@ -40,15 +40,37 @@
 
   const pillText = document.getElementById('discoverPillText');
 
-  function markActive() {
-    const mid = cardsEl.scrollLeft + cardsEl.clientWidth / 2;
-    let best = null, bestD = Infinity, idx = 0;
+  // Which card is in the middle of the row? Measured from real on-screen
+  // geometry (getBoundingClientRect): offsetLeft is relative to a different
+  // container than the scrolling row, which skewed the answer, and a scaled
+  // card's rect stays centred on its own middle so the maths is unaffected
+  // by the zoom animation.
+  function centredIndex() {
+    const rr = cardsEl.getBoundingClientRect();
+    const mid = rr.left + rr.width / 2;
+    let best = 0, bestD = Infinity;
     Array.from(cardsEl.children).forEach((c, i) => {
-      const d = Math.abs(c.offsetLeft + c.offsetWidth / 2 - mid);
-      if (d < bestD) { bestD = d; best = c; idx = i; }
+      const b = c.getBoundingClientRect();
+      const d = Math.abs(b.left + b.width / 2 - mid);
+      if (d < bestD) { bestD = d; best = i; }
     });
-    Array.from(cardsEl.children).forEach((c) => c.classList.toggle('is-active', c === best));
+    return best;
+  }
+
+  function markActive() {
+    const idx = centredIndex();
+    Array.from(cardsEl.children).forEach((c, i) => c.classList.toggle('is-active', i === idx));
     if (pillText && locations[idx]) pillText.textContent = locations[idx].subtitle;
+  }
+
+  // Scroll card `i` exactly into the middle (smooth or instant).
+  function centreCard(i, smooth) {
+    const c = cardsEl.children[Math.max(0, Math.min(cardsEl.children.length - 1, i))];
+    if (!c) return;
+    const rr = cardsEl.getBoundingClientRect(), b = c.getBoundingClientRect();
+    const delta = (b.left + b.width / 2) - (rr.left + rr.width / 2);
+    if (smooth) { cardsEl.scrollBy({ left: delta, behavior: 'smooth' }); }
+    else { cardsEl.style.scrollBehavior = 'auto'; cardsEl.scrollLeft += delta; cardsEl.style.scrollBehavior = ''; }
   }
 
   if (window.G29_lazyLoadBg) window.G29_lazyLoadBg(cardsEl);
@@ -74,20 +96,20 @@
     nextBtn.disabled = cardsEl.scrollLeft >= max - 2;
   }
 
-  prevBtn.addEventListener('click', () => cardsEl.scrollBy({ left: -step(), behavior: 'smooth' }));
-  nextBtn.addEventListener('click', () => cardsEl.scrollBy({ left: step(), behavior: 'smooth' }));
+  prevBtn.addEventListener('click', () => centreCard(centredIndex() - 1, true));
+  nextBtn.addEventListener('click', () => centreCard(centredIndex() + 1, true));
   function onScroll() { syncArrows(); markActive(); }
-  cardsEl.addEventListener('scroll', onScroll, { passive: true });
+  let settleTimer = null;
+  function settle() { clearTimeout(settleTimer); settleTimer = setTimeout(onScroll, 140); }
+  cardsEl.addEventListener('scroll', () => { onScroll(); settle(); }, { passive: true });
+  // 'scrollend' fires when the snap has fully finished (Chrome/Firefox); the timer covers the rest.
+  cardsEl.addEventListener('scrollend', onScroll);
+  ['touchend', 'pointerup', 'mouseup'].forEach((ev) => cardsEl.addEventListener(ev, () => { settle(); setTimeout(onScroll, 450); }, { passive: true }));
   window.addEventListener('resize', onScroll);
 
   // Start with the second card centred, as in the coverflow reference.
   requestAnimationFrame(() => {
-    const c = cardsEl.children[Math.min(1, cardsEl.children.length - 1)];
-    if (c) {
-      cardsEl.style.scrollBehavior = 'auto';
-      cardsEl.scrollLeft = c.offsetLeft + c.offsetWidth / 2 - cardsEl.clientWidth / 2;
-      cardsEl.style.scrollBehavior = '';
-    }
+    centreCard(Math.min(1, cardsEl.children.length - 1), false);
     onScroll();
   });
 })();

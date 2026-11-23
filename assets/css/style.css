@@ -529,10 +529,11 @@ a { text-decoration: none; color: inherit; }
 .property-overview {
   padding: var(--space-16) var(--space-6);
   display: grid;
-  grid-template-columns: 1fr 360px;
+  grid-template-columns: minmax(0, 1fr) 360px;
   gap: var(--space-16);
   align-items: start;
 }
+.property-overview > * { min-width: 0; }
 
 .property-overview__head {
   display: flex;
@@ -3116,7 +3117,7 @@ html.nav-menu-open { overflow: hidden; }
   .about__body p { font-size: 16px; }
   .home-hero__heading { font-size: 56px; }
   .home-hero__highlight { width: 280px; }
-  .property-overview { grid-template-columns: 1fr; }
+  .property-overview { grid-template-columns: minmax(0, 1fr); }
   .property-inquiry__card { position: static; }
   .property-grid {
     display: flex;
@@ -4113,4 +4114,61 @@ html.lite .finder-pop .finder__summary li, html.lite .finder-pop .finder-intro__
 @media (prefers-reduced-transparency: reduce) {
   .finder-pop__dialog { background: var(--color-surface); -webkit-backdrop-filter: none; backdrop-filter: none; }
   .finder-pop .finder__opt, .finder-pop .finder-result { background: #fff; }
+}
+
+/* Never let anything that slides in from the side (reveal animations, wide
+   rails) create sideways scrolling. `clip` — unlike `hidden` — does not turn
+   <body> into a scroll container, so sticky/pinned sections keep working. */
+@supports (overflow: clip) {
+  body { overflow-x: clip; }
+}
+
+/* ==========================================================================
+   Small and short phones — nothing may be cut off.
+   The matcher dialog is designed to fit without scrolling; on very small
+   screens it gets more compact, and if it STILL can't fit it scrolls rather
+   than hiding content.
+   ========================================================================== */
+@media (max-width: 640px) {
+  .finder-pop__body { overflow-y: auto; }
+}
+@media (max-width: 640px) and (max-height: 640px) {
+  .finder-pop__dialog { max-height: 96svh; }
+  .finder-pop__body { padding: 26px 14px calc(10px + env(safe-area-inset-bottom)); }
+  .finder-pop .finder-intro__points { display: none; }
+  .finder-pop .finder-intro__icon { width: 36px; height: 36px; margin-bottom: 6px; }
+  .finder-pop .finder__hint { font-size: 13px; margin-bottom: 10px; }
+  .finder-pop .finder__q { font-size: 18px; }
+  .finder-pop .finder__opt { padding: 8px 10px; }
+  .finder-pop .finder__summary { display: none; }
+  .finder-pop .finder-result__img { min-height: 76px; }
+  .finder-pop .finder-result__body { padding: 10px 12px 12px; }
+  .finder-pop .finder-result__why li:nth-child(n+2) { display: none; }
+}
+/* Landscape phones: the full-screen menu gets compact so it fits the short screen */
+@media (max-width: 1024px) and (max-height: 520px) {
+  .nav-menu { padding-top: calc(env(safe-area-inset-top, 0px) + 60px + 6px); padding-bottom: 8px; }
+  .nav-menu__link { padding: 3px 0; }
+  .nav-menu__label { font-size: 20px; }
+  .nav-menu__num { font-size: 10px; }
+  .nav-menu__foot { margin-top: 8px; gap: 8px; grid-template-columns: 1fr 2fr; align-items: center; }
+  .nav-menu__quick { grid-column: 2; }
+  .nav-menu__meta { display: none; }
+  .nav-menu__cta { height: 40px; font-size: 14px; }
+  .nav-menu__quick a { padding: 6px 4px; flex-direction: row; justify-content: center; }
+}
+
+/* Landscape phones: the screen is short, so the hero logo shrinks and the
+   buttons/hint sit low, instead of overlapping or running off the bottom. */
+@media (max-height: 520px) and (orientation: landscape) {
+  .walkthrough__wordmark { top: calc(50% - 50px); width: min(34vh, 200px); }
+  .walkthrough__ctas { bottom: calc(100px + var(--space-3)); }
+  .walkthrough__hint { bottom: calc(100px + var(--space-2)); }
+  .walkthrough__hint-line { display: none; }
+}
+
+/* Narrowest phones (320–360px): keep both hero buttons on one row, inside the screen */
+@media (max-width: 360px) {
+  .walkthrough__ctas { gap: var(--space-2); }
+  .walkthrough__ctas .btn { padding: 12px 8px; font-size: 12.5px; letter-spacing: 0; min-width: 0; }
 }
