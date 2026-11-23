@@ -4180,3 +4180,35 @@ html.lite .finder-pop .finder__summary li, html.lite .finder-pop .finder-intro__
   .walkthrough__wordmark { top: calc(50% - 20px); }
   .walkthrough__ctas { bottom: calc(100px + var(--space-24)); }
 }
+
+
+/* ==========================================================================
+   Phone hero polish
+   ========================================================================== */
+@media (max-width: 768px) {
+  /* The pinned hero is 100px taller than the screen, so the dark bottom of the gradient sat OFF-screen
+     and the buttons were white-on-light. Put the dark where the buttons actually are. */
+  .walkthrough__gradient {
+    background: linear-gradient(180deg,
+      rgba(6, 14, 26, 0.55) 0%, rgba(6, 14, 26, 0.05) 26%, rgba(6, 14, 26, 0.08) 52%,
+      rgba(6, 14, 26, 0.5) 74%, rgba(6, 14, 26, 0.82) 89%, rgba(6, 14, 26, 0.9) 100%);
+  }
+  /* "Book a Viewing" (the outline button) becomes a dark glass pill so its white text is always readable */
+  .walkthrough__ctas .btn-ghost,
+  .walkthrough__ctas .btn:not(.btn-primary) {
+    background: rgba(8, 24, 24, 0.55);
+    border-color: rgba(255, 255, 255, 0.75);
+    color: #fff;
+    -webkit-backdrop-filter: blur(10px);
+    backdrop-filter: blur(10px);
+    text-shadow: 0 1px 8px rgba(0, 0, 0, 0.4);
+  }
+}
+
+/* No blue tap/focus ring on the round matcher button (keyboard users still get a clear ring) */
+.finder-launcher { -webkit-tap-highlight-color: transparent; outline: none; }
+.finder-launcher:focus:not(:focus-visible) { outline: none; box-shadow: 0 12px 28px rgba(0, 0, 0, 0.22); }
+.finder-launcher:focus-visible { outline: 3px solid #fff; outline-offset: 2px; }
+
+/* While the homepage hero fills the screen the round button steps out of the way of the video */
+.finder-launcher.is-away { opacity: 0 !important; pointer-events: none; transform: scale(0.85); visibility: hidden; }

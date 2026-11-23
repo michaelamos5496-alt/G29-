@@ -252,6 +252,20 @@
 
     makeLauncherDraggable();
 
+    // Homepage: keep the round button out of the hero video; it appears once you scroll past the hero.
+    const heroEl = document.getElementById('walkthrough');
+    const sheetEl = document.getElementById('properties');
+    if (heroEl && sheetEl) {
+      // "away" until the properties page has (almost) fully slid over the hero
+      const syncAway = () => {
+        const away = sheetEl.getBoundingClientRect().top > window.innerHeight * 0.12;
+        launcher.classList.toggle('is-away', away);
+      };
+      window.addEventListener('scroll', syncAway, { passive: true });
+      window.addEventListener('resize', syncAway);
+      syncAway();
+    }
+
     // Idle fade (like iOS AssistiveTouch): the button dims to 40% after a
     // few seconds untouched, and comes back to full strength the moment it
     // is hovered, touched or focused (and whenever it re-appears).
