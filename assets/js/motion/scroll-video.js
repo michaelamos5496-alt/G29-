@@ -174,9 +174,11 @@
     // The hero clip is slowed to 70% speed (see assets/videos/hero-final*.mp4,
     // 16.7s instead of 11.7s). Giving it 1/0.7 the scroll distance keeps the
     // same ~43vh of scroll per clip-second, so the camera really does travel
-    // at 70% of the original speed per scroll. Set SLOWMO to 1 to undo.
+    // at 70% of the original speed per scroll on desktop. Set SLOWMO to 1 to undo.
     var SLOWMO = 0.7;
-    var scrollLengthVh = (M.isMobile ? 420 : 500) / SLOWMO;
+    // Phones get a much shorter hero scroll: the footage is a sideways glide, and on a narrow
+    // screen only a slice of it is visible, so a long scroll made it look frozen.
+    var scrollLengthVh = M.isMobile ? 260 : 500 / SLOWMO;
     // The properties section (.discover in style.css, margin-top: -100svh)
     // starts sliding up over the still-playing video for the last 100vh of
     // scroll = roughly the final 2.4s of the video (3s on phones).
@@ -208,9 +210,16 @@
     // ('seeked') or the screen refreshes, we jump to the newest target.
     var seekTarget = 0;
     var FRAME = 1 / 23.33; // the hero clip is ~23.3fps
+    var seekStarted = 0;
     function pumpSeek() {
-      if (video.seeking) return;
+      var now = performance.now();
+      if (video.seeking) {
+        // Watchdog: a seek that never completes (stalled decode/network) must not freeze the hero.
+        if (now - seekStarted > 500) { seekStarted = now; video.currentTime = seekTarget; }
+        return;
+      }
       if (Math.abs(video.currentTime - seekTarget) > FRAME * 0.5) {
+        seekStarted = now;
         video.currentTime = seekTarget;
       }
     }

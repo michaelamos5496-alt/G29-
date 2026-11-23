@@ -139,7 +139,7 @@ a { text-decoration: none; color: inherit; }
    shows the white sheet covering the hero and then jumps down. Always lower
    than the final height, so JS simply takes over. */
 @media (prefers-reduced-motion: no-preference) {
-  .walkthrough { min-height: 400svh; }
+  .walkthrough { min-height: 240svh; }
 }
 .walkthrough.is-static,
 .walkthrough.is-fallback { min-height: 0; }
@@ -4171,4 +4171,50 @@ html.lite .finder-pop .finder__summary li, html.lite .finder-pop .finder-intro__
 @media (max-width: 360px) {
   .walkthrough__ctas { gap: var(--space-2); }
   .walkthrough__ctas .btn { padding: 12px 8px; font-size: 12.5px; letter-spacing: 0; min-width: 0; }
+}
+
+
+/* ==========================================================================
+   Phones, upright: show the WHOLE video frame (not a zoomed centre crop).
+   The 16:9 video sits full-width in the middle of the screen; a blurred,
+   darkened copy of its first frame fills the space above and below, and the
+   top/bottom edges of the video fade into it. Logo, buttons and the scroll
+   hint stay where they were.
+   ========================================================================== */
+@media (max-width: 768px) and (orientation: portrait) {
+  .walkthrough__pin { background: #060e1a; overflow: hidden; }
+  .walkthrough__pin::before {
+    content: '';
+    position: absolute;
+    inset: -12%;
+    background: #060e1a url('assets/videos/hero-final-poster-mobile.jpg') center / cover no-repeat;
+    filter: blur(38px) brightness(0.34) saturate(1.7) hue-rotate(-8deg);
+    transform: scale(1.1);
+    z-index: 0;
+  }
+  /* deep brand-teal wash over the glow, darker toward the bottom where the buttons sit */
+  .walkthrough__pin::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(180deg, rgba(10, 35, 33, 0.35) 0%, rgba(10, 35, 33, 0.15) 45%, rgba(6, 14, 26, 0.7) 100%);
+    z-index: 0;
+    pointer-events: none;
+  }
+  .walkthrough__poster,
+  .walkthrough__video {
+    inset: auto;
+    left: 0;
+    width: 100%;
+    height: auto;
+    aspect-ratio: 16 / 9;
+    /* the pin has 100px of extra height below the visible screen, so the visible middle is 50px above its middle */
+    top: calc(50% - 50px);
+    transform: translateY(-50%);
+    object-fit: cover;
+    -webkit-mask-image: linear-gradient(to bottom, transparent 0, #000 9%, #000 91%, transparent 100%);
+    mask-image: linear-gradient(to bottom, transparent 0, #000 9%, #000 91%, transparent 100%);
+    z-index: 1;
+  }
+  .walkthrough__gradient { z-index: 1; }
 }
