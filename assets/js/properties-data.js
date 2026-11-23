@@ -624,11 +624,22 @@ window.G29_PROPERTIES = [
     "video": null,
     "floorPlans": [],
     "marketSnapshot": null,
-    "image": "https://images.unsplash.com/photo-1600566753190-17f0baa2a6c3?q=80&w=800&auto=format&fit=crop",
+    "image": "assets/images/properties/allamanda-homes/thumbs/12.jpg",
     "gallery": [
-      "https://images.unsplash.com/photo-1600566753190-17f0baa2a6c3?q=80&w=1600&auto=format&fit=crop",
-      "https://images.unsplash.com/photo-1600585154526-990dced4db0d?q=80&w=1600&auto=format&fit=crop",
-      "https://images.unsplash.com/photo-1613977257592-4871e5fcd7c4?q=80&w=1600&auto=format&fit=crop"
+      "assets/images/properties/allamanda-homes/12.jpg",
+      "assets/images/properties/allamanda-homes/13.jpg",
+      "assets/images/properties/allamanda-homes/14.jpg",
+      "assets/images/properties/allamanda-homes/03.jpg",
+      "assets/images/properties/allamanda-homes/10.jpg",
+      "assets/images/properties/allamanda-homes/01.jpg",
+      "assets/images/properties/allamanda-homes/02.jpg",
+      "assets/images/properties/allamanda-homes/04.jpg",
+      "assets/images/properties/allamanda-homes/05.jpg",
+      "assets/images/properties/allamanda-homes/06.jpg",
+      "assets/images/properties/allamanda-homes/07.jpg",
+      "assets/images/properties/allamanda-homes/08.jpg",
+      "assets/images/properties/allamanda-homes/09.jpg",
+      "assets/images/properties/allamanda-homes/11.jpg"
     ],
     "description": [
       "A contemporary townhouse with additional maid's quarters in Cantonments, offering the ideal blend of comfort, convenience and elegance for long-term living.",
