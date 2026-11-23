@@ -11,7 +11,7 @@ window.G29_SERVICES = [
     slug: 'facility-management',
     name: "Facility Management",
     tagline: "Upkeep, supervision and operational support",
-    heroImage: 'https://images.unsplash.com/photo-1600585154340-be6161a56a0c?q=80&w=1600&auto=format&fit=crop',
+    heroImage: 'assets/images/services/facility-management.jpg',
     intro: [
       "Our facility management services are designed to maintain and enhance the value of properties through efficient upkeep, supervision, and operational support.",
       "At G29 we don’t just manage properties — we help our clients protect, improve, and maximize the value of their investments, with clear, regular reporting so you always know where things stand."
@@ -35,7 +35,7 @@ window.G29_SERVICES = [
     slug: 'brokerage',
     name: "Brokerage (Sales & Rentals)",
     tagline: "Sales and rentals, done right",
-    heroImage: 'https://images.unsplash.com/photo-1600047509807-ba8f99d2cdde?q=80&w=1600&auto=format&fit=crop',
+    heroImage: 'assets/images/services/brokerage.jpg',
     intro: [
       "We specialize in property rentals, helping individuals and businesses secure the right properties at competitive prices and with flexible payment options, while assisting property owners in finding reliable tenants.",
       "We deal with all manner and style of property — from studio flats, conversions and purpose-built apartments to new homes, villas, town houses and detached houses."
@@ -59,7 +59,7 @@ window.G29_SERVICES = [
     slug: 'real-estate-advisory',
     name: "Real Estate Advisory",
     tagline: "Informed property and investment decisions",
-    heroImage: 'https://images.unsplash.com/photo-1613977257363-707ba9348227?q=80&w=1600&auto=format&fit=crop',
+    heroImage: 'assets/images/services/real-estate-advisory.jpg',
     intro: [
       "We offer expert property advisory, guiding clients in making informed property and investment decisions with confidence.",
       "We work as an ongoing sounding board: market entry, portfolio review, and the due diligence that protects your capital."
@@ -83,7 +83,7 @@ window.G29_SERVICES = [
     slug: 'refurbishment-renovation',
     name: "Refurbishment & Renovation Works",
     tagline: "Modern, functional, value-enhancing spaces",
-    heroImage: 'https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?q=80&w=1600&auto=format&fit=crop',
+    heroImage: 'assets/images/services/refurbishment-renovation.jpg',
     intro: [
       "Our renovation services transform homes and spaces into functional, modern, and value-enhancing environments, delivered with professionalism and attention to detail.",
       "Our ethos is a personal, proactive service with clear communication, from the first walk-through to handover."

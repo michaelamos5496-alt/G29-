@@ -170,8 +170,13 @@
     // the video itself plays 0 -> 1 across the whole pin, so it never
     // finishes before the page moves on) --------------------------------
     // Total scroll distance of the hero, in viewport heights. The video is
-    // ~12s, so ~41vh of scroll per second on desktop (~33 on phones).
-    var scrollLengthVh = M.isMobile ? 420 : 500;
+    // ~16.7s, so ~43vh of scroll per second on desktop (~36 on phones).
+    // The hero clip is slowed to 70% speed (see assets/videos/hero-final*.mp4,
+    // 16.7s instead of 11.7s). Giving it 1/0.7 the scroll distance keeps the
+    // same ~43vh of scroll per clip-second, so the camera really does travel
+    // at 70% of the original speed per scroll. Set SLOWMO to 1 to undo.
+    var SLOWMO = 0.7;
+    var scrollLengthVh = (M.isMobile ? 420 : 500) / SLOWMO;
     // The properties section (.discover in style.css, margin-top: -100svh)
     // starts sliding up over the still-playing video for the last 100vh of
     // scroll = roughly the final 2.4s of the video (3s on phones).
@@ -195,6 +200,24 @@
     // compositor and sidesteps that whole category of bug.
     var isDesktopPointer = window.matchMedia('(hover: hover) and (pointer: fine)').matches;
 
+    // ---- Smooth scrubbing --------------------------------------------
+    // Assigning video.currentTime on every scroll tick starts a new decode
+    // before the last one has finished; on slower phones those pile up and
+    // the picture stutters. Instead there is only ever ONE seek in flight:
+    // scroll just updates the target, and each time a seek completes
+    // ('seeked') or the screen refreshes, we jump to the newest target.
+    var seekTarget = 0;
+    var FRAME = 1 / 23.33; // the hero clip is ~23.3fps
+    function pumpSeek() {
+      if (video.seeking) return;
+      if (Math.abs(video.currentTime - seekTarget) > FRAME * 0.5) {
+        video.currentTime = seekTarget;
+      }
+    }
+    video.addEventListener('seeked', pumpSeek);
+    gsap.ticker.add(pumpSeek);
+    try { video.pause(); } catch (e) { /* ignore */ }
+
     var triggerConfig = {
       trigger: root,
       start: 'top top',
@@ -213,11 +236,8 @@
         var videoProgress = Math.min(self.progress / VIDEO_END, 1);
         // Stop just short of `duration` so the final decoded frame stays
         // on screen (seeking to the exact end can show nothing).
-        var targetTime = videoProgress >= 1 ? Math.max(0, duration - 0.04) : videoProgress * duration;
-        // Guard against redundant seeks (video.currentTime setter is not free).
-        if (Math.abs(video.currentTime - targetTime) > 0.03) {
-          video.currentTime = targetTime;
-        }
+        seekTarget = videoProgress >= 1 ? Math.max(0, duration - 0.04) : videoProgress * duration;
+        pumpSeek();
 
         // Once the properties sheet has fully landed, the hero is entirely
         // behind it — hide the pin so no strip of video/buttons can peek out

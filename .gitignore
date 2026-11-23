@@ -1,2 +1,5 @@
 .DS_Store
 **/.DS_Store
+
+# Original 35MB HEVC hero master — the site uses the compressed hero-final*.mp4 instead
+assets/videos/HERO VIDEO FINAL.mp4

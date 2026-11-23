@@ -4024,3 +4024,93 @@ body:has(.walkthrough.is-fallback) .discover { margin-top: 0; min-height: 0; bor
 @media (prefers-reduced-motion: reduce) {
   .discover { margin-top: 0; min-height: 0; border-radius: 0; box-shadow: none; }
 }
+
+/* ==========================================================================
+   Property matcher dialog — glassmorphism (frosted glass over the page).
+   Solid fallbacks follow for browsers without backdrop-filter, for the
+   lightweight mode, and for people who prefer reduced transparency.
+   ========================================================================== */
+.finder-pop__backdrop {
+  background: radial-gradient(120% 90% at 50% 100%, rgba(12, 60, 56, 0.34), rgba(10, 24, 28, 0.46));
+  -webkit-backdrop-filter: blur(7px) saturate(115%);
+  backdrop-filter: blur(7px) saturate(115%);
+}
+.finder-pop__dialog {
+  background:
+    linear-gradient(150deg, rgba(255, 255, 255, 0.80) 0%, rgba(255, 255, 255, 0.58) 55%, rgba(236, 250, 248, 0.52) 100%);
+  -webkit-backdrop-filter: blur(28px) saturate(180%);
+  backdrop-filter: blur(28px) saturate(180%);
+  border: 1px solid rgba(255, 255, 255, 0.7);
+  box-shadow:
+    0 32px 90px rgba(6, 30, 28, 0.38),
+    0 2px 0 rgba(255, 255, 255, 0.55) inset,
+    0 -1px 0 rgba(255, 255, 255, 0.25) inset;
+}
+/* soft light bloom in the corner, like light catching the glass */
+.finder-pop__dialog::before {
+  content: '';
+  position: absolute;
+  top: -40%; left: -20%;
+  width: 70%; height: 80%;
+  background: radial-gradient(closest-side, rgba(255, 255, 255, 0.55), transparent 70%);
+  pointer-events: none;
+  z-index: 0;
+}
+.finder-pop__body { position: relative; z-index: 1; }
+.finder-pop__close {
+  background: rgba(255, 255, 255, 0.55);
+  border: 1px solid rgba(255, 255, 255, 0.8);
+  -webkit-backdrop-filter: blur(10px);
+  backdrop-filter: blur(10px);
+  z-index: 2;
+}
+.finder-pop__close:hover { background: rgba(255, 255, 255, 0.85); }
+
+/* Controls and cards become small glass tiles on the glass panel */
+.finder-pop .finder__progress { background: rgba(255, 255, 255, 0.55); }
+.finder-pop .finder__opt {
+  background: rgba(255, 255, 255, 0.52);
+  border: 1.5px solid rgba(255, 255, 255, 0.85);
+  box-shadow: 0 6px 18px rgba(8, 40, 38, 0.07), 0 1px 0 rgba(255, 255, 255, 0.9) inset;
+  -webkit-backdrop-filter: blur(8px);
+  backdrop-filter: blur(8px);
+}
+.finder-pop .finder__opt:hover { background: rgba(255, 255, 255, 0.78); border-color: var(--color-accent); }
+.finder-pop .finder__opt.is-on {
+  background: rgba(89, 194, 191, 0.30);
+  border-color: rgba(46, 156, 152, 0.85);
+  box-shadow: 0 8px 22px rgba(46, 156, 152, 0.22), 0 1px 0 rgba(255, 255, 255, 0.7) inset;
+}
+.finder-pop .finder-intro__points li,
+.finder-pop .finder__summary li {
+  background: rgba(255, 255, 255, 0.55);
+  border: 1px solid rgba(255, 255, 255, 0.85);
+  -webkit-backdrop-filter: blur(6px);
+  backdrop-filter: blur(6px);
+}
+.finder-pop .finder-intro__icon {
+  background: rgba(255, 255, 255, 0.6);
+  border: 1px solid rgba(255, 255, 255, 0.9);
+  box-shadow: 0 8px 24px rgba(46, 156, 152, 0.18);
+}
+.finder-pop .finder-result {
+  background: rgba(255, 255, 255, 0.62);
+  border: 1px solid rgba(255, 255, 255, 0.85);
+  box-shadow: 0 10px 28px rgba(8, 40, 38, 0.10), 0 1px 0 rgba(255, 255, 255, 0.9) inset;
+  -webkit-backdrop-filter: blur(10px);
+  backdrop-filter: blur(10px);
+}
+.finder-pop .finder__sub { border-top-color: rgba(255, 255, 255, 0.7); }
+
+/* Fallbacks: no blur support / lightweight mode / reduced transparency -> solid panel */
+@supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+  .finder-pop__dialog { background: var(--color-surface); }
+  .finder-pop .finder__opt, .finder-pop .finder-result { background: #fff; }
+}
+html.lite .finder-pop__dialog { background: var(--color-surface); }
+html.lite .finder-pop .finder__opt, html.lite .finder-pop .finder-result,
+html.lite .finder-pop .finder__summary li, html.lite .finder-pop .finder-intro__points li { background: #fff; }
+@media (prefers-reduced-transparency: reduce) {
+  .finder-pop__dialog { background: var(--color-surface); -webkit-backdrop-filter: none; backdrop-filter: none; }
+  .finder-pop .finder__opt, .finder-pop .finder-result { background: #fff; }
+}

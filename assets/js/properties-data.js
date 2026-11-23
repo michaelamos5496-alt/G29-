@@ -809,26 +809,19 @@ window.G29_PROPERTIES = [
     "image": "assets/images/properties/wentworth-place/thumbs/02.jpg",
     "gallery": [
       "assets/images/properties/wentworth-place/02.jpg",
-      "assets/images/properties/wentworth-place/01.jpg",
       "assets/images/properties/wentworth-place/03.jpg",
       "assets/images/properties/wentworth-place/04.jpg",
       "assets/images/properties/wentworth-place/05.jpg",
-      "assets/images/properties/wentworth-place/06.jpg",
       "assets/images/properties/wentworth-place/07.jpg",
       "assets/images/properties/wentworth-place/09.jpg",
-      "assets/images/properties/wentworth-place/10.jpg",
+      "assets/images/properties/wentworth-place/06.jpg",
+      "assets/images/properties/wentworth-place/26.jpg",
       "assets/images/properties/wentworth-place/12.jpg",
-      "assets/images/properties/wentworth-place/13.jpg",
-      "assets/images/properties/wentworth-place/14.jpg",
-      "assets/images/properties/wentworth-place/15.jpg",
-      "assets/images/properties/wentworth-place/16.jpg",
+      "assets/images/properties/wentworth-place/28.jpg",
+      "assets/images/properties/wentworth-place/29.jpg",
       "assets/images/properties/wentworth-place/17.jpg",
-      "assets/images/properties/wentworth-place/18.jpg",
-      "assets/images/properties/wentworth-place/19.jpg",
-      "assets/images/properties/wentworth-place/20.jpg",
-      "assets/images/properties/wentworth-place/21.jpg",
-      "assets/images/properties/wentworth-place/22.jpg",
-      "assets/images/properties/wentworth-place/23.jpg",
+      "assets/images/properties/wentworth-place/16.jpg",
+      "assets/images/properties/wentworth-place/14.jpg",
       "assets/images/properties/wentworth-place/24.jpg",
       "assets/images/properties/wentworth-place/25.jpg"
     ],
@@ -1535,34 +1528,34 @@ window.G29_CATEGORIES = [
     name: 'Apartments',
     type: 'Apartment',
     description: 'City-center living, ready to rent or buy',
-    image: 'https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?q=80&w=800&auto=format&fit=crop'
+    image: 'assets/images/properties/toms-place/thumbs/01.jpg'
   },
   {
     name: 'Villas',
     type: 'Villa',
     description: 'Private pools, gardens, and premium finishes',
-    image: 'https://images.unsplash.com/photo-1580587771525-78b9dba3b914?q=80&w=800&auto=format&fit=crop'
+    image: 'assets/images/properties/vida-villa-aburi/thumbs/43.jpg'
   },
   {
     name: 'Townhouses',
     type: 'Townhouse',
     description: 'Modern, low-maintenance homes in gated developments',
-    image: 'https://images.unsplash.com/photo-1600585154526-990dced4db0d?q=80&w=800&auto=format&fit=crop'
+    image: 'assets/images/properties/ninth-avenue-square/thumbs/01.jpg'
   }
 ];
 
 // Homepage "Browse by Location" rail. `subtitle` must match properties'
 // own `subtitle` field exactly (used by the ?location= filter).
 window.G29_LOCATIONS = [
-  { name: 'North Ridge', subtitle: 'North Ridge, Accra', description: 'Elevated, established, and close to the city center', image: 'https://images.unsplash.com/photo-1613977257592-4871e5fcd7c4?q=80&w=800&auto=format&fit=crop' },
-  { name: 'Cantonments', subtitle: 'Cantonments, Accra', description: 'Diplomatic quarter, embassies, and tree-lined streets', image: 'https://images.unsplash.com/photo-1600566753190-17f0baa2a6c3?q=80&w=800&auto=format&fit=crop' },
-  { name: 'Airport Residential', subtitle: 'Airport Residential, Accra', description: 'Premium living minutes from Kotoka International', image: 'https://images.unsplash.com/photo-1580587771525-78b9dba3b914?q=80&w=800&auto=format&fit=crop' },
-  { name: 'Osu', subtitle: 'Osu, Accra', description: 'City-center energy with beachside nightlife nearby', image: 'https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?q=80&w=800&auto=format&fit=crop' },
+  { name: 'North Ridge', subtitle: 'North Ridge, Accra', description: 'Elevated, established, and close to the city center', image: 'assets/images/properties/bay-tree-gardens/thumbs/22.jpg' },
+  { name: 'Cantonments', subtitle: 'Cantonments, Accra', description: 'Diplomatic quarter, embassies, and tree-lined streets', image: 'assets/images/properties/allamanda-homes/thumbs/14.jpg' },
+  { name: 'Airport Residential', subtitle: 'Airport Residential, Accra', description: 'Premium living minutes from Kotoka International', image: 'assets/images/properties/palm-court/thumbs/01.jpg' },
+  { name: 'Osu', subtitle: 'Osu, Accra', description: 'City-center energy with beachside nightlife nearby', image: 'assets/images/properties/novo-residences-osu/thumbs/28.jpg' },
   { name: 'East Legon', subtitle: 'East Legon, Accra', description: "Accra's most established residential address", image: 'https://images.unsplash.com/photo-1512917774080-9991f1c4c750?q=80&w=800&auto=format&fit=crop' },
-  { name: 'North Legon', subtitle: 'North Legon (Westlands), Accra', description: 'Spacious apartments close to restaurants and shops', image: 'https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?q=80&w=800&auto=format&fit=crop' },
-  { name: 'McCarthy Hill', subtitle: 'McCarthy Hill, Accra', description: 'Townhouse living in a gated urban village', image: 'https://images.unsplash.com/photo-1600585154526-990dced4db0d?q=80&w=800&auto=format&fit=crop' },
-  { name: 'Abelemkpe', subtitle: 'Abelempke, Accra', description: 'Bright, contemporary apartments in a central location', image: 'https://images.unsplash.com/photo-1484154218962-a197022b5858?q=80&w=800&auto=format&fit=crop' },
-  { name: 'Aburi', subtitle: 'Aburi, Eastern Region', description: 'Hillside villa stays with fresh air and mountain views', image: 'https://images.unsplash.com/photo-1580587771525-78b9dba3b914?q=80&w=800&auto=format&fit=crop' }
+  { name: 'North Legon', subtitle: 'North Legon (Westlands), Accra', description: 'Spacious apartments close to restaurants and shops', image: 'assets/images/properties/novo-residences-westlands/thumbs/18.jpg' },
+  { name: 'McCarthy Hill', subtitle: 'McCarthy Hill, Accra', description: 'Townhouse living in a gated urban village', image: 'assets/images/properties/ayanda-urban-village/thumbs/10.jpg' },
+  { name: 'Abelemkpe', subtitle: 'Abelempke, Accra', description: 'Bright, contemporary apartments in a central location', image: 'assets/images/properties/imperial-oak/thumbs/01.jpg' },
+  { name: 'Aburi', subtitle: 'Aburi, Eastern Region', description: 'Hillside villa stays with fresh air and mountain views', image: 'assets/images/properties/vida-villa-aburi/thumbs/44.jpg' }
 ];
 
 window.G29_propertyDetailUrl = function (slug) {
