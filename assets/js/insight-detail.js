@@ -22,7 +22,7 @@
     return;
   }
 
-  document.title = `${article.title} | G29 Property Consults`;
+  document.title = `G29 Property Consults | ${article.title}`;
   const metaDesc = document.getElementById('pageDescription');
   if (metaDesc) {
     metaDesc.setAttribute('content', article.excerpt);

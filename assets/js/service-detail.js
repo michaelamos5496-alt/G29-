@@ -27,7 +27,7 @@
     const url = window.G29_SEO.BASE + path;
     const desc = `${service.name} in Accra, Ghana from G29 Property Consults: ${service.tagline}.`;
     window.G29_SEO.set({
-      title: `${service.name} in Accra, Ghana | G29 Property Consults`,
+      title: `G29 Property Consults | ${service.name} in Accra, Ghana`,
       description: desc,
       path: path,
       image: service.heroImage,

@@ -57,14 +57,14 @@
     });
 
     const label = currentLabel();
-    document.title = `${label} | G29 Property Consults`;
+    document.title = `G29 Property Consults | ${label}`;
     if (window.G29_SEO) {
       const isLoc = !!loc && !type;
       const place = loc.replace(/, (Accra|Eastern Region)$/, '');
       const where = /Eastern Region/.test(loc) ? loc : place + ', Accra';
-      const t = isLoc ? `Apartments & Homes for Rent and Sale in ${where} | G29 Property Consults`
-        : type ? `${label} for Rent & Sale in Accra, Ghana | G29 Property Consults`
-        : 'Properties for Rent & Sale in Accra, Ghana | G29 Property Consults';
+      const t = isLoc ? `G29 Property Consults | Apartments & Homes for Rent and Sale in ${where}`
+        : type ? `G29 Property Consults | ${label} for Rent & Sale in Accra, Ghana`
+        : 'G29 Property Consults | Properties for Rent & Sale in Accra, Ghana';
       window.G29_SEO.set({
         title: t,
         description: isLoc

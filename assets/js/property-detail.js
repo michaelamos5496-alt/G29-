@@ -53,7 +53,7 @@
       offeredBy: { '@id': window.G29_SEO.BASE + '#business' }
     };
     window.G29_SEO.set({
-      title: `${property.title}, ${place} | ${property.status} | G29 Property Consults`,
+      title: `G29 Property Consults | ${property.title}, ${place} | ${property.status}`,
       description: desc,
       path: path,
       image: img,
