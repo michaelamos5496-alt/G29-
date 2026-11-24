@@ -68,6 +68,24 @@
       trigger.addEventListener('click', function () { open(trigger); });
     });
 
+    // Send Request: open WhatsApp to the G29 line with the details pre-filled
+    // (same approach and number as the property-page and contact-page forms).
+    var PHONE_WHATSAPP = '233549933727'; // wa.me format: no plus, no leading zero
+    var form = modal.querySelector('form');
+    if (form) {
+      form.addEventListener('submit', function (e) {
+        e.preventDefault();
+        var val = function (n) { return form.elements[n] ? form.elements[n].value.trim() : ''; };
+        var lines = ["Hi G29, I'd like to book a viewing.", '', 'Name: ' + val('name')];
+        if (val('email')) lines.push('Email: ' + val('email'));
+        if (val('phone')) lines.push('Phone: ' + val('phone'));
+        if (val('message')) lines.push('', val('message'));
+        window.open('https://wa.me/' + PHONE_WHATSAPP + '?text=' + encodeURIComponent(lines.join('\n')), '_blank', 'noopener');
+        form.reset();
+        close();
+      });
+    }
+
     closeBtn.addEventListener('click', close);
 
     overlay.addEventListener('click', function (e) {
