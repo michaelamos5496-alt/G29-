@@ -1549,7 +1549,7 @@ window.G29_CATEGORIES = [
 window.G29_LOCATIONS = [
   { name: 'North Ridge', subtitle: 'North Ridge, Accra', description: 'Elevated, established, and close to the city center', image: 'assets/images/properties/bay-tree-gardens/thumbs/22.jpg' },
   { name: 'Cantonments', subtitle: 'Cantonments, Accra', description: 'Diplomatic quarter, embassies, and tree-lined streets', image: 'assets/images/properties/allamanda-homes/thumbs/14.jpg' },
-  { name: 'Airport Residential', subtitle: 'Airport Residential, Accra', description: 'Premium living minutes from Kotoka International', image: 'assets/images/properties/palm-court/thumbs/01.jpg' },
+  { name: 'Airport Residential', subtitle: 'Airport Residential, Accra', description: 'Premium living minutes from Kotoka International', image: 'assets/images/properties/palm-court/thumbs/17.jpg' },
   { name: 'Osu', subtitle: 'Osu, Accra', description: 'City-center energy with beachside nightlife nearby', image: 'assets/images/properties/novo-residences-osu/thumbs/28.jpg' },
   { name: 'East Legon', subtitle: 'East Legon, Accra', description: "Accra's most established residential address", image: 'https://images.unsplash.com/photo-1512917774080-9991f1c4c750?q=80&w=800&auto=format&fit=crop' },
   { name: 'North Legon', subtitle: 'North Legon (Westlands), Accra', description: 'Spacious apartments close to restaurants and shops', image: 'assets/images/properties/novo-residences-westlands/thumbs/18.jpg' },

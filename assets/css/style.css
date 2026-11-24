@@ -1306,363 +1306,6 @@ a { text-decoration: none; color: inherit; }
 
 
 /* ==========================================================================
-   Team — org chart (see assets/js/team-carousel.js). Dark brand section;
-   CEO on top, a connector line down to a horizontal rail, then the
-   Administration and Facilities branches, with the Facility Officers
-   hanging under the Facility Supervisor. Below 1024px the branches stack
-   and the chart becomes a single centred column with vertical connectors.
-   ========================================================================== */
-.team-org {
-  --org-line: rgba(89, 194, 191, 0.45);
-  position: relative;
-  padding: var(--space-16) 0;
-  background:
-    radial-gradient(60% 50% at 50% 0%, rgba(89, 194, 191, 0.16), transparent 70%),
-    linear-gradient(165deg, #123937 0%, #0A2321 100%);
-  color: #fff;
-  overflow: hidden;
-}
-
-.team-org__head {
-  text-align: center;
-  max-width: 640px;
-  margin: 0 auto var(--space-16);
-}
-.team-org__head h1,
-.team-org__head h2 {
-  font-family: var(--font-heading);
-  font-size: 44px;
-  line-height: 1.1;
-  letter-spacing: -0.02em;
-  margin: 0 0 var(--space-4);
-}
-.team-org__head p {
-  margin: 0;
-  font-size: 16px;
-  color: rgba(255, 255, 255, 0.7);
-}
-
-/* Standalone team page (team.html): dark from the top, so the breadcrumb
-   sits on the same background as the chart. */
-.team-page {
-  background:
-    radial-gradient(60% 40% at 50% 0%, rgba(89, 194, 191, 0.16), transparent 70%),
-    linear-gradient(165deg, #123937 0%, #0A2321 100%);
-}
-.team-page .team-org { background: none; }
-.team-page__crumb { color: rgba(255, 255, 255, 0.55); }
-.team-page__crumb a { color: rgba(255, 255, 255, 0.7); }
-.team-page__crumb a:hover { color: #fff; }
-.team-page__crumb span:last-child { color: #fff; }
-.team-page .team-org { padding-top: var(--space-12); }
-.team-page + .site-footer { margin-top: 0; }
-
-/* ---- Cards ---- */
-.org-card {
-  position: relative;
-  z-index: 1;
-  display: flex;
-  align-items: center;
-  gap: var(--space-4);
-  padding: var(--space-4) var(--space-6) var(--space-4) var(--space-4);
-  border-radius: 20px;
-  background: linear-gradient(145deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.04));
-  border: 1px solid rgba(255, 255, 255, 0.14);
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.12), 0 14px 30px rgba(0, 0, 0, 0.25);
-  transition: transform 0.3s cubic-bezier(0.22, 1, 0.36, 1), border-color 0.3s ease;
-}
-@media (hover: hover) and (pointer: fine) {
-  .org-card:hover {
-    transform: translateY(-3px);
-    border-color: rgba(89, 194, 191, 0.55);
-  }
-}
-.org-card__avatar {
-  flex-shrink: 0;
-  width: 56px;
-  height: 56px;
-  border-radius: 50%;
-  background-color: #134140;
-  background-size: cover;
-  /* Team photos are square crops centred on the face. */
-  background-position: center;
-  box-shadow: 0 0 0 2px rgba(89, 194, 191, 0.6);
-}
-.org-card__avatar--monogram {
-  display: grid;
-  place-items: center;
-  background: linear-gradient(160deg, #2B7A76 0%, #134140 100%);
-  font-family: var(--font-heading);
-  font-size: 18px;
-  font-weight: 700;
-  color: #fff;
-}
-.org-card__text { min-width: 0; }
-.org-card__name {
-  font-family: var(--font-heading);
-  font-size: 17px;
-  font-weight: 700;
-  line-height: 1.25;
-  margin: 0 0 4px;
-}
-.org-card__role {
-  display: block;
-  font-size: 11px;
-  font-weight: 700;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-  color: var(--color-accent);
-}
-
-/* CEO: larger, stacked, teal-edged. */
-.org-card--lead {
-  flex-direction: column;
-  text-align: center;
-  gap: var(--space-3);
-  padding: var(--space-8) var(--space-12);
-  border-color: rgba(89, 194, 191, 0.5);
-  background: linear-gradient(145deg, rgba(89, 194, 191, 0.22), rgba(255, 255, 255, 0.05));
-}
-.org-card--lead .org-card__avatar {
-  width: 104px;
-  height: 104px;
-  box-shadow: 0 0 0 3px var(--color-accent), 0 0 0 10px rgba(89, 194, 191, 0.15);
-}
-.org-card--lead .org-card__avatar--monogram { font-size: 34px; }
-.org-card--lead .org-card__name { font-size: 26px; }
-.org-card--lead .org-card__role { font-size: 13px; }
-
-/* Full photo card: portrait fills the card, name/role on a dark fade. */
-.org-card--photo {
-  display: block;
-  width: 300px;
-  aspect-ratio: 4 / 5;
-  padding: 0;
-  overflow: hidden;
-  border-radius: 24px;
-  border: 1px solid rgba(89, 194, 191, 0.5);
-  background-color: #134140;
-  background-size: cover;
-  background-position: center 30%;
-  box-shadow: 0 0 0 6px rgba(89, 194, 191, 0.12), 0 24px 50px rgba(0, 0, 0, 0.4);
-}
-.org-card--photo .org-card__text {
-  position: absolute;
-  inset: auto 0 0 0;
-  padding: 90px var(--space-6) var(--space-6);
-  background: linear-gradient(to top, rgba(10, 35, 33, 0.95) 0%, rgba(10, 35, 33, 0.7) 45%, transparent 100%);
-  text-align: left;
-}
-.org-card--photo .org-card__name {
-  font-size: 26px;
-  letter-spacing: -0.01em;
-  margin-bottom: 6px;
-}
-.org-card--photo .org-card__role {
-  display: inline-block;
-  padding: 5px 12px;
-  border-radius: 999px;
-  background: var(--color-accent);
-  color: #0A2321;
-  font-size: 11px;
-  letter-spacing: 0.12em;
-}
-
-/* Below the CEO, photo cards are smaller than hers (hierarchy), centred
-   in their branch, with the role as plain teal text instead of a pill. */
-.org-branch__cards > .org-card--photo,
-.org-reports > .org-card--photo {
-  width: min(260px, 100%);
-  align-self: center;
-  box-shadow: 0 18px 40px rgba(0, 0, 0, 0.35);
-}
-.org-card--photo:not(.org-card--lead) .org-card__name { font-size: 20px; }
-.org-card--photo:not(.org-card--lead) .org-card__role {
-  display: block;
-  padding: 0;
-  background: none;
-  color: var(--color-accent);
-  line-height: 1.4;
-}
-
-/* Photo cards in the officers grid: tighter overlay so the name stays
-   below the face in the narrow cells. */
-.org-reports > .org-card--photo { width: 100%; }
-.org-reports > .org-card--photo .org-card__text { padding: 56px var(--space-4) var(--space-4); }
-.org-reports > .org-card--photo .org-card__name { font-size: 17px; }
-
-/* Facility Officers: compact. */
-.org-card--small {
-  padding: var(--space-3) var(--space-4) var(--space-3) var(--space-3);
-  border-radius: 16px;
-}
-.org-card--small .org-card__avatar { width: 44px; height: 44px; }
-.org-card--small .org-card__avatar--monogram { font-size: 15px; }
-.org-card--small .org-card__name { font-size: 15px; }
-
-/* ---- Structure + connectors ---- */
-.org-top {
-  display: grid;
-  grid-template-columns: 1fr auto 1fr;
-  align-items: center;
-  padding-bottom: var(--space-12);
-  position: relative;
-}
-.org-top__ceo { grid-column: 2; }
-.org-top__director {
-  grid-column: 3;
-  position: relative;
-  justify-self: start;
-  margin-left: var(--space-12);
-  width: 240px;
-}
-/* CEO → Director */
-.org-top__director::before {
-  content: '';
-  position: absolute;
-  top: 50%;
-  right: 100%;
-  width: var(--space-12);
-  height: 2px;
-  background: var(--org-line);
-}
-/* CEO → rail */
-.org-top::after {
-  content: '';
-  position: absolute;
-  left: 50%;
-  bottom: 0;
-  width: 2px;
-  height: var(--space-12);
-  background: var(--org-line);
-  transform: translateX(-50%);
-}
-
-.org-branches {
-  position: relative;
-  display: grid;
-  grid-template-columns: 1fr 2fr;
-}
-/* Horizontal rail joining the two branch centres (1/6 and 4/6 across). */
-.org-branches::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: calc(100% / 6);
-  right: calc(100% / 3);
-  height: 2px;
-  background: var(--org-line);
-}
-.org-branch {
-  position: relative;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  padding: var(--space-12) var(--space-4) 0;
-}
-/* rail → branch */
-.org-branch::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 50%;
-  width: 2px;
-  height: var(--space-12);
-  background: var(--org-line);
-  transform: translateX(-50%);
-}
-.org-branch__label {
-  position: relative;
-  z-index: 1;
-  margin: calc(-1 * var(--space-12) + var(--space-4)) 0 var(--space-6);
-  padding: 6px 14px;
-  border-radius: 999px;
-  background: #0E2E2C;
-  border: 1px solid var(--org-line);
-  font-size: 11px;
-  font-weight: 700;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
-  color: var(--color-accent);
-}
-.org-branch__cards {
-  display: flex;
-  flex-direction: column;
-  gap: var(--space-4);
-  width: 100%;
-  max-width: 340px;
-}
-
-/* Facility Supervisor → Facility Officers */
-.org-reports {
-  position: relative;
-  width: 100%;
-  display: grid;
-  align-items: start; /* a taller photo card mustn't stretch its row-mates */
-  grid-template-columns: repeat(3, 1fr);
-  gap: var(--space-4);
-  margin-top: var(--space-12);
-  padding-top: var(--space-6);
-  border-top: 2px solid var(--org-line);
-  border-radius: 0;
-}
-.org-reports::before {
-  content: '';
-  position: absolute;
-  left: 50%;
-  bottom: 100%;
-  width: 2px;
-  height: calc(var(--space-12) + 2px);
-  background: var(--org-line);
-  transform: translateX(-50%);
-}
-
-@media (max-width: 1024px) {
-  .team-org { padding: var(--space-16) 0; }
-  .team-org__head { margin-bottom: var(--space-12); }
-  .team-org__head h1,
-.team-org__head h2 { font-size: clamp(32px, 9vw, 44px); }
-
-  .org-top { display: flex; flex-direction: column; align-items: center; gap: var(--space-6); }
-  .org-top__director { margin-left: 0; width: min(240px, 100%); }
-  .org-top__director::before { display: none; }
-  .org-card--lead { padding: var(--space-6) var(--space-8); width: 100%; max-width: 340px; }
-  .org-card--lead.org-card--photo { padding: 0; width: min(320px, 100%); }
-  .org-card--lead .org-card__avatar { width: 88px; height: 88px; }
-  .org-card--lead .org-card__name { font-size: 22px; }
-
-  .org-branches { grid-template-columns: minmax(0, 1fr); }
-  .org-branches::before { display: none; }
-  .org-branch + .org-branch { margin-top: var(--space-12); }
-  /* Second branch's connector has to reach back past the first branch, so
-     draw it from the top of that branch's own label instead. */
-  .org-branch + .org-branch::before { top: calc(-1 * var(--space-12)); height: calc(var(--space-12) * 2); }
-  .org-branch__cards { max-width: 420px; }
-  .org-reports {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    max-width: 640px;
-    border-top: 0;
-    padding-top: 0;
-  }
-  .org-reports::before { height: var(--space-12); }
-}
-/* Phones: officers as a two-up grid of compact stacked cards. */
-@media (max-width: 560px) {
-  .org-reports { gap: var(--space-3); }
-  .org-card--small {
-    flex-direction: column;
-    text-align: center;
-    gap: var(--space-2);
-    padding: var(--space-4) var(--space-2);
-  }
-  .org-card--small .org-card__name { font-size: 14px; }
-  .org-card--small .org-card__role { font-size: 10px; }
-  .org-card--photo.org-card--small { padding: 0; }
-  .org-reports > .org-card--photo .org-card__text { padding: 48px 12px 12px; text-align: left; }
-  .org-reports > .org-card--photo .org-card__name { font-size: 15px; }
-}
-
-/* ==========================================================================
    Stats — "G29 at a glance" strip (homepage, replaces testimonials)
    ========================================================================== */
 .stats {
@@ -2274,8 +1917,7 @@ a { text-decoration: none; color: inherit; }
 /* Pages whose last section is already dark run straight into the footer. */
 main:has(> .contact-map:last-child) + .site-footer,
 .contact-teaser + .site-footer,
-main:has(> .contact-teaser:last-child) + .site-footer,
-.team-page + .site-footer {
+main:has(> .contact-teaser:last-child) + .site-footer {
   margin-top: 0;
 }
 
@@ -4234,4 +3876,277 @@ html.lite .finder-pop .finder__summary li, html.lite .finder-pop .finder-intro__
     justify-content: center;
   }
   .walkthrough__ctas.is-visible { transform: translate(-50%, 0); }
+}
+
+
+/* ==========================================================================
+   Team page — minimalist roster (see assets/js/team-roster.js)
+   Light, typographic: a huge headline, then one large line per person.
+   Mouse: the hovered person's portrait floats beside the cursor. Touch: accordion.
+   ========================================================================== */
+.team2 {
+  --t2-line: rgba(31, 36, 34, 0.12);
+  --t2-line-strong: rgba(31, 36, 34, 0.3);
+  --t2-muted: rgba(31, 36, 34, 0.68);   /* 4.6:1 on white — passes AA for small text */
+  background: var(--color-bg);
+  color: var(--color-primary);
+  padding: calc(var(--space-8) + 76px) 0 var(--space-24);
+}
+.team2__crumb { padding-top: var(--space-4); }
+
+.team2__head {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(240px, 340px);
+  gap: var(--space-8) var(--space-16);
+  align-items: end;
+  padding-top: clamp(28px, 6vw, 80px);
+  padding-bottom: clamp(36px, 6vw, 72px);
+}
+.team2__eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--t2-muted);
+}
+.team2__eyebrow::before { content: ''; width: 8px; height: 8px; border-radius: 50%; background: var(--color-accent); }
+.team2__title {
+  font-family: var(--font-heading);
+  font-size: clamp(44px, 8vw, 118px);
+  line-height: 0.96;
+  letter-spacing: -0.05em;
+  font-weight: 600;
+  margin: var(--space-6) 0 0;
+}
+.team2__title span { color: var(--t2-muted); }
+.team2__aside { display: grid; gap: var(--space-6); }
+.team2__count { margin: 0; display: flex; align-items: baseline; gap: 14px; }
+.team2__count strong {
+  font-size: clamp(56px, 7vw, 96px);
+  line-height: 0.9;
+  letter-spacing: -0.05em;
+  font-weight: 600;
+  color: var(--color-accent);
+  font-variant-numeric: tabular-nums;
+}
+.team2__count span { font-size: 13px; line-height: 1.35; max-width: 17ch; color: var(--t2-muted); }
+.team2__lede { margin: 0; font-size: 16px; line-height: 1.6; color: var(--t2-muted); }
+
+/* ---- Roster ---- */
+.roster__group { margin-top: clamp(40px, 6vw, 88px); }
+.roster__group:first-child { margin-top: 0; }
+.roster__label {
+  display: flex;
+  justify-content: space-between;
+  gap: var(--space-4);
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--t2-muted);
+  padding-bottom: 14px;
+  border-bottom: 1px solid rgba(31, 36, 34, 0.35);
+}
+.roster__label b { color: var(--color-accent); margin-right: 14px; font-variant-numeric: tabular-nums; }
+.roster__list { list-style: none; margin: 0; padding: 0; }
+
+.roster__item {
+  position: relative;
+  border-bottom: 1px solid var(--t2-line);
+  transition: opacity 0.35s ease;
+}
+.roster__item::after {            /* accent line that draws across the row on hover */
+  content: '';
+  position: absolute;
+  left: 0; right: 0; bottom: -1px;
+  height: 1px;
+  background: var(--color-accent);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.55s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.roster__item.is-active::after { transform: scaleX(1); }
+.roster.is-hovering .roster__item:not(.is-active) { opacity: 0.26; }
+
+.roster__item { --av: 60px; }
+.roster__item--lead { --av: 96px; }
+.roster__item--sub { --av: 48px; }
+.roster__row {
+  position: relative;
+  width: 100%;
+  display: grid;
+  grid-template-columns: 44px var(--av) minmax(0, 1fr) auto;
+  column-gap: clamp(16px, 2vw, 28px);
+  align-items: center;
+  padding: clamp(16px, 2vw, 26px) 0;
+  border: 0;
+  background: none;
+  color: inherit;
+  font: inherit;
+  text-align: left;
+  cursor: default;
+}
+.roster__item--sub .roster__row { grid-template-columns: 44px 22px var(--av) minmax(0, 1fr) auto; column-gap: clamp(12px, 1.6vw, 22px); }
+.roster__tree { color: var(--t2-line-strong); font-size: 18px; line-height: 1; text-align: center; }
+.roster__tree::before { content: '\21B3'; }
+
+/* Round portrait — faces are always visible */
+.roster__avatar {
+  width: var(--av);
+  height: var(--av);
+  border-radius: 50%;
+  overflow: hidden;
+  display: grid;
+  place-items: center;
+  background: linear-gradient(160deg, #123937, #0A2321);
+  box-shadow: 0 0 0 0 transparent;
+  transition: transform 0.45s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.3s ease;
+}
+.roster__avatar img { width: 100%; height: 100%; object-fit: cover; object-position: 50% 20%; display: block; }
+.roster__avatar--mono {
+  font-size: calc(var(--av) * 0.34);
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  color: #fff;
+  background: radial-gradient(80% 70% at 30% 20%, rgba(89, 194, 191, 0.6), transparent 70%), linear-gradient(160deg, #123937, #0A2321);
+}
+.roster__item.is-active .roster__avatar { transform: scale(1.07); box-shadow: 0 0 0 3px #fff, 0 0 0 5px var(--color-accent); }
+.roster__name-t { display: inline-block; }
+.roster__row:focus-visible { outline: 2px solid var(--color-accent); outline-offset: 4px; border-radius: 6px; }
+.roster__no { font-size: 12px; font-weight: 600; letter-spacing: 0.08em; color: var(--color-accent); font-variant-numeric: tabular-nums; }
+.roster__name {
+  font-family: var(--font-heading);
+  font-size: clamp(28px, 4.4vw, 62px);
+  line-height: 1.04;
+  letter-spacing: -0.04em;
+  font-weight: 600;
+  transition: transform 0.5s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.roster__item--lead .roster__name { font-size: clamp(34px, 6vw, 88px); letter-spacing: -0.045em; }
+.roster__item--sub .roster__name { font-size: clamp(24px, 3.4vw, 48px); }
+.roster__item--long .roster__name { font-size: clamp(24px, 3.6vw, 52px); }   /* very long names stay on one line */
+.roster__item.is-active .roster__name { transform: translateX(clamp(8px, 1.4vw, 20px)); }
+.roster__role { font-size: 14px; color: var(--t2-muted); text-align: right; max-width: 24ch; line-height: 1.35; }
+
+/* + / - marker (touch only) */
+.roster__icon { position: relative; width: 14px; height: 14px; justify-self: end; display: none; }
+.roster__icon::before, .roster__icon::after {
+  content: ''; position: absolute; left: 0; right: 0; top: 50%; height: 1.5px; margin-top: -0.75px;
+  background: currentColor; transition: transform 0.35s ease;
+}
+.roster__icon::after { transform: rotate(90deg); }
+.roster__item.is-open .roster__icon::after { transform: rotate(0deg); }
+
+/* Accordion panel (touch / narrow only) */
+.roster__panel { display: none; }
+
+/* ---- Floating portrait (mouse devices) ---- */
+.roster__float {
+  position: fixed;
+  left: 0; top: 0;
+  z-index: 60;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.25s ease;
+  will-change: transform;
+}
+.roster__float.is-on { opacity: 1; }
+.roster__float-card {
+  position: relative;
+  width: clamp(200px, 17vw, 264px);
+  aspect-ratio: 4 / 5;
+  border-radius: 20px;
+  overflow: hidden;
+  background: linear-gradient(160deg, #123937, #0A2321);
+  box-shadow: 0 36px 90px rgba(10, 35, 33, 0.32), 0 0 0 6px #fff;
+  transform: scale(0.94);
+  transition: transform 0.45s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.roster__float.is-on .roster__float-card { transform: scale(1); }
+.roster__float-card img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+.roster__float-cap {
+  position: absolute; left: 0; right: 0; bottom: 0;
+  padding: 44px 16px 14px;
+  background: linear-gradient(180deg, transparent, rgba(6, 14, 26, 0.78));
+  color: #fff;
+  display: grid; gap: 2px;
+}
+.roster__float-cap b { font-size: 15px; font-weight: 600; letter-spacing: -0.01em; }
+.roster__float-cap i { font-style: normal; font-size: 12px; opacity: 0.8; }
+
+/* Monogram for people without a photo yet */
+.roster__mono {
+  display: none;
+  place-items: center;
+  position: absolute; inset: 0;
+  font-family: var(--font-heading);
+  font-size: clamp(56px, 6vw, 88px);
+  font-weight: 600;
+  letter-spacing: -0.04em;
+  color: rgba(255, 255, 255, 0.9);
+  background: radial-gradient(80% 60% at 30% 20%, rgba(89, 194, 191, 0.55), transparent 70%), linear-gradient(160deg, #123937, #0A2321);
+}
+
+.team2__hint { margin: 0; display: flex; align-items: center; gap: 10px; font-size: 12px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; color: var(--color-primary); }
+.team2__hint-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--color-accent); box-shadow: 0 0 0 0 rgba(89, 194, 191, 0.6); animation: t2pulse 2.2s ease-out infinite; }
+@keyframes t2pulse { 0% { box-shadow: 0 0 0 0 rgba(89, 194, 191, 0.55); } 70%, 100% { box-shadow: 0 0 0 10px rgba(89, 194, 191, 0); } }
+.hint-touch { display: none; }
+
+/* ---- Touch devices and narrow screens: accordion ---- */
+@media (hover: none), (max-width: 820px) {
+  .roster__float { display: none; }
+  .hint-mouse { display: none; }
+  .hint-touch { display: inline; }
+  .roster.is-hovering .roster__item:not(.is-active) { opacity: 1; }
+  .roster__item { --av: 48px; }
+  .roster__item--lead { --av: 60px; }
+  .roster__item--sub { --av: 40px; }
+  .roster__row,
+  .roster__item--sub .roster__row {
+    cursor: pointer;
+    grid-template-columns: 26px var(--av) minmax(0, 1fr) 24px;
+    grid-template-areas: "no avatar name icon" ". . role icon";
+    column-gap: 14px;
+    row-gap: 2px;
+    align-items: center;
+    padding: 16px 0;
+  }
+  .roster__item--sub .roster__row { padding-left: 14px; }
+  .roster__tree { display: none; }
+  .roster__no { grid-area: no; }
+  .roster__avatar { grid-area: avatar; grid-row: 1 / span 2; }
+  .roster__name { grid-area: name; font-size: clamp(22px, 5.8vw, 34px); align-self: end; }
+  .roster__item--lead .roster__name { font-size: clamp(24px, 6.6vw, 38px); }
+  .roster__item--sub .roster__name { font-size: clamp(20px, 5.4vw, 30px); }
+  .roster__role { grid-area: role; text-align: left; max-width: none; align-self: start; }
+  .roster__icon { grid-area: icon; display: block; align-self: center; grid-row: 1 / span 2; }
+  .roster__item.is-active .roster__name, .roster__item.is-active .roster__avatar { transform: none; box-shadow: none; }
+  .roster__panel { display: grid; grid-template-rows: 0fr; transition: grid-template-rows 0.45s cubic-bezier(0.22, 1, 0.36, 1); }
+  .roster__item.is-open .roster__panel { grid-template-rows: 1fr; }
+  .roster__panel-inner { overflow: hidden; }
+  .roster__fig {
+    position: relative;
+    margin: 2px 0 22px calc(26px + var(--av) + 28px);
+    width: min(240px, calc(100% - 26px - var(--av) - 28px));
+    aspect-ratio: 4 / 5;
+    border-radius: 18px;
+    overflow: hidden;
+    background: linear-gradient(160deg, #123937, #0A2321);
+    box-shadow: 0 18px 44px rgba(10, 35, 33, 0.22);
+  }
+  .roster__fig img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+  .roster__fig .roster__mono { display: grid; }
+  .team2__head { grid-template-columns: 1fr; align-items: start; }
+  .team2__aside { grid-template-columns: auto 1fr; align-items: center; gap: var(--space-6); }
+  .team2__hint { grid-column: 1 / -1; }
+}
+@media (max-width: 480px) {
+  .team2__aside { grid-template-columns: 1fr; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .roster__item::after, .roster__name, .roster__avatar, .roster__panel, .roster__float-card, .roster__icon::before, .roster__icon::after { transition: none; }
+  .team2__hint-dot { animation: none; }
 }
