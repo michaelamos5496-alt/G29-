@@ -365,10 +365,10 @@
         <video id="aboutVideo" muted loop playsinline preload="none" aria-label="A walkthrough of a G29 managed apartment"></video>
         <script>
           /* The About clip is far below the fold: don't download or decode it until the visitor scrolls near it,
-             pause it when it leaves the screen, and use the light 540p file on phones / 720p elsewhere. */
+             pause it when it leaves the screen, and use the light 480p file on phones / 720p elsewhere. */
           (function () {
             var v = document.getElementById('aboutVideo'); if (!v) return;
-            var src = 'assets/videos/' + (window.innerWidth <= 900 ? 'hero-final-mobile.mp4' : 'hero-final-720.mp4');
+            var src = 'assets/videos/' + (window.innerWidth <= 900 ? 'about-mobile.mp4' : 'about-720.mp4');
             var reduce = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
             var loaded = false;
             function go() { if (!loaded) { loaded = true; v.src = src; } if (!reduce) { var p = v.play(); if (p && p.catch) p.catch(function () {}); } }
