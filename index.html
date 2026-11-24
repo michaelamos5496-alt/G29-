@@ -79,15 +79,20 @@
             var hd = phone ? (slow ? 'hero-final-phone-lite.mp4' : 'hero-final-phone.mp4')
                    : (w <= 900 || low || slow || !(w >= 1600 && fast)) ? 'hero-final-720.mp4'
                    : 'hero-final.mp4';
-            var preview = phone ? 'hero-final-phone-preview.mp4' : 'hero-final-preview.mp4';   // ~1MB, same length & framing
+            var preview = phone ? 'hero-final-phone-preview.mp4' : 'hero-final-preview.mp4';   // ~1MB (H.264) / 0.6MB (HEVC)
             var dir = 'assets/videos/';
+            /* HEVC (H.265) gives the same sharpness in about half the file size. Use it where the browser can
+               play it (all iPhones, most Android phones and computers); everything else gets the H.264 files. */
+            var useH = false;
+            try { useH = document.createElement('video').canPlayType('video/mp4; codecs="hvc1.1.6.L93.B0"') === 'probably'; } catch (e) {}
+            function nm(f) { return useH ? f.replace('.mp4', '-hevc.mp4') : f; }
             /* Scrubbing needs instant random access to every frame, so the video is downloaded whole and played
                from memory (streaming re-requests the network on every seek and stalls on phones).
-               Two stages keep the hero responsive on slow networks: a ~1MB preview arrives first and the hero
+               Two stages keep the hero responsive on slow networks: a small preview arrives first and the hero
                works straight away; the sharp version then downloads in the background (low priority, after the
                page has loaded) and is swapped in at the same frame. */
             function blobUrl(file, prio) {
-              return fetch(dir + file, { priority: prio }).then(function (r) { if (!r.ok) throw 0; return r.blob(); })
+              return fetch(dir + nm(file), { priority: prio }).then(function (r) { if (!r.ok) throw 0; return r.blob(); })
                 .then(function (b) { return URL.createObjectURL(b); });
             }
             function setSrc(u) {
@@ -95,18 +100,24 @@
               v.src = u;
               if (had && t > 0) v.addEventListener('loadedmetadata', function () { try { v.currentTime = t; } catch (e) {} }, { once: true });
             }
-            var gotHd = false;
+            var gotHd = false, bail = null;
             function upgrade() {
               if (gotHd) return; gotHd = true;
               blobUrl(hd, 'low').then(setSrc).catch(function () { /* keep the preview */ });
             }
-            if (window.fetch && window.URL && URL.createObjectURL) {
-              var bail = setTimeout(function () { gotHd = true; v.src = dir + hd; }, 10000);   // preview too slow -> just stream the sharp one
-              blobUrl(preview, 'high').then(function (u) {
-                clearTimeout(bail); if (v.currentSrc) return; setSrc(u);
-                if (document.readyState === 'complete') upgrade(); else { window.addEventListener('load', upgrade); setTimeout(upgrade, 5000); }
-              }).catch(function () { clearTimeout(bail); gotHd = true; v.src = dir + hd; });
-            } else { v.src = dir + hd; }
+            function start() {
+              gotHd = false; clearTimeout(bail);
+              if (window.fetch && window.URL && URL.createObjectURL) {
+                bail = setTimeout(function () { gotHd = true; v.src = dir + nm(hd); }, 10000);   // preview too slow -> just stream the sharp one
+                blobUrl(preview, 'high').then(function (u) {
+                  clearTimeout(bail); if (v.currentSrc && !v.error) return; setSrc(u);
+                  if (document.readyState === 'complete') upgrade(); else { window.addEventListener('load', upgrade, { once: true }); setTimeout(upgrade, 5000); }
+                }).catch(function () { clearTimeout(bail); gotHd = true; v.src = dir + nm(hd); });
+              } else { v.src = dir + nm(hd); }
+            }
+            /* Safety net: if this device claims HEVC but can't actually decode it, fall back to H.264 once. */
+            v.addEventListener('error', function () { if (useH) { useH = false; start(); } });
+            start();
           })();
         </script>
         <div class="walkthrough__gradient"></div>
