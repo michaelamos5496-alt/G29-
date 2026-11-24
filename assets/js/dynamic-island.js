@@ -16,7 +16,7 @@
   const PHONE = '+233549933727';
   const PHONE_LABEL = '+233 54 993 3727';
   const WHATSAPP = '233549933727';
-  const EMAIL = 'info@g29propertyconsults.com';
+  const EMAIL = 'info@g29consults.com';
 
   const items = [
     { key: 'home', label: 'Home', href: 'index.html' },

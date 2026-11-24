@@ -64,7 +64,7 @@
           <a href="contact.html" class="btn btn-primary">Request a Consultation</a>
           <div class="property-inquiry__direct">
             <a href="tel:+233549933727">&#128222; +233 54 993 3727</a>
-            <a href="mailto:info@g29propertyconsults.com">&#9993; info@g29propertyconsults.com</a>
+            <a href="mailto:info@g29consults.com">&#9993; info@g29consults.com</a>
           </div>
         </div>
       </aside>

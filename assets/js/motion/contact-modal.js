@@ -80,6 +80,7 @@
         if (val('email')) lines.push('Email: ' + val('email'));
         if (val('phone')) lines.push('Phone: ' + val('phone'));
         if (val('message')) lines.push('', val('message'));
+        if (window.G29Mail) G29Mail.send('Book a Viewing request', { name: val('name'), email: val('email'), phone: val('phone'), message: val('message') });
         window.open('https://wa.me/' + PHONE_WHATSAPP + '?text=' + encodeURIComponent(lines.join('\n')), '_blank', 'noopener');
         form.reset();
         close();

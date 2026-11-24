@@ -37,6 +37,7 @@
         '',
         `Email: ${data.get('email')}`
       ];
+      if (window.G29Mail) G29Mail.send('Contact form enquiry', { name: String(data.get('name')), email: String(data.get('email')), message: String(data.get('message')) });
       window.open(`https://wa.me/${PHONE_WHATSAPP}?text=${encodeURIComponent(lines.join('\n'))}`, '_blank', 'noopener');
     });
   }

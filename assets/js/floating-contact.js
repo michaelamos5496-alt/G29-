@@ -5,13 +5,13 @@
 
   NEEDS INPUT: confirm which number is WhatsApp-enabled — currently both
   actions use the primary contact number (+233 54 993 3727). Email is a
-  placeholder (info@g29propertyconsults.com) pending the real address.
+  placeholder (info@g29consults.com) pending the real address.
 */
 (function () {
   const PHONE_DISPLAY = '+233 54 993 3727';
   const PHONE_TEL = '+233549933727';
   const PHONE_WHATSAPP = '233549933727'; // wa.me format: no plus, no leading zero
-  const EMAIL_ADDRESS = 'info@g29propertyconsults.com'; // placeholder — NEEDS INPUT
+  const EMAIL_ADDRESS = 'info@g29consults.com'; // placeholder — NEEDS INPUT
 
   const markup = `
     <div class="floating-contact" id="floatingContact">

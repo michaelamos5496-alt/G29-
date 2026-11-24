@@ -162,7 +162,7 @@
           </form>
           <div class="property-inquiry__direct">
             <a href="tel:+233549933727">&#128222; +233 54 993 3727</a>
-            <a href="mailto:info@g29propertyconsults.com">&#9993; info@g29propertyconsults.com</a>
+            <a href="mailto:info@g29consults.com">&#9993; info@g29consults.com</a>
           </div>
         </div>
       </aside>
@@ -198,6 +198,7 @@
         message
       ].filter((line) => line !== null);
 
+      if (window.G29Mail) G29Mail.send(`Viewing request: ${property.title}`, { property: `${property.title} (${property.location})`, name, email, phone, message });
       window.open(`https://wa.me/${PHONE_WHATSAPP}?text=${encodeURIComponent(lines.join('\n'))}`, '_blank', 'noopener');
     });
   }
