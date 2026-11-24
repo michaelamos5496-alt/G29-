@@ -1520,6 +1520,85 @@ window.G29_PROPERTIES = [
       "Water: Yes",
       "Parking: Yes"
     ]
+  },
+  {
+    "slug": "joels-place",
+    "title": "Joel's Place",
+    "subtitle": "East Legon, Accra",
+    "location": "East Legon, Accra, Ghana",
+    "category": "Apartment",
+    "tags": [
+      "Apartment",
+      "For Rent"
+    ],
+    "status": "For Rent",
+    "beds": 1,
+    "bedsLabel": "1 – 3",
+    "baths": 1,
+    "bathsLabel": "1 – 2",
+    "floorArea": null,
+    "yearBuilt": null,
+    "price": null,
+    "priceLabel": "$900 – $1,500",
+    "purpose": [
+      "Rent"
+    ],
+    "featured": false,
+    "availability": "Available now",
+    "video": null,
+    "floorPlans": [],
+    "marketSnapshot": null,
+    "image": "assets/images/properties/joels-place/thumbs/01.jpg",
+    "gallery": [
+      "assets/images/properties/joels-place/01.jpg",
+      "assets/images/properties/joels-place/02.jpg",
+      "assets/images/properties/joels-place/03.jpg"
+    ],
+    "description": [
+      "Unfurnished one-, two- and three-bedroom apartments in East Legon, a 5-minute drive from UPSA, offering bright, contemporary interiors with a practical layout that can be furnished and personalised to suit your lifestyle.",
+      "The residence combines generous living spaces with access to a selection of well-considered lifestyle amenities within the development."
+    ],
+    "amenities": [
+      "24-hour manned security",
+      "CCTV surveillance",
+      "Gated community",
+      "Security post",
+      "Security doors",
+      "Standby generator",
+      "Fibre internet",
+      "DStv connection",
+      "Fitted kitchen with cabinets and countertops",
+      "Open-plan kitchen",
+      "Extractor fan",
+      "Electric hob / burner",
+      "Microwave",
+      "Oven",
+      "Wall refrigerator",
+      "Washing machine",
+      "Water heating system",
+      "Water reservoir",
+      "Water storage and pump system",
+      "Closets",
+      "Living area",
+      "Balcony / patio",
+      "Smoke detector",
+      "Fire fighting system",
+      "Parking"
+    ],
+    "details": [
+      "Type: Apartment",
+      "Lease term: 1–12 months",
+      "Pets: Per lease agreement",
+      "Furnishing: Unfurnished",
+      "View: Street view",
+      "Cooling: Air-conditioning",
+      "Flooring: Ceramic tiles",
+      "Kitchen: Fully fitted",
+      "Balcony / patio: Yes",
+      "Stories: 3",
+      "Water: Yes",
+      "Parking: Yes"
+    ]
   }
 ];
 

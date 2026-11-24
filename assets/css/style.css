@@ -3092,6 +3092,11 @@ html.nav-menu-open { overflow: hidden; }
 .cards--native-scroll { -webkit-overflow-scrolling: touch; overscroll-behavior-x: contain; touch-action: pan-x pan-y; }
 .cards--native-scroll > .gallery-card { scroll-snap-align: start; }
 .cards--native-scroll > .location-card { scroll-snap-align: start; }
+/* The final card snaps to the END edge so it always rests fully in view
+   (otherwise the snap lands part-way through it when the rail's length
+   isn't a whole number of cards). */
+.cards--native-scroll > .gallery-card:last-child,
+.cards--native-scroll > .location-card:last-child { scroll-snap-align: end; }
 
 .gallery-card {
   position: relative;

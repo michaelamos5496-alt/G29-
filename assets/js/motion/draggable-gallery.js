@@ -80,7 +80,13 @@
 
     var gap = parseFloat(getComputedStyle(cardsEl).columnGap) || 0;
     var step = cards[0].getBoundingClientRect().width + gap;
-    var contentWidth = cardsEl.scrollWidth;
+    // End of the rail = the last card's real right edge (not scrollWidth,
+    // which can under-report), so the last card always ends up fully visible.
+    var measureContent = function () {
+      var last = cards[cards.length - 1];
+      return Math.max(cardsEl.scrollWidth, last.offsetLeft + last.offsetWidth);
+    };
+    var contentWidth = measureContent();
     var containerWidth = containerEl.clientWidth;
     var minX = Math.min(0, containerWidth - contentWidth);
     var maxX = 0;
@@ -108,7 +114,15 @@
       cursor: 'grab',
       activeCursor: 'grabbing',
       snap: slideMode ? undefined : {
-        x: function (value) { return gsap.utils.clamp(minX, maxX, Math.round(value / step) * step); }
+        // Snap to whole cards, but the true end of the rail (minX) rarely
+        // falls on a whole-card multiple. A resting spot just short of it
+        // would leave the last card partly clipped, so anything within half
+        // a card of the end snaps to the end itself.
+        x: function (value) {
+          var s = Math.round(value / step) * step;
+          if (s - minX < step / 2) s = minX;
+          return gsap.utils.clamp(minX, maxX, s);
+        }
       },
       onPress: function () {
         gsap.killTweensOf(cardsEl);
@@ -131,9 +145,10 @@
     reportProgress();
 
     function goTo(index) {
-      var maxIndex = Math.round(-minX / step);
+      var maxIndex = Math.ceil(-minX / step - 0.001);
       var clampedIndex = Math.max(0, Math.min(maxIndex, index));
       var targetX = gsap.utils.clamp(minX, maxX, -clampedIndex * step);
+      if (targetX - minX < step / 2) targetX = minX; // never rest with the last card clipped
       gsap.to(cardsEl, { x: targetX, duration: 0.6, ease: 'power2.out', onUpdate: function () { draggable.update(); onUpdateTick(); } });
     }
 
@@ -151,7 +166,7 @@
     var onResize = function () {
       gap = parseFloat(getComputedStyle(cardsEl).columnGap) || 0;
       step = cards[0].getBoundingClientRect().width + gap;
-      contentWidth = cardsEl.scrollWidth;
+      contentWidth = measureContent();
       containerWidth = containerEl.clientWidth;
       minX = Math.min(0, containerWidth - contentWidth);
       draggable.applyBounds({ minX: minX, maxX: maxX });
@@ -161,11 +176,16 @@
       reportProgress();
     };
     window.addEventListener('resize', onResize);
+    window.addEventListener('load', onResize);
+    var ro = typeof ResizeObserver !== 'undefined' ? new ResizeObserver(onResize) : null;
+    if (ro) { ro.observe(containerEl); ro.observe(cardsEl); }
 
     var controller = {
       destroy: function () {
         draggable.kill();
         window.removeEventListener('resize', onResize);
+        window.removeEventListener('load', onResize);
+        if (ro) ro.disconnect();
         prevBtn.removeEventListener('click', onPrevDrag);
         nextBtn.removeEventListener('click', onNextDrag);
         gsap.set(cardsEl, { clearProps: 'x' });
