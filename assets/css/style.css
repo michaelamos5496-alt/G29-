@@ -1928,9 +1928,7 @@ main:has(> .contact-teaser:last-child) + .site-footer {
   align-items: flex-end;
   min-height: 340px;
   padding: var(--space-16) 0 var(--space-12);
-  background-color: #123937;
-  background-size: cover;
-  background-position: center 30%;
+  background: #123937 url('../images/footer-team.jpg') center 30% / cover no-repeat;
   isolation: isolate;
 }
 .footer-band::after {
