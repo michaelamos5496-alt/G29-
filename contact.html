@@ -180,7 +180,7 @@
 
 <script src="https://cdn.jsdelivr.net/npm/gsap@3.15.0/dist/gsap.min.js" defer></script>
 <script src="https://cdn.jsdelivr.net/npm/gsap@3.15.0/dist/ScrollTrigger.min.js" defer></script>
-<script src="https://cdn.jsdelivr.net/npm/gsap@3.15.0/dist/ScrollSmoother.min.js" defer></script>
+<script>/* desktop pointer only — touch devices use native scrolling/snapping, so they skip this download */if(matchMedia('(hover: hover) and (pointer: fine)').matches)document.write('<script src="https://cdn.jsdelivr.net/npm/gsap@3.15.0/dist/ScrollSmoother.min.js" defer><\/script>');</script>
 <script src="assets/js/motion/tokens.js" defer></script>
 <script src="assets/js/motion/scroll-smoother-init.js" defer></script>
 <script src="assets/js/motion/lazy-bg.js" defer></script>

@@ -64,8 +64,7 @@
           <img class="walkthrough__poster" src="assets/videos/hero-final-poster.jpg" srcset="assets/videos/hero-final-poster-mobile.jpg 828w, assets/videos/hero-final-poster.jpg 1920w" sizes="100vw" alt="" aria-hidden="true" fetchpriority="high">
         </picture>
 
-        <video id="walkthroughVideo" class="walkthrough__video" muted playsinline preload="auto"
-          poster="assets/videos/hero-final-poster.jpg" aria-hidden="true"></video>
+        <video id="walkthroughVideo" class="walkthrough__video" muted playsinline preload="auto" aria-hidden="true"></video>
         <script>
           /* Pick the lightest hero video that still looks sharp on this screen, before it starts to download.
              Phone (upright): 608x1080 full-screen cut made for tall screens.
@@ -74,21 +73,30 @@
             var v = document.getElementById('walkthroughVideo');
             var w = window.innerWidth, h = window.innerHeight;
             var low = (navigator.deviceMemory && navigator.deviceMemory <= 2); // only very low-memory devices step down to 720p
-            var f = (w <= 768 && h > w) ? 'hero-final-phone.mp4'
-                  : (w <= 900 || low) ? 'hero-final-720.mp4'
+            var c = navigator.connection || {};
+            var slow = c.saveData === true || /(^|-)2g$|3g/.test(c.effectiveType || '');   // Data Saver / slow network -> lighter file
+            var f = (w <= 768 && h > w) ? (slow ? 'hero-final-phone-lite.mp4' : 'hero-final-phone.mp4')
+                  : (w <= 900 || low || slow) ? 'hero-final-720.mp4'
                   : 'hero-final.mp4';
             var url = 'assets/videos/' + f;
             /* Scrubbing needs instant random access to every frame. Streamed video re-requests the network on
-               every seek, which stalls on phones — so download the whole (small) file first and play it from
-               memory. If that fails or is slow (>15s), fall back to normal streaming. */
+               every seek, which stalls on phones — so download the whole file and play it from memory. The
+               download starts once the page itself has loaded (so it never competes with the poster, styles
+               and scripts), at low priority. If it fails or is slow (>15s) we fall back to normal streaming. */
             var started = false;
             function direct() { if (started) return; started = true; v.src = url; }
-            if (window.fetch && window.URL && URL.createObjectURL) {
-              var t = setTimeout(direct, 15000);
-              fetch(url).then(function (r) { if (!r.ok) throw 0; return r.blob(); })
-                .then(function (b) { if (started) return; started = true; clearTimeout(t); v.src = URL.createObjectURL(b); })
-                .catch(function () { clearTimeout(t); direct(); });
-            } else { direct(); }
+            var began = false;
+            function begin() {
+              if (began) return; began = true;
+              if (window.fetch && window.URL && URL.createObjectURL) {
+                var t = setTimeout(direct, 15000);
+                fetch(url, { priority: 'low' }).then(function (r) { if (!r.ok) throw 0; return r.blob(); })
+                  .then(function (b) { if (started) return; started = true; clearTimeout(t); v.src = URL.createObjectURL(b); })
+                  .catch(function () { clearTimeout(t); direct(); });
+              } else { direct(); }
+            }
+            if (document.readyState === 'complete') { begin(); }
+            else { window.addEventListener('load', begin); setTimeout(begin, 4000); }
           })();
         </script>
         <div class="walkthrough__gradient"></div>
@@ -333,14 +341,21 @@
       </div>
 
       <div class="about__video" data-reveal="fade-in">
-        <video id="aboutVideo" poster="assets/videos/hero-final-poster.jpg" autoplay muted loop playsinline preload="metadata">
-          <!-- Reusing the real interior walkthrough footage here since it's
-               the only real video asset available. NEEDS INPUT: swap for a
-               dedicated BTS clip of staff/management at work once one exists. -->
-          <source src="assets/videos/hero-final-mobile.mp4" type="video/mp4" media="(max-width: 768px)">
-          <source src="assets/videos/hero-final.mp4" type="video/mp4">
-          Your browser does not support embedded video.
-        </video>
+        <video id="aboutVideo" muted loop playsinline preload="none" aria-label="A walkthrough of a G29 managed apartment"></video>
+        <script>
+          /* The About clip is far below the fold: don't download or decode it until the visitor scrolls near it,
+             pause it when it leaves the screen, and use the light 540p file on phones / 720p elsewhere. */
+          (function () {
+            var v = document.getElementById('aboutVideo'); if (!v) return;
+            var src = 'assets/videos/' + (window.innerWidth <= 900 ? 'hero-final-mobile.mp4' : 'hero-final-720.mp4');
+            var reduce = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
+            var loaded = false;
+            function go() { if (!loaded) { loaded = true; v.src = src; } if (!reduce) { var p = v.play(); if (p && p.catch) p.catch(function () {}); } }
+            if ('IntersectionObserver' in window) {
+              new IntersectionObserver(function (es) { es.forEach(function (e) { if (e.isIntersecting) go(); else if (loaded) v.pause(); }); }, { rootMargin: '200px 0px' }).observe(v);
+            } else { go(); }
+          })();
+        </script>
       </div>
     </section>
 
@@ -535,10 +550,10 @@
 
   <script src="assets/js/properties-data.js" defer></script>
   <script src="https://cdn.jsdelivr.net/npm/gsap@3.15.0/dist/gsap.min.js" defer></script>
-  <script src="https://cdn.jsdelivr.net/npm/gsap@3.15.0/dist/Draggable.min.js" defer></script>
-  <script src="https://cdn.jsdelivr.net/npm/gsap@3.15.0/dist/InertiaPlugin.min.js" defer></script>
+  <script>/* desktop pointer only — touch devices use native scrolling/snapping, so they skip this download */if(matchMedia('(hover: hover) and (pointer: fine)').matches)document.write('<script src="https://cdn.jsdelivr.net/npm/gsap@3.15.0/dist/Draggable.min.js" defer><\/script>');</script>
+  <script>/* desktop pointer only — touch devices use native scrolling/snapping, so they skip this download */if(matchMedia('(hover: hover) and (pointer: fine)').matches)document.write('<script src="https://cdn.jsdelivr.net/npm/gsap@3.15.0/dist/InertiaPlugin.min.js" defer><\/script>');</script>
   <script src="https://cdn.jsdelivr.net/npm/gsap@3.15.0/dist/ScrollTrigger.min.js" defer></script>
-  <script src="https://cdn.jsdelivr.net/npm/gsap@3.15.0/dist/ScrollSmoother.min.js" defer></script>
+  <script>/* desktop pointer only — touch devices use native scrolling/snapping, so they skip this download */if(matchMedia('(hover: hover) and (pointer: fine)').matches)document.write('<script src="https://cdn.jsdelivr.net/npm/gsap@3.15.0/dist/ScrollSmoother.min.js" defer><\/script>');</script>
   <script src="assets/js/motion/tokens.js" defer></script>
   <script src="assets/js/motion/scroll-smoother-init.js" defer></script>
   <script src="assets/js/motion/lazy-bg.js" defer></script>
