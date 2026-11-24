@@ -18,7 +18,6 @@
   <meta name="description"
     content="G29 Property Consults is a facilities management and real estate brokerage company in Accra, Ghana: facility management, brokerage, real estate advisory, and refurbishment and renovation works.">
       <link rel="preconnect" href="https://images.unsplash.com">
-  <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
 <link rel="stylesheet" href="assets/css/style.css">
   <!-- Hero poster is the page's LCP image (see .walkthrough__poster) —
        starts this fetch immediately rather than waiting for the parser
@@ -67,36 +66,47 @@
         <video id="walkthroughVideo" class="walkthrough__video" muted playsinline preload="auto" aria-hidden="true"></video>
         <script>
           /* Pick the lightest hero video that still looks sharp on this screen, before it starts to download.
-             Phone (upright): 608x1080 full-screen cut made for tall screens.
-             Small/landscape screens and very low-memory devices: 1280x720. Everything else: 1920x1080. */
+             Phone (upright): 608x1080 full-screen cut. Small/landscape screens, low-memory or slower devices: 1280x720.
+             1920x1080 only for wide screens on a known-fast connection. */
           (function () {
             var v = document.getElementById('walkthroughVideo');
             var w = window.innerWidth, h = window.innerHeight;
-            var low = (navigator.deviceMemory && navigator.deviceMemory <= 2); // only very low-memory devices step down to 720p
+            var phone = (w <= 768 && h > w);
             var c = navigator.connection || {};
             var slow = c.saveData === true || /(^|-)2g$|3g/.test(c.effectiveType || '');   // Data Saver / slow network -> lighter file
-            var f = (w <= 768 && h > w) ? (slow ? 'hero-final-phone-lite.mp4' : 'hero-final-phone.mp4')
-                  : (w <= 900 || low || slow) ? 'hero-final-720.mp4'
-                  : 'hero-final.mp4';
-            var url = 'assets/videos/' + f;
-            /* Scrubbing needs instant random access to every frame. Streamed video re-requests the network on
-               every seek, which stalls on phones — so download the whole file and play it from memory. The
-               download starts once the page itself has loaded (so it never competes with the poster, styles
-               and scripts), at low priority. If it fails or is slow (>15s) we fall back to normal streaming. */
-            var started = false;
-            function direct() { if (started) return; started = true; v.src = url; }
-            var began = false;
-            function begin() {
-              if (began) return; began = true;
-              if (window.fetch && window.URL && URL.createObjectURL) {
-                var t = setTimeout(direct, 15000);
-                fetch(url, { priority: 'low' }).then(function (r) { if (!r.ok) throw 0; return r.blob(); })
-                  .then(function (b) { if (started) return; started = true; clearTimeout(t); v.src = URL.createObjectURL(b); })
-                  .catch(function () { clearTimeout(t); direct(); });
-              } else { direct(); }
+            var fast = (c.downlink || 0) >= 10;                                              // only known-fast connections get 1080p
+            var low = (navigator.deviceMemory && navigator.deviceMemory <= 2);
+            var hd = phone ? (slow ? 'hero-final-phone-lite.mp4' : 'hero-final-phone.mp4')
+                   : (w <= 900 || low || slow || !(w >= 1600 && fast)) ? 'hero-final-720.mp4'
+                   : 'hero-final.mp4';
+            var preview = phone ? 'hero-final-phone-preview.mp4' : 'hero-final-preview.mp4';   // ~1MB, same length & framing
+            var dir = 'assets/videos/';
+            /* Scrubbing needs instant random access to every frame, so the video is downloaded whole and played
+               from memory (streaming re-requests the network on every seek and stalls on phones).
+               Two stages keep the hero responsive on slow networks: a ~1MB preview arrives first and the hero
+               works straight away; the sharp version then downloads in the background (low priority, after the
+               page has loaded) and is swapped in at the same frame. */
+            function blobUrl(file, prio) {
+              return fetch(dir + file, { priority: prio }).then(function (r) { if (!r.ok) throw 0; return r.blob(); })
+                .then(function (b) { return URL.createObjectURL(b); });
             }
-            if (document.readyState === 'complete') { begin(); }
-            else { window.addEventListener('load', begin); setTimeout(begin, 4000); }
+            function setSrc(u) {
+              var t = v.currentTime || 0, had = !!v.currentSrc;
+              v.src = u;
+              if (had && t > 0) v.addEventListener('loadedmetadata', function () { try { v.currentTime = t; } catch (e) {} }, { once: true });
+            }
+            var gotHd = false;
+            function upgrade() {
+              if (gotHd) return; gotHd = true;
+              blobUrl(hd, 'low').then(setSrc).catch(function () { /* keep the preview */ });
+            }
+            if (window.fetch && window.URL && URL.createObjectURL) {
+              var bail = setTimeout(function () { gotHd = true; v.src = dir + hd; }, 10000);   // preview too slow -> just stream the sharp one
+              blobUrl(preview, 'high').then(function (u) {
+                clearTimeout(bail); if (v.currentSrc) return; setSrc(u);
+                if (document.readyState === 'complete') upgrade(); else { window.addEventListener('load', upgrade); setTimeout(upgrade, 5000); }
+              }).catch(function () { clearTimeout(bail); gotHd = true; v.src = dir + hd; });
+            } else { v.src = dir + hd; }
           })();
         </script>
         <div class="walkthrough__gradient"></div>
@@ -549,11 +559,11 @@
   </div>
 
   <script src="assets/js/properties-data.js" defer></script>
-  <script src="https://cdn.jsdelivr.net/npm/gsap@3.15.0/dist/gsap.min.js" defer></script>
-  <script>/* desktop pointer only — touch devices use native scrolling/snapping, so they skip this download */if(matchMedia('(hover: hover) and (pointer: fine)').matches)document.write('<script src="https://cdn.jsdelivr.net/npm/gsap@3.15.0/dist/Draggable.min.js" defer><\/script>');</script>
-  <script>/* desktop pointer only — touch devices use native scrolling/snapping, so they skip this download */if(matchMedia('(hover: hover) and (pointer: fine)').matches)document.write('<script src="https://cdn.jsdelivr.net/npm/gsap@3.15.0/dist/InertiaPlugin.min.js" defer><\/script>');</script>
-  <script src="https://cdn.jsdelivr.net/npm/gsap@3.15.0/dist/ScrollTrigger.min.js" defer></script>
-  <script>/* desktop pointer only — touch devices use native scrolling/snapping, so they skip this download */if(matchMedia('(hover: hover) and (pointer: fine)').matches)document.write('<script src="https://cdn.jsdelivr.net/npm/gsap@3.15.0/dist/ScrollSmoother.min.js" defer><\/script>');</script>
+  <script src="assets/js/vendor/gsap.min.js" defer></script>
+  <script>/* desktop pointer only — touch devices use native scrolling/snapping, so they skip this download */if(matchMedia('(hover: hover) and (pointer: fine)').matches)document.write('<script src="assets/js/vendor/Draggable.min.js" defer><\/script>');</script>
+  <script>/* desktop pointer only — touch devices use native scrolling/snapping, so they skip this download */if(matchMedia('(hover: hover) and (pointer: fine)').matches)document.write('<script src="assets/js/vendor/InertiaPlugin.min.js" defer><\/script>');</script>
+  <script src="assets/js/vendor/ScrollTrigger.min.js" defer></script>
+  <script>/* desktop pointer only — touch devices use native scrolling/snapping, so they skip this download */if(matchMedia('(hover: hover) and (pointer: fine)').matches)document.write('<script src="assets/js/vendor/ScrollSmoother.min.js" defer><\/script>');</script>
   <script src="assets/js/motion/tokens.js" defer></script>
   <script src="assets/js/motion/scroll-smoother-init.js" defer></script>
   <script src="assets/js/motion/lazy-bg.js" defer></script>

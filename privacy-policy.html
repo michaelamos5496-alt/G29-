@@ -12,7 +12,6 @@
 <link rel="icon" type="image/png" href="assets/images/g29-icon-32.png">
 <link rel="apple-touch-icon" href="assets/images/g29-icon-180.png">
 <meta name="description" content="How G29 Property Consults collects, uses, and protects your information.">
-<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
 <link rel="stylesheet" href="assets/css/style.css">
 </head>
 <body>
@@ -66,7 +65,6 @@
       <h2>4. Third-Party Services</h2>
       <p>This website loads a small number of third-party services needed to display content:</p>
       <ul>
-        <li><strong>jsDelivr</strong> (cdn.jsdelivr.net) — hosts the GSAP animation library used for page motion.</li>
         <li><strong>Unsplash</strong> (images.unsplash.com) — hosts stock photography used as placeholder imagery.</li>
         <li><strong>Google Maps</strong> — embedded on individual property pages to show a listing's location.</li>
         <li><strong>WhatsApp</strong> (wa.me) — opens WhatsApp when you choose to message us that way.</li>
@@ -186,9 +184,9 @@
 </div><!-- /#smooth-content -->
 </div><!-- /#smooth-wrapper -->
 
-<script src="https://cdn.jsdelivr.net/npm/gsap@3.15.0/dist/gsap.min.js" defer></script>
-<script src="https://cdn.jsdelivr.net/npm/gsap@3.15.0/dist/ScrollTrigger.min.js" defer></script>
-<script>/* desktop pointer only — touch devices use native scrolling/snapping, so they skip this download */if(matchMedia('(hover: hover) and (pointer: fine)').matches)document.write('<script src="https://cdn.jsdelivr.net/npm/gsap@3.15.0/dist/ScrollSmoother.min.js" defer><\/script>');</script>
+<script src="assets/js/vendor/gsap.min.js" defer></script>
+<script src="assets/js/vendor/ScrollTrigger.min.js" defer></script>
+<script>/* desktop pointer only — touch devices use native scrolling/snapping, so they skip this download */if(matchMedia('(hover: hover) and (pointer: fine)').matches)document.write('<script src="assets/js/vendor/ScrollSmoother.min.js" defer><\/script>');</script>
 <script src="assets/js/motion/tokens.js" defer></script>
 <script src="assets/js/motion/scroll-smoother-init.js" defer></script>
 <script src="assets/js/motion/reveal.js" defer></script>
