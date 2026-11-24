@@ -22,11 +22,54 @@
     return;
   }
 
-  document.title = `${property.title} — ${property.subtitle} | G29 Property Consults`;
-  const metaDesc = document.getElementById('pageDescription');
-  if (metaDesc) {
-    metaDesc.setAttribute('content', `${property.title} in ${property.subtitle}. Available through G29 Property Consults.`);
-  }
+  (function seo() {
+    if (!window.G29_SEO) return;
+    const bedsTxt = property.beds ? `${property.beds}-bedroom ` : '';
+    const purpose = (property.purpose || []).map((x) => (x === 'Buy' ? 'sale' : 'rent'));
+    const forTxt = purpose.length ? ` for ${purpose.join(' and ')}` : '';
+    const place = property.subtitle || property.location;
+    const desc = `${property.title}: ${bedsTxt}${property.category.toLowerCase()}${forTxt} in ${place}, Ghana.` +
+      `${property.floorArea ? ' ' + property.floorArea + '.' : ''}${property.priceLabel ? ' ' + property.priceLabel + '.' : ''}` +
+      ' Book a viewing with G29 Property Consults.';
+    const path = 'property-detail.html?slug=' + encodeURIComponent(property.slug);
+    const img = (property.gallery && property.gallery[0]) || property.image;
+    const url = window.G29_SEO.BASE + path;
+    const listing = {
+      '@type': 'RealEstateListing',
+      '@id': url + '#listing',
+      name: `${property.title}, ${place}`,
+      url: url,
+      description: desc,
+      image: (property.gallery && property.gallery.length ? property.gallery : [property.image]).slice(0, 6).map((g) => (/^https?:/.test(g) ? g : window.G29_SEO.BASE + g)),
+      datePosted: '2026-09-01',
+      about: {
+        '@type': property.category === 'Townhouse' || property.category === 'Villa' ? 'House' : 'Apartment',
+        name: property.title,
+        numberOfRooms: property.beds || undefined,
+        numberOfBathroomsTotal: property.baths || undefined,
+        floorSize: property.floorArea ? { '@type': 'QuantitativeValue', value: parseFloat(property.floorArea), unitCode: 'MTK' } : undefined,
+        address: { '@type': 'PostalAddress', addressLocality: place, addressCountry: 'GH' }
+      },
+      offeredBy: { '@id': window.G29_SEO.BASE + '#business' }
+    };
+    window.G29_SEO.set({
+      title: `${property.title}, ${place} | ${property.status} | G29 Property Consults`,
+      description: desc,
+      path: path,
+      image: img,
+      jsonld: {
+        '@context': 'https://schema.org',
+        '@graph': [listing, {
+          '@type': 'BreadcrumbList',
+          itemListElement: [
+            { '@type': 'ListItem', position: 1, name: 'Home', item: window.G29_SEO.BASE },
+            { '@type': 'ListItem', position: 2, name: 'Properties', item: window.G29_SEO.BASE + 'properties-category.html' },
+            { '@type': 'ListItem', position: 3, name: property.title, item: url }
+          ]
+        }]
+      }
+    });
+  })();
 
   // Small thumbnail version of a local photo (assets/images/properties/<slug>/thumbs/)
   const thumbOf = (src) => (src.indexOf('assets/images/properties/') === 0 ? src.replace(/\/([^/]+)$/, '/thumbs/$1') : src);

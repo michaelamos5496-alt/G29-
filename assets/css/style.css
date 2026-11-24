@@ -4146,3 +4146,11 @@ html.lite .finder-pop .finder__summary li, html.lite .finder-pop .finder-intro__
   .roster__item::after, .roster__name, .roster__avatar, .roster__panel, .roster__float-card, .roster__icon::before, .roster__icon::after { transition: none; }
   .team2__hint-dot { animation: none; }
 }
+
+/* Plain-language intro + location links above the footer (SEO). */
+.seo-intro { padding: var(--space-16, 64px) 0 var(--space-8, 32px); }
+.seo-intro h2 { font-family: var(--font-heading); font-size: clamp(20px, 2.4vw, 28px); line-height: 1.2; max-width: 28ch; margin: 0 0 var(--space-3, 12px); }
+.seo-intro p { max-width: 62ch; color: var(--color-text-muted); line-height: 1.7; margin: 0 0 var(--space-5, 20px); }
+.seo-intro__links { display: flex; flex-wrap: wrap; gap: 8px; }
+.seo-intro__links a { padding: 8px 16px; border-radius: 999px; border: 1px solid rgba(10, 35, 33, 0.14); font-size: 14px; font-weight: 600; color: var(--color-primary); transition: background 0.2s ease, color 0.2s ease; }
+.seo-intro__links a:hover { background: var(--color-primary); color: #fff; }

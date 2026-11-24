@@ -22,10 +22,26 @@
     return;
   }
 
-  document.title = `${service.name} | G29 Property Consults`;
-  const metaDesc = document.getElementById('pageDescription');
-  if (metaDesc) {
-    metaDesc.setAttribute('content', `${service.name} from G29 Property Consults: ${service.tagline}.`);
+  if (window.G29_SEO) {
+    const path = 'service-detail.html?slug=' + encodeURIComponent(service.slug);
+    const url = window.G29_SEO.BASE + path;
+    const desc = `${service.name} in Accra, Ghana from G29 Property Consults: ${service.tagline}.`;
+    window.G29_SEO.set({
+      title: `${service.name} in Accra, Ghana | G29 Property Consults`,
+      description: desc,
+      path: path,
+      image: service.heroImage,
+      jsonld: {
+        '@context': 'https://schema.org',
+        '@type': 'Service',
+        name: service.name,
+        url: url,
+        description: desc,
+        serviceType: service.name,
+        areaServed: { '@type': 'City', name: 'Accra' },
+        provider: { '@id': window.G29_SEO.BASE + '#business' }
+      }
+    });
   }
 
   const otherServices = services.filter((s) => s.slug !== service.slug);

@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://g29.vercel.app/sitemap.xml
