@@ -3881,6 +3881,33 @@ html.lite .finder-pop .finder__summary li, html.lite .finder-pop .finder-intro__
 
 
 /* ==========================================================================
+   Tablets / iPad (769–1400px wide, not a short landscape phone): the hero
+   logo is vertically centred in the 100svh+100px pinned hero while the
+   buttons sat at a fixed distance from the bottom, so on iPad the
+   "G29 PROPERTY CONSULTS" line ran into the buttons. Same idea as the phone
+   layout: logo + buttons form ONE block centred in the visible screen
+   (below the ~76px nav bar), the buttons directly under the logo.
+   --hero-mark-w is the logo width; its height is 600/512 of that.
+   ========================================================================== */
+@media (min-width: 769px) and (max-width: 1400px) and (min-height: 521px) {
+  .walkthrough { --hero-mark-w: min(40vw, 320px); }
+  .walkthrough__wordmark {
+    width: var(--hero-mark-w);
+    left: 50%;
+    top: calc(50vh - 2px);
+    top: calc(50svh - 2px);
+  }
+  .walkthrough__ctas {
+    top: calc(50vh + 0.586 * var(--hero-mark-w) + 30px);
+    top: calc(50svh + 0.586 * var(--hero-mark-w) + 30px);
+    bottom: auto;
+    left: 50%;
+    justify-content: center;
+  }
+}
+
+
+/* ==========================================================================
    Team page — minimalist roster (see assets/js/team-roster.js)
    Light, typographic: a huge headline, then one large line per person.
    Mouse: the hovered person's portrait floats beside the cursor. Touch: accordion.
