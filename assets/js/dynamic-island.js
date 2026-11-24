@@ -23,6 +23,7 @@
     { key: 'properties', label: 'Properties', href: 'index.html#properties' },
     { key: 'services', label: 'Services', href: 'index.html#services' },
     { key: 'about', label: 'About', href: 'index.html#about' },
+    { key: 'faq', label: 'FAQs', href: 'faq.html' },
     { key: 'contact', label: 'Contact', href: 'contact.html' }
   ];
 
@@ -89,6 +90,8 @@
     if (path.includes('property-detail') || path.includes('find-property') || path.includes('properties-category')) return 'properties';
     if (path.includes('service-detail')) return 'services';
     if (path.includes('team')) return 'about';
+    if (path.includes('faq')) return 'faq';
+    if (path.includes('short-stay')) return 'properties';
     if (path.includes('contact')) return 'contact';
     if (path.includes('privacy-policy') || path.includes('terms-of-use')) return null;
     const hash = window.location.hash.replace('#', '');
