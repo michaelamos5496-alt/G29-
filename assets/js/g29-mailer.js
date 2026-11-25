@@ -20,4 +20,14 @@
       } catch (e) { return null; }
     }
   };
+
+  // Any WhatsApp booking link tagged data-g29-booking="<subject>" also emails
+  // the request (its pre-filled WhatsApp text becomes the email message).
+  document.addEventListener('click', function (e) {
+    var a = e.target.closest && e.target.closest('a[data-g29-booking]');
+    if (!a) return;
+    var text = '';
+    try { text = new URL(a.href).searchParams.get('text') || ''; } catch (err) {}
+    window.G29Mail.send(a.getAttribute('data-g29-booking'), { message: text });
+  });
 })();

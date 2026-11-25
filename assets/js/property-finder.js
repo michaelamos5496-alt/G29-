@@ -412,7 +412,7 @@
               ${m.warn.length ? `<ul class="finder-result__warn">${m.warn.map((w) => `<li>${esc(w)}</li>`).join('')}</ul>` : ''}
               <div class="finder-result__actions">
                 <a class="btn btn-primary" href="${window.G29_propertyDetailUrl(m.p.slug)}">View details</a>
-                <a class="finder-result__link" href="${whatsappLink(allShown, m.p)}" target="_blank" rel="noopener">Request a viewing</a>
+                <a class="finder-result__link" data-g29-booking="Viewing request (property matcher): ${esc(m.p.title)}" href="${whatsappLink(allShown, m.p)}" target="_blank" rel="noopener">Request a viewing</a>
               </div>
             </div>
           </article>`;
